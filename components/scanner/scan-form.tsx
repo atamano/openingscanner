@@ -24,20 +24,23 @@ const DATE_PRESETS = [
   { value: "all", label: "All" },
 ] as const;
 
+// Curated list of handles that actually post games regularly (super-GMs and
+// active streamers). Lichess in particular — avoid accounts that are mostly
+// dormant (e.g. alireza2003 plays very few games there).
 const POPULAR_PLAYERS: Record<Platform, { handle: string; label: string }[]> = {
   lichess: [
     { handle: "DrNykterstein", label: "Magnus" },
     { handle: "penguingm1", label: "Hikaru" },
-    { handle: "alireza2003", label: "Alireza" },
-    { handle: "AnishGiri", label: "Giri" },
-    { handle: "RebeccaHarris", label: "Nepo" },
+    { handle: "Zhigalko_Sergei", label: "Zhigalko" },
+    { handle: "Konevlad", label: "Kovalev" },
+    { handle: "EricRosen", label: "Eric Rosen" },
   ],
   chesscom: [
     { handle: "Hikaru", label: "Hikaru" },
     { handle: "MagnusCarlsen", label: "Magnus" },
     { handle: "FabianoCaruana", label: "Caruana" },
     { handle: "GothamChess", label: "Levy" },
-    { handle: "DanielNaroditsky", label: "Danya" },
+    { handle: "AnnaCramling", label: "Anna" },
   ],
 };
 

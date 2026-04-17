@@ -7,65 +7,81 @@ export interface GapRecommendation {
   reason: string;
 }
 
+export interface GapOptions {
+  /**
+   * When set, only return curated entries whose move sequence starts with this
+   * prefix (and goes deeper). Used to narrow "Worth exploring" to variations
+   * of the currently-selected opening instead of the whole repertoire.
+   */
+  scopePrefix?: readonly string[];
+}
+
+const FAMILIAR_THRESHOLD = 5;
+
 /**
  * Recommend curated openings the player barely explores on the given side.
- * Uses fuzzy name / family matching against the player's classified ECO
- * entries (the ECO taxonomy is exhaustive but doesn't carry "popularity",
- * so we keep the curated catalog as the preset list for this view).
+ *
+ * The curated catalog and the ECO catalog have incompatible taxonomies
+ * (curated family "vs 1.e4" vs ECO family "Italian Game"/"Ruy Lopez"/…), so
+ * we can't compare by name or family. The only vocabulary both sides share
+ * is the move sequence: every classified opening's `entry.moves` starts from
+ * move 1, and every curated entry is defined as a move prefix. So: a curated
+ * entry is "covered" iff any played opening's moves start with its prefix.
  */
 export function computeGaps(
   stats: RepertoireStats,
   color: PlayerColor,
   limit = 3,
+  options: GapOptions = {},
 ): GapRecommendation[] {
   const played = Object.values(stats.byOpening).filter(
-    (s) => s.entry?.color === color && s.gameCount >= 3,
+    (s) => s.entry?.color === color && s.gameCount >= 1,
   );
 
-  const playedNames = played
-    .map((s) => s.entry?.name.toLowerCase())
-    .filter((n): n is string => Boolean(n));
-
-  const playedFamilies = new Map<string, number>();
+  const prefixCount = new Map<string, number>();
   for (const s of played) {
     if (!s.entry) continue;
-    const fam = normalizeFamily(s.entry.family, s.entry.name);
-    playedFamilies.set(fam, (playedFamilies.get(fam) ?? 0) + s.gameCount);
+    const moves = s.entry.moves;
+    for (let i = 1; i <= moves.length; i++) {
+      const key = moves.slice(0, i).join(" ");
+      prefixCount.set(key, (prefixCount.get(key) ?? 0) + s.gameCount);
+    }
   }
 
-  const candidates = CATALOG.filter((e) => {
-    if (e.color !== color) return false;
-    const needle = e.name.toLowerCase();
-    // Skip if the player already plays something with the same name or family.
-    if (playedNames.some((n) => n.includes(needle) || needle.includes(n))) {
-      return false;
-    }
-    const fam = normalizeFamily(e.family, e.name);
-    if ((playedFamilies.get(fam) ?? 0) >= 5) return false;
-    return true;
-  });
+  const scope = options.scopePrefix;
+  const scopeLen = scope?.length ?? 0;
 
-  const scored = candidates
+  const scored = CATALOG.filter((e) => {
+    if (e.color !== color) return false;
+    if (scope && !startsWith(e.moves, scope)) return false;
+    if (scope && e.moves.length <= scopeLen) return false;
+    return true;
+  })
     .map((entry) => {
-      const fam = normalizeFamily(entry.family, entry.name);
-      const familyPlayed = playedFamilies.get(fam) ?? 0;
-      const familyPenalty = familyPlayed > 0 ? familyPlayed * 0.5 : -15;
-      return { entry, score: entry.popularity - familyPenalty };
+      const familiar = prefixCount.get(entry.moves.join(" ")) ?? 0;
+      return { entry, familiar };
+    })
+    .filter(({ familiar }) => familiar < FAMILIAR_THRESHOLD)
+    .map(({ entry, familiar }) => {
+      const penalty = familiar > 0 ? familiar * 2 : -15;
+      return { entry, familiar, score: entry.popularity - penalty };
     })
     .sort((a, b) => b.score - a.score)
     .slice(0, limit);
 
-  return scored.map(({ entry }) => ({
+  return scored.map(({ entry, familiar }) => ({
     entry,
-    reason: playedFamilies.has(normalizeFamily(entry.family, entry.name))
-      ? `Complement your ${entry.family} repertoire`
-      : `You rarely explore ${entry.family}`,
+    reason:
+      familiar > 0
+        ? `You've played this ${familiar} time${familiar > 1 ? "s" : ""}`
+        : `You rarely explore ${entry.family}`,
   }));
 }
 
-function normalizeFamily(family: string, name: string): string {
-  // Lichess ECO names look like "Sicilian Defense: Najdorf Variation".
-  // The curated catalog uses "Sicilian" (short form). Normalise both.
-  const first = (family || name.split(":")[0] || name).trim();
-  return first.toLowerCase().replace(/\s+defense$/i, "");
+function startsWith(moves: readonly string[], prefix: readonly string[]): boolean {
+  if (moves.length < prefix.length) return false;
+  for (let i = 0; i < prefix.length; i++) {
+    if (moves[i] !== prefix[i]) return false;
+  }
+  return true;
 }

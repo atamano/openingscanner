@@ -12,34 +12,56 @@ interface GapAnalysisProps {
   stats: RepertoireStats;
   color: PlayerColor;
   onSelect: (moves: string[]) => void;
+  /**
+   * When set, narrows recommendations to curated entries that extend this
+   * move prefix — i.e. variations of the currently-selected opening.
+   */
+  scopePrefix?: readonly string[];
+  /** Human-readable name of the opening the scope corresponds to. */
+  scopeLabel?: string | null;
 }
 
 const PAGE_SIZE = 8;
 
-export function GapAnalysis({ stats, color, onSelect }: GapAnalysisProps) {
+export function GapAnalysis({
+  stats,
+  color,
+  onSelect,
+  scopePrefix,
+  scopeLabel,
+}: GapAnalysisProps) {
   const gaps = useMemo(
-    () => computeGaps(stats, color, Number.MAX_SAFE_INTEGER),
-    [stats, color],
+    () =>
+      computeGaps(stats, color, Number.MAX_SAFE_INTEGER, {
+        scopePrefix,
+      }),
+    [stats, color, scopePrefix],
   );
 
   const [visible, setVisible] = useState(PAGE_SIZE);
 
-  // Reset the pager when the underlying list changes (e.g. switching color).
+  // Reset the pager when the underlying list changes (e.g. switching color
+  // or selecting a new opening).
   useEffect(() => setVisible(PAGE_SIZE), [gaps]);
 
   if (gaps.length === 0) return null;
 
   const shown = gaps.slice(0, visible);
   const remaining = gaps.length - shown.length;
+  const scoped = Boolean(scopePrefix && scopePrefix.length > 0);
 
   return (
     <Card>
       <CardHeader className="flex-row items-center gap-2 space-y-0">
         <Lightbulb className="size-4 text-primary" />
         <div>
-          <CardTitle>Worth exploring</CardTitle>
+          <CardTitle>
+            {scoped ? "Variations worth exploring" : "Worth exploring"}
+          </CardTitle>
           <CardDescription>
-            Openings missing from the player's {color} repertoire.
+            {scoped && scopeLabel
+              ? `Lines under ${scopeLabel} you haven't played much.`
+              : `Openings missing from the player's ${color} repertoire.`}
           </CardDescription>
         </div>
       </CardHeader>

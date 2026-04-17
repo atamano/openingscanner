@@ -1,12 +1,13 @@
 "use client";
 
 import { GitBranch, Info, MousePointerClick } from "lucide-react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ChessBoard } from "@/components/chess/chess-board";
 import { ContinuationsPanel } from "@/components/scanner/continuations-panel";
 import { ExportMenu } from "@/components/scanner/export-menu";
 import { GapAnalysis } from "@/components/scanner/gap-analysis";
 import { RepertoireList } from "@/components/scanner/repertoire-list";
+import { WeakSpots } from "@/components/scanner/weak-spots";
 import {
   ToggleGroup,
   ToggleGroupItem,
@@ -60,10 +61,29 @@ export function Dashboard({ stats }: DashboardProps) {
   const baseMoves = selected?.entry?.moves ?? [];
   const boardMoves = previewMoves ?? [...baseMoves, ...path];
 
+  // When a new opening is picked we normally reset the drill path. The
+  // "jump to variation" flow (e.g. from Weak spots) needs to set the path
+  // and the selection in the same tick — this ref lets that one navigation
+  // skip the reset.
+  const skipNextPathResetRef = useRef(false);
   useEffect(() => {
+    if (skipNextPathResetRef.current) {
+      skipNextPathResetRef.current = false;
+      return;
+    }
     setPath([]);
     setPreviewMoves(null);
   }, [selectedId]);
+
+  const jumpToVariation = useCallback(
+    (openingId: string, variationPath: string[]) => {
+      skipNextPathResetRef.current = true;
+      setSelectedId(openingId);
+      setPath(variationPath);
+      setPreviewMoves(null);
+    },
+    [],
+  );
 
   // Pre-aggregated move tree across *all* games of the current color. Used
   // when no opening is selected so the Continuations panel stays useful from
@@ -252,6 +272,16 @@ export function Dashboard({ stats }: DashboardProps) {
         stats={stats}
         color={color}
         onSelect={(moves) => setPreviewMoves(moves)}
+        scopePrefix={selected?.entry?.moves}
+        scopeLabel={selected?.entry?.name ?? null}
+      />
+
+      <WeakSpots
+        stats={stats}
+        color={color}
+        selected={selected}
+        onSelectOpening={(openingId) => setSelectedId(openingId)}
+        onSelectVariation={jumpToVariation}
       />
     </section>
   );
