@@ -2,10 +2,9 @@
 
 import { AlertCircle, Radar } from "lucide-react";
 import { parseAsString, parseAsStringLiteral, useQueryState } from "nuqs";
-import { Suspense, useCallback, useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { Header } from "@/components/layout/header";
 import { Dashboard } from "@/components/scanner/dashboard";
-import { PlayerDirectory } from "@/components/scanner/player-directory";
 import { ScanForm } from "@/components/scanner/scan-form";
 import { ScanProgress } from "@/components/scanner/scan-progress";
 import { ScanSummaryBar } from "@/components/scanner/scan-summary-bar";
@@ -19,7 +18,7 @@ import {
   TIME_CLASSES,
   type DatePreset,
 } from "@/lib/scan/params";
-import type { Platform, ScanParams, TimeClass } from "@/lib/sources/types";
+import type { ScanParams, TimeClass } from "@/lib/sources/types";
 
 export default function HomePage() {
   return (
@@ -34,11 +33,8 @@ function HomeInner() {
   const { status, progress, stats, error, maxGames, scan, abort, reset } =
     useScanner();
 
-  const [username, setUsername] = useQueryState(
-    "u",
-    parseAsString.withDefault(""),
-  );
-  const [platform, setPlatform] = useQueryState(
+  const [username] = useQueryState("u", parseAsString.withDefault(""));
+  const [platform] = useQueryState(
     "p",
     parseAsStringLiteral(PLATFORMS).withDefault("chesscom"),
   );
@@ -81,24 +77,8 @@ function HomeInner() {
     setExpanded(true);
   };
 
-  // Click-through from the Popular players directory: only fill the form so
-  // the user can review/adjust filters before launching the scan themselves.
-  const fillPlayer = useCallback(
-    (nextUsername: string, nextPlatform: Platform) => {
-      setUsername(nextUsername);
-      setPlatform(nextPlatform);
-    },
-    [setUsername, setPlatform],
-  );
-
   if (!started) {
-    return (
-      <LandingHero
-        platform={platform}
-        onSubmit={submit}
-        onPickPlayer={fillPlayer}
-      />
-    );
+    return <LandingHero onSubmit={submit} />;
   }
 
   return (
@@ -175,20 +155,16 @@ function HomeInner() {
 }
 
 function LandingHero({
-  platform,
   onSubmit,
-  onPickPlayer,
 }: {
-  platform: Platform;
   onSubmit: (params: ScanParams) => void;
-  onPickPlayer: (username: string, platform: Platform) => void;
 }) {
   const dict = useDictionary();
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
       <div className="hero-bg paper-texture flex-1 flex flex-col items-center justify-center px-4 py-14">
-        <div className="w-full max-w-6xl relative z-10">
+        <div className="w-full max-w-3xl relative z-10">
           <div className="text-center mb-10 stagger-children">
             <div className="inline-flex items-center gap-2 rounded-full border border-border bg-paper/80 px-3 py-1 text-xs text-ink-light">
               <Radar className="h-3.5 w-3.5 text-amber" />
@@ -205,17 +181,8 @@ function LandingHero({
             </p>
           </div>
 
-          <div className="grid gap-6 lg:grid-cols-[minmax(0,7fr)_minmax(0,3fr)]">
-            <div className="bg-paper rounded-xl border border-border shadow-lg p-6 animate-scale-in paper-inset">
-              <ScanForm
-                onSubmit={onSubmit}
-                running={false}
-                onAbort={() => {}}
-              />
-            </div>
-            <div className="min-h-[520px] lg:h-[600px] animate-scale-in">
-              <PlayerDirectory platform={platform} onPick={onPickPlayer} />
-            </div>
+          <div className="bg-paper rounded-xl border border-border shadow-lg p-6 animate-scale-in paper-inset">
+            <ScanForm onSubmit={onSubmit} running={false} onAbort={() => {}} />
           </div>
 
           <p className="text-center text-xs text-ink-light/60 mt-10">
