@@ -1,7 +1,7 @@
 "use client";
 
 import { GitBranch, Info, MousePointerClick } from "lucide-react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { ChessBoard } from "@/components/chess/chess-board";
 import { ContinuationsPanel } from "@/components/scanner/continuations-panel";
 import { ExportMenu } from "@/components/scanner/export-menu";
@@ -20,6 +20,7 @@ import {
   type RepertoireStats,
 } from "@/lib/repertoire/aggregate";
 import { useDictionary } from "@/lib/i18n/context";
+import { useDashboardFilters } from "@/lib/state/dashboard-filters";
 import type { PlayerColor } from "@/lib/sources/types";
 import { formatNumber, formatPct } from "@/lib/utils";
 
@@ -37,9 +38,17 @@ export function Dashboard({ stats }: DashboardProps) {
   }, [stats.colorBreakdown]);
 
   const [color, setColor] = useState<PlayerColor>(availableColors[0] ?? "white");
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [path, setPath] = useState<string[]>([]);
-  const [previewMoves, setPreviewMoves] = useState<string[] | null>(null);
+  const {
+    selectedId,
+    path,
+    previewMoves,
+    setSelectedId,
+    setPath,
+    setPreviewMoves,
+    jumpToVariation,
+    skipNextPathResetRef,
+    reset: resetFilters,
+  } = useDashboardFilters();
 
   const rowsForColor = useMemo(
     () =>
@@ -54,9 +63,8 @@ export function Dashboard({ stats }: DashboardProps) {
   // Reset drill state when color/stats change, but don't auto-select:
   // the user should see a clean starting position until they pick an opening.
   useEffect(() => {
-    setSelectedId(null);
-    setPreviewMoves(null);
-    setPath([]);
+    resetFilters();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [color, stats]);
 
   const selected = selectedId ? stats.byOpening[selectedId] : null;
@@ -64,10 +72,8 @@ export function Dashboard({ stats }: DashboardProps) {
   const boardMoves = previewMoves ?? [...baseMoves, ...path];
 
   // When a new opening is picked we normally reset the drill path. The
-  // "jump to variation" flow (e.g. from Weak spots) needs to set the path
-  // and the selection in the same tick — this ref lets that one navigation
-  // skip the reset.
-  const skipNextPathResetRef = useRef(false);
+  // "jump to variation" flow (ref provided by the filters context) skips it
+  // so the selection + path land in the same tick.
   useEffect(() => {
     if (skipNextPathResetRef.current) {
       skipNextPathResetRef.current = false;
@@ -75,17 +81,8 @@ export function Dashboard({ stats }: DashboardProps) {
     }
     setPath([]);
     setPreviewMoves(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedId]);
-
-  const jumpToVariation = useCallback(
-    (openingId: string, variationPath: string[]) => {
-      skipNextPathResetRef.current = true;
-      setSelectedId(openingId);
-      setPath(variationPath);
-      setPreviewMoves(null);
-    },
-    [],
-  );
 
   // Pre-aggregated move tree across *all* games of the current color. Used
   // when no opening is selected so the Continuations panel stays useful from
@@ -184,16 +181,16 @@ export function Dashboard({ stats }: DashboardProps) {
                 <ToggleGroupItem
                   value="white"
                   title={`White (${formatNumber(stats.colorBreakdown.white)} games)`}
-                  className="px-2 font-mono text-xs"
+                  className="px-2.5 text-xs"
                 >
-                  W
+                  White
                 </ToggleGroupItem>
                 <ToggleGroupItem
                   value="black"
                   title={`Black (${formatNumber(stats.colorBreakdown.black)} games)`}
-                  className="px-2 font-mono text-xs"
+                  className="px-2.5 text-xs"
                 >
-                  B
+                  Black
                 </ToggleGroupItem>
               </ToggleGroup>
             ) : null
@@ -286,7 +283,7 @@ export function Dashboard({ stats }: DashboardProps) {
         stats={stats}
         color={color}
         selected={selected}
-        onSelectOpening={(openingId) => setSelectedId(openingId)}
+        onSelectOpening={(openingId) => jumpToVariation(openingId, [])}
         onSelectVariation={jumpToVariation}
       />
     </section>

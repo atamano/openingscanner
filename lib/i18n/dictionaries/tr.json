@@ -97,7 +97,10 @@
     "kpiN": "N",
     "kpiWin": "G%",
     "kpiDraw": "B%",
-    "kpiLoss": "K%"
+    "kpiLoss": "K%",
+    "filterLabel": "Filtre:",
+    "filterPlySuffix": "· {count} yarı-hamle içinde",
+    "clearFilter": "Temizle"
   },
   "continuations": {
     "move": "Hamle",

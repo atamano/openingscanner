@@ -97,7 +97,10 @@
     "kpiN": "N",
     "kpiWin": "Z%",
     "kpiDraw": "R%",
-    "kpiLoss": "P%"
+    "kpiLoss": "P%",
+    "filterLabel": "Filtr:",
+    "filterPlySuffix": "· {count} półruchów w głąb",
+    "clearFilter": "Wyczyść"
   },
   "continuations": {
     "move": "Ruch",

@@ -97,7 +97,10 @@
     "kpiN": "N",
     "kpiWin": "勝%",
     "kpiDraw": "引%",
-    "kpiLoss": "負%"
+    "kpiLoss": "負%",
+    "filterLabel": "フィルタ:",
+    "filterPlySuffix": "· {count}手先",
+    "clearFilter": "クリア"
   },
   "continuations": {
     "move": "手",

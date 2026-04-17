@@ -1,7 +1,7 @@
 "use client";
 
 import { AlertCircle, Radar } from "lucide-react";
-import { parseAsBoolean, parseAsString, useQueryState } from "nuqs";
+import { parseAsString, useQueryState } from "nuqs";
 import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { Header } from "@/components/layout/header";
 import { Dashboard } from "@/components/scanner/dashboard";
@@ -11,12 +11,8 @@ import { ScanProgress } from "@/components/scanner/scan-progress";
 import { ScanSummaryBar } from "@/components/scanner/scan-summary-bar";
 import { useScanner } from "@/hooks/use-scanner";
 import { useDictionary } from "@/lib/i18n/context";
-import type {
-  Platform,
-  ScanColor,
-  ScanParams,
-  TimeClass,
-} from "@/lib/sources/types";
+import { DashboardFiltersProvider } from "@/lib/state/dashboard-filters";
+import type { Platform, ScanParams } from "@/lib/sources/types";
 
 export default function HomePage() {
   return (
@@ -37,12 +33,11 @@ function HomeInner() {
   );
   const [platform, setPlatform] = useQueryState(
     "p",
-    parseAsString.withDefault("lichess"),
+    parseAsString.withDefault("chesscom"),
   );
   const [color] = useQueryState("c", parseAsString.withDefault("both"));
   const [times] = useQueryState("tc", parseAsString.withDefault("blitz,rapid"));
   const [window] = useQueryState("d", parseAsString.withDefault("1y"));
-  const [rated] = useQueryState("rated", parseAsBoolean.withDefault(true));
   const timeClasses = times ? times.split(",").filter(Boolean) : [];
 
   const started = status !== "idle";
@@ -57,7 +52,9 @@ function HomeInner() {
     if (status === "idle") autoCollapsedRef.current = false;
   }, [status]);
 
+  const [scanGen, setScanGen] = useState(0);
   const submit = (params: ScanParams) => {
+    setScanGen((g) => g + 1);
     scan(params);
     setExpanded(false);
   };
@@ -67,111 +64,107 @@ function HomeInner() {
     setExpanded(true);
   };
 
-  // Click-through from the Popular players directory: sync the URL state
-  // (so the form reflects the picked player) and immediately trigger the
-  // scan using the current filter preferences.
-  const quickScan = useCallback(
+  // Click-through from the Popular players directory: only fill the form so
+  // the user can review/adjust filters before launching the scan themselves.
+  const fillPlayer = useCallback(
     (nextUsername: string, nextPlatform: Platform) => {
       setUsername(nextUsername);
       setPlatform(nextPlatform);
-      const since = datePresetToSince(window);
-      submit({
-        platform: nextPlatform,
-        username: nextUsername,
-        filters: {
-          color: color as ScanColor,
-          ratedOnly: rated,
-          timeClasses: timeClasses as TimeClass[],
-          since,
-          maxGames: 2000,
-        },
-      });
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [color, rated, timeClasses.join(","), window],
+    [setUsername, setPlatform],
   );
 
   if (!started) {
-    return <LandingHero onSubmit={submit} onQuickScan={quickScan} />;
+    return (
+      <LandingHero
+        platform={platform as Platform}
+        onSubmit={submit}
+        onPickPlayer={fillPlayer}
+      />
+    );
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-paper-dark">
-      <Header onNewScan={newScan} />
+    <DashboardFiltersProvider resetKey={scanGen}>
+      <div className="min-h-screen flex flex-col bg-paper-dark">
+        <Header onNewScan={newScan} />
 
-      <div className="paper-texture animate-workspace-enter">
-        <div className="mx-auto max-w-7xl px-4 py-6 space-y-5">
-          <ScanSummaryBar
-            running={status === "running"}
-            progress={progress}
-            stats={stats}
-            username={username}
-            platform={platform}
-            color={color}
-            timeClasses={timeClasses}
-            window={window}
-            expanded={expanded}
-            onToggle={() => setExpanded((v) => !v)}
-            onReset={newScan}
-            onAbort={abort}
-          />
-
-          {expanded ? (
-            <section className="rounded-xl border border-border bg-paper p-5 paper-inset animate-fade-up">
-              <ScanForm
-                onSubmit={submit}
-                running={status === "running"}
-                onAbort={abort}
-              />
-            </section>
-          ) : null}
-
-          {status === "running" ? (
-            <ScanProgress
+        <div className="paper-texture animate-workspace-enter">
+          <div className="mx-auto max-w-7xl px-4 py-6 space-y-5">
+            <ScanSummaryBar
+              running={status === "running"}
               progress={progress}
-              running
-              expected={maxGames}
+              stats={stats}
+              username={username}
+              platform={platform}
+              color={color}
+              timeClasses={timeClasses}
+              window={window}
+              expanded={expanded}
+              onToggle={() => setExpanded((v) => !v)}
+              onReset={newScan}
+              onAbort={abort}
             />
-          ) : null}
 
-          {error ? (
-            <div className="rounded-xl border border-destructive/30 bg-destructive/5 p-4">
-              <div className="flex items-start gap-3">
-                <AlertCircle className="mt-0.5 h-4 w-4 text-destructive shrink-0" />
-                <div>
-                  <div className="text-sm font-semibold text-destructive">
-                    {dict.page.scanFailed}
+            {expanded ? (
+              <section className="rounded-xl border border-border bg-paper p-5 paper-inset animate-fade-up">
+                <ScanForm
+                  onSubmit={submit}
+                  running={status === "running"}
+                  onAbort={abort}
+                />
+              </section>
+            ) : null}
+
+            {status === "running" ? (
+              <ScanProgress
+                progress={progress}
+                running
+                expected={maxGames}
+              />
+            ) : null}
+
+            {error ? (
+              <div className="rounded-xl border border-destructive/30 bg-destructive/5 p-4">
+                <div className="flex items-start gap-3">
+                  <AlertCircle className="mt-0.5 h-4 w-4 text-destructive shrink-0" />
+                  <div>
+                    <div className="text-sm font-semibold text-destructive">
+                      {dict.page.scanFailed}
+                    </div>
+                    <div className="text-xs text-ink-light mt-0.5">{error}</div>
                   </div>
-                  <div className="text-xs text-ink-light mt-0.5">{error}</div>
                 </div>
               </div>
-            </div>
-          ) : null}
+            ) : null}
 
-          {status === "done" && stats && stats.totalGames > 0 ? (
-            <Dashboard stats={stats} />
-          ) : null}
+            {status === "done" && stats && stats.totalGames > 0 ? (
+              <Dashboard stats={stats} />
+            ) : null}
 
-          {status === "done" && stats && stats.totalGames === 0 ? (
-            <div className="rounded-xl border border-border bg-paper p-10 text-center text-sm text-ink-light paper-inset">
-              <p className="font-medium text-foreground">
-                {dict.page.noGamesMatched}
-              </p>
-              <p className="mt-1">{dict.page.widenTryHint}</p>
-            </div>
-          ) : null}
+            {status === "done" && stats && stats.totalGames === 0 ? (
+              <div className="rounded-xl border border-border bg-paper p-10 text-center text-sm text-ink-light paper-inset">
+                <p className="font-medium text-foreground">
+                  {dict.page.noGamesMatched}
+                </p>
+                <p className="mt-1">{dict.page.widenTryHint}</p>
+              </div>
+            ) : null}
+          </div>
         </div>
       </div>
-    </div>
+    </DashboardFiltersProvider>
   );
 }
 
 function LandingHero({
+  platform,
   onSubmit,
-  onQuickScan,
+  onPickPlayer,
 }: {
+  platform: Platform;
   onSubmit: (params: ScanParams) => void;
-  onQuickScan: (username: string, platform: Platform) => void;
+  onPickPlayer: (username: string, platform: Platform) => void;
 }) {
   const dict = useDictionary();
   return (
@@ -204,7 +197,7 @@ function LandingHero({
               />
             </div>
             <div className="min-h-[520px] lg:h-[600px] animate-scale-in">
-              <PlayerDirectory onPick={onQuickScan} />
+              <PlayerDirectory platform={platform} onPick={onPickPlayer} />
             </div>
           </div>
 
@@ -217,17 +210,3 @@ function LandingHero({
   );
 }
 
-function datePresetToSince(preset: string): number | undefined {
-  const now = Date.now();
-  switch (preset) {
-    case "30d":
-      return now - 30 * 24 * 60 * 60 * 1000;
-    case "6m":
-      return now - 6 * 30 * 24 * 60 * 60 * 1000;
-    case "1y":
-      return now - 365 * 24 * 60 * 60 * 1000;
-    case "all":
-    default:
-      return undefined;
-  }
-}

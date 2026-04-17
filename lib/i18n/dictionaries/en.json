@@ -97,7 +97,10 @@
     "kpiN": "N",
     "kpiWin": "W%",
     "kpiDraw": "D%",
-    "kpiLoss": "L%"
+    "kpiLoss": "L%",
+    "filterLabel": "Filtered to",
+    "filterPlySuffix": "· {count} ply in",
+    "clearFilter": "Clear"
   },
   "continuations": {
     "move": "Move",

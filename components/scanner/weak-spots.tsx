@@ -107,9 +107,9 @@ export function WeakSpots({
                   </span>
                 </div>
                 <div className="font-medium">
-                  {dict.weakSpots.afterPly.replace(
-                    "{count}",
-                    String(v.path.length),
+                  {formatLastMove(
+                    selected.entry?.moves ?? [],
+                    v.path,
                   )}
                 </div>
                 <div className="mt-1 font-mono text-xs text-muted-foreground group-hover:text-foreground">
@@ -185,6 +185,18 @@ export function WeakSpots({
       ) : null}
     </Card>
   );
+}
+
+function formatLastMove(
+  baseMoves: readonly string[],
+  pathMoves: readonly string[],
+): string {
+  const last = pathMoves[pathMoves.length - 1];
+  if (!last) return "";
+  const totalPly = baseMoves.length + pathMoves.length;
+  const moveNumber = Math.ceil(totalPly / 2);
+  const isBlack = totalPly % 2 === 0;
+  return isBlack ? `${moveNumber}... ${last}` : `${moveNumber}. ${last}`;
 }
 
 function renderPreview(sans: readonly string[]): string {

@@ -10,15 +10,16 @@ import {
 import type { Platform } from "@/lib/sources/types";
 
 interface PlayerDirectoryProps {
+  platform: Platform;
   onPick: (username: string, platform: Platform) => void;
 }
 
 const PAGE_SIZE = 12;
 
-const PLATFORMS: { value: Platform; label: string; icon: string }[] = [
-  { value: "lichess", label: "Lichess", icon: "♞" },
-  { value: "chesscom", label: "Chess.com", icon: "♘" },
-];
+const PLATFORM_LABEL: Record<Platform, string> = {
+  chesscom: "Chess.com",
+  lichess: "Lichess",
+};
 
 const COUNTRY_LABELS: Record<string, string> = {
   NO: "Norway",
@@ -70,8 +71,7 @@ const COUNTRY_LABELS: Record<string, string> = {
   DZ: "Algeria",
 };
 
-export function PlayerDirectory({ onPick }: PlayerDirectoryProps) {
-  const [platform, setPlatform] = useState<Platform>("chesscom");
+export function PlayerDirectory({ platform, onPick }: PlayerDirectoryProps) {
   const [country, setCountry] = useState<string>("");
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(0);
@@ -80,19 +80,31 @@ export function PlayerDirectory({ onPick }: PlayerDirectoryProps) {
   const normalizedQuery = deferredQuery.trim().toLowerCase();
 
   const filtered = useMemo(() => {
-    return POPULAR_PLAYERS.filter((p) => {
+    const base = POPULAR_PLAYERS.filter((p) => {
       if (!handleFor(p, platform)) return false;
       if (country && p.country !== country) return false;
-      if (!normalizedQuery) return true;
-      const handle = handleFor(p, platform) ?? "";
-      return (
-        p.name.toLowerCase().includes(normalizedQuery) ||
-        handle.toLowerCase().includes(normalizedQuery) ||
-        (COUNTRY_LABELS[p.country] ?? "")
-          .toLowerCase()
-          .includes(normalizedQuery)
-      );
+      return true;
     });
+
+    if (!normalizedQuery) return base;
+
+    // Fuzzy match against name / handle / country — case-insensitive,
+    // subsequence-aware (e.g. "mgns" matches "Magnus"), with a score that
+    // rewards consecutive matches and matches at word boundaries.
+    const scored: { player: (typeof base)[number]; score: number }[] = [];
+    for (const p of base) {
+      const handle = handleFor(p, platform) ?? "";
+      const country = COUNTRY_LABELS[p.country] ?? p.country;
+      const scores = [
+        fuzzyScore(normalizedQuery, p.name.toLowerCase()),
+        fuzzyScore(normalizedQuery, handle.toLowerCase()),
+        fuzzyScore(normalizedQuery, country.toLowerCase()),
+      ];
+      const best = Math.max(...scores);
+      if (best > 0) scored.push({ player: p, score: best });
+    }
+    scored.sort((a, b) => b.score - a.score);
+    return scored.map((s) => s.player);
   }, [platform, country, normalizedQuery]);
 
   // Reset pagination when any filter changes.
@@ -121,35 +133,13 @@ export function PlayerDirectory({ onPick }: PlayerDirectoryProps) {
           <Users className="size-3.5" />
         </div>
         <div className="flex-1">
-          <div className="text-sm font-semibold">Popular players</div>
+          <div className="text-sm font-semibold">
+            Popular on {PLATFORM_LABEL[platform]}
+          </div>
           <div className="text-[11px] text-ink-light">
-            {filtered.length} handles · click to scan
+            {filtered.length} handles · click to fill
           </div>
         </div>
-      </div>
-
-      {/* Platform tabs */}
-      <div className="mb-3 grid grid-cols-2 gap-1.5">
-        {PLATFORMS.map((p) => (
-          <button
-            key={p.value}
-            type="button"
-            onClick={() => setPlatform(p.value)}
-            className={`h-8 rounded-md text-xs font-medium transition-all border ${
-              platform === p.value
-                ? "border-amber/40 text-amber-dark"
-                : "border-border text-ink-light hover:border-amber/30 hover:text-foreground"
-            }`}
-            style={
-              platform === p.value
-                ? { backgroundColor: "rgba(176,122,46,0.12)" }
-                : undefined
-            }
-          >
-            <span className="mr-1">{p.icon}</span>
-            {p.label}
-          </button>
-        ))}
       </div>
 
       {/* Search + country row */}
@@ -194,32 +184,35 @@ export function PlayerDirectory({ onPick }: PlayerDirectoryProps) {
             No player matches these filters.
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3">
+          <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
             {shown.map((player) => {
               const handle = handleFor(player, platform);
               if (!handle) return null;
               return (
                 <button
-                  key={`${player.name}-${platform}-${handle}`}
+                  key={`${platform}-${handle}`}
                   type="button"
                   onClick={() => onPick(handle, platform)}
-                  className="group flex flex-col items-start gap-1 rounded-lg border border-border bg-paper-dark p-2 text-left transition-all hover:border-amber/40 hover:bg-amber/5"
+                  className="group flex min-w-0 flex-col items-start gap-1 rounded-lg border border-border bg-paper-dark p-2 text-left transition-all hover:border-amber/40 hover:bg-amber/5"
                   title={`${player.name} · ${handle}`}
                 >
-                  <div className="flex w-full items-center gap-1.5">
+                  <div className="flex w-full min-w-0 items-center gap-1.5">
                     {player.title ? (
-                      <span className="rounded border border-border px-1 font-mono text-[9px] font-semibold uppercase tracking-wide text-amber-dark">
+                      <span className="shrink-0 rounded border border-border px-1 font-mono text-[9px] font-semibold uppercase tracking-wide text-amber-dark">
                         {player.title}
                       </span>
                     ) : null}
-                    <span className="ml-auto font-mono text-[9px] uppercase tracking-wider text-ink-light">
-                      {COUNTRY_LABELS[player.country] ?? player.country}
+                    <span
+                      className="ml-auto shrink-0 font-mono text-[9px] uppercase tracking-wider text-ink-light"
+                      title={COUNTRY_LABELS[player.country] ?? player.country}
+                    >
+                      {player.country}
                     </span>
                   </div>
-                  <div className="line-clamp-2 text-xs font-semibold leading-tight">
+                  <div className="line-clamp-2 w-full break-words text-xs font-semibold leading-tight">
                     {player.name}
                   </div>
-                  <div className="truncate font-mono text-[10px] text-ink-light group-hover:text-foreground">
+                  <div className="w-full truncate font-mono text-[10px] text-ink-light group-hover:text-foreground">
                     {handle}
                   </div>
                 </button>
@@ -264,4 +257,49 @@ function handleFor(
   platform: Platform,
 ): string | undefined {
   return platform === "lichess" ? player.lichess : player.chesscom;
+}
+
+/**
+ * Cheap fuzzy match: every character of `query` must appear in `target` in
+ * order (subsequence match). Score rewards consecutive matches and matches
+ * right after a word boundary; returns 0 when no match.
+ *
+ * Both inputs are expected lowercase.
+ */
+function fuzzyScore(query: string, target: string): number {
+  if (!query) return 1;
+  if (!target) return 0;
+  // Fast path: exact substring match dominates any fuzzy hit.
+  const direct = target.indexOf(query);
+  if (direct === 0) return 10000;
+  if (direct > 0) return 5000 - direct;
+
+  let score = 0;
+  let ti = 0;
+  let lastMatch = -2;
+  for (let qi = 0; qi < query.length; qi++) {
+    const qc = query.charCodeAt(qi);
+    let found = -1;
+    while (ti < target.length) {
+      if (target.charCodeAt(ti) === qc) {
+        found = ti;
+        ti++;
+        break;
+      }
+      ti++;
+    }
+    if (found === -1) return 0;
+
+    let bonus = 10;
+    if (found === lastMatch + 1) bonus += 15; // consecutive
+    if (found === 0) bonus += 20; // prefix
+    else {
+      const prev = target.charCodeAt(found - 1);
+      // Word-boundary bonus (space / - / _ / . before the matched char).
+      if (prev === 32 || prev === 45 || prev === 95 || prev === 46) bonus += 10;
+    }
+    score += bonus;
+    lastMatch = found;
+  }
+  return score;
 }

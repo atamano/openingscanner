@@ -97,7 +97,10 @@
     "kpiN": "N",
     "kpiWin": "П%",
     "kpiDraw": "Н%",
-    "kpiLoss": "П%"
+    "kpiLoss": "П%",
+    "filterLabel": "Фільтр:",
+    "filterPlySuffix": "· на {count} півходів углиб",
+    "clearFilter": "Очистити"
   },
   "continuations": {
     "move": "Хід",

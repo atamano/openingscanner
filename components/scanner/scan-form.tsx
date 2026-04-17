@@ -50,7 +50,7 @@ export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
   );
   const [platform, setPlatform] = useQueryState(
     "p",
-    parseAsString.withDefault("lichess"),
+    parseAsString.withDefault("chesscom"),
   );
   const [color, setColor] = useQueryState(
     "c",
@@ -131,14 +131,17 @@ export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
       <div className="grid grid-cols-2 gap-1.5">
         {(
           [
-            { value: "lichess" as const, label: "Lichess", icon: "\u265E" },
             { value: "chesscom" as const, label: "Chess.com", icon: "\u2658" },
+            { value: "lichess" as const, label: "Lichess", icon: "\u265E" },
           ]
         ).map(({ value, label, icon }) => (
           <button
             key={value}
             type="button"
-            onClick={() => setPlatform(value)}
+            onClick={() => {
+              setPlatform(value);
+              if (value !== platform) setUsername("");
+            }}
             disabled={running}
             className={`h-10 rounded-lg text-sm font-medium transition-all border ${
               platform === value

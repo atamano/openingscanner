@@ -1,9 +1,10 @@
 "use client";
 
-import { ChevronDown, Pencil, RotateCcw, UserCircle } from "lucide-react";
+import { ChevronDown, Pencil, RotateCcw, UserCircle, X } from "lucide-react";
 import { useDictionary } from "@/lib/i18n/context";
 import type { RepertoireStats } from "@/lib/repertoire/aggregate";
 import type { ScanProgressEvent } from "@/lib/sources/types";
+import { useDashboardFilters } from "@/lib/state/dashboard-filters";
 import { cn, formatNumber } from "@/lib/utils";
 
 interface ScanSummaryBarProps {
@@ -41,6 +42,14 @@ export function ScanSummaryBar({
   onAbort,
 }: ScanSummaryBarProps) {
   const dict = useDictionary();
+  const {
+    selectedId,
+    path,
+    previewMoves,
+    clearOpening,
+    clearPath,
+    clearPreview,
+  } = useDashboardFilters();
   const gameCount = stats?.totalGames ?? progress?.fetched ?? 0;
 
   const colorLabelMap: Record<string, string> = {
@@ -53,6 +62,19 @@ export function ScanSummaryBar({
     "6m": dict.summary.windowLast6m,
     "1y": dict.summary.windowLast1y,
     all: dict.summary.windowAllTime,
+  };
+
+  const selectedStats = selectedId ? stats?.byOpening[selectedId] : null;
+  const openingLabel = selectedStats
+    ? selectedStats.entry?.name ?? dict.dashboard.uncategorized
+    : null;
+  const hasFilters = Boolean(
+    selectedId || path.length > 0 || previewMoves,
+  );
+  const clearAll = () => {
+    if (previewMoves) clearPreview();
+    if (selectedId) clearOpening();
+    else if (path.length > 0) clearPath();
   };
 
   return (
@@ -143,6 +165,71 @@ export function ScanSummaryBar({
           </button>
         </div>
       </div>
+
+      {hasFilters ? (
+        <div className="flex flex-wrap items-center gap-1.5 border-t border-border/60 px-4 py-2">
+          <span className="text-[11px] font-medium uppercase tracking-wider text-ink-light">
+            {dict.dashboard.filterLabel}
+          </span>
+          {openingLabel ? (
+            <FilterChip label={openingLabel} onRemove={clearOpening} />
+          ) : null}
+          {path.length > 0 ? (
+            <FilterChip
+              label={dict.dashboard.filterPlySuffix
+                .replace(/^·\s*/, "")
+                .replace("{count}", String(path.length))}
+              onRemove={clearPath}
+              subtle
+            />
+          ) : null}
+          {previewMoves ? (
+            <FilterChip
+              label={dict.dashboard.previewingLine}
+              onRemove={clearPreview}
+              subtle
+            />
+          ) : null}
+          <button
+            type="button"
+            onClick={clearAll}
+            className="ml-auto rounded-md px-2 py-0.5 text-[11px] font-medium text-ink-light hover:bg-paper-dark hover:text-foreground transition-colors"
+          >
+            {dict.dashboard.clearFilter}
+          </button>
+        </div>
+      ) : null}
     </div>
+  );
+}
+
+function FilterChip({
+  label,
+  onRemove,
+  subtle,
+}: {
+  label: string;
+  onRemove: () => void;
+  subtle?: boolean;
+}) {
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-medium",
+        subtle
+          ? "border-border bg-paper-dark/40 text-ink-light"
+          : "border-amber/40 bg-amber/10 text-foreground",
+      )}
+    >
+      <span className="truncate max-w-[16rem]">{label}</span>
+      <button
+        type="button"
+        onClick={onRemove}
+        className="-mr-1 rounded-full p-0.5 text-ink-light/70 hover:bg-rose-500/10 hover:text-rose-500 transition-colors"
+        aria-label="Remove filter"
+      >
+        <X className="size-3" />
+      </button>
+    </span>
   );
 }

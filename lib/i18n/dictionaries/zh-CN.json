@@ -97,7 +97,10 @@
     "kpiN": "N",
     "kpiWin": "胜%",
     "kpiDraw": "和%",
-    "kpiLoss": "负%"
+    "kpiLoss": "负%",
+    "filterLabel": "已筛选:",
+    "filterPlySuffix": "· 深入 {count} 步",
+    "clearFilter": "清除"
   },
   "continuations": {
     "move": "着法",

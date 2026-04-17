@@ -97,7 +97,10 @@
     "kpiN": "N",
     "kpiWin": "W%",
     "kpiDraw": "R%",
-    "kpiLoss": "V%"
+    "kpiLoss": "V%",
+    "filterLabel": "Gefilterd op",
+    "filterPlySuffix": "· {count} halve zetten erin",
+    "clearFilter": "Wissen"
   },
   "continuations": {
     "move": "Zet",

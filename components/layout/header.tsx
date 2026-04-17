@@ -1,7 +1,9 @@
 "use client";
 
 import { Plus } from "lucide-react";
-import { useDictionary } from "@/lib/i18n/context";
+import Link from "next/link";
+import { LocaleSwitcher } from "@/components/layout/locale-switcher";
+import { useDictionary, useLocale } from "@/lib/i18n/context";
 
 interface HeaderProps {
   onNewScan?: () => void;
@@ -10,15 +12,30 @@ interface HeaderProps {
 
 export function Header({ onNewScan, subtitle }: HeaderProps) {
   const dict = useDictionary();
+  const locale = useLocale();
   return (
     <header className="wood-panel border-b-2 border-amber-dark/30 shrink-0">
       <div className="flex h-11 items-center gap-4 px-5">
-        <span
-          className="text-base font-bold tracking-tight text-amber-light select-none"
-          style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
-        >
-          Repertoire Scanner
-        </span>
+        {onNewScan ? (
+          <button
+            type="button"
+            onClick={onNewScan}
+            className="text-base font-bold tracking-tight text-amber-light select-none rounded-md -mx-1 px-1 hover:text-paper transition-colors"
+            style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
+            aria-label="Back to home"
+          >
+            Repertoire Scanner
+          </button>
+        ) : (
+          <Link
+            href={`/${locale}`}
+            className="text-base font-bold tracking-tight text-amber-light select-none rounded-md -mx-1 px-1 hover:text-paper transition-colors"
+            style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
+            aria-label="Back to home"
+          >
+            Repertoire Scanner
+          </Link>
+        )}
 
         {subtitle ? (
           <>
@@ -38,6 +55,8 @@ export function Header({ onNewScan, subtitle }: HeaderProps) {
             {dict.header.newScan}
           </button>
         ) : null}
+
+        <LocaleSwitcher />
       </div>
     </header>
   );

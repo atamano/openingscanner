@@ -97,7 +97,10 @@
     "kpiN": "N",
     "kpiWin": "П%",
     "kpiDraw": "Н%",
-    "kpiLoss": "П%"
+    "kpiLoss": "П%",
+    "filterLabel": "Фильтр:",
+    "filterPlySuffix": "· на {count} полуходов в глубину",
+    "clearFilter": "Сбросить"
   },
   "continuations": {
     "move": "Ход",

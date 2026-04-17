@@ -90,6 +90,9 @@ export interface Dictionary {
     kpiWin: string;
     kpiDraw: string;
     kpiLoss: string;
+    filterLabel: string;
+    filterPlySuffix: string;
+    clearFilter: string;
   };
   continuations: {
     move: string;

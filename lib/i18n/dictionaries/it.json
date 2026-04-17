@@ -97,7 +97,10 @@
     "kpiN": "N",
     "kpiWin": "V%",
     "kpiDraw": "P%",
-    "kpiLoss": "S%"
+    "kpiLoss": "S%",
+    "filterLabel": "Filtrato su",
+    "filterPlySuffix": "· {count} mezze mosse dentro",
+    "clearFilter": "Rimuovi"
   },
   "continuations": {
     "move": "Mossa",

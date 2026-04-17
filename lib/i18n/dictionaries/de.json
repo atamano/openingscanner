@@ -97,7 +97,10 @@
     "kpiN": "N",
     "kpiWin": "S%",
     "kpiDraw": "R%",
-    "kpiLoss": "N%"
+    "kpiLoss": "N%",
+    "filterLabel": "Gefiltert auf",
+    "filterPlySuffix": "· {count} Halbzüge tief",
+    "clearFilter": "Zurücksetzen"
   },
   "continuations": {
     "move": "Zug",

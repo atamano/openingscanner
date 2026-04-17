@@ -97,7 +97,10 @@
     "kpiN": "N",
     "kpiWin": "V%",
     "kpiDraw": "T%",
-    "kpiLoss": "D%"
+    "kpiLoss": "D%",
+    "filterLabel": "Filtrado a",
+    "filterPlySuffix": "· {count} medio-jugadas dentro",
+    "clearFilter": "Limpiar"
   },
   "continuations": {
     "move": "Jugada",

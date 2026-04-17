@@ -97,7 +97,10 @@
     "kpiN": "N",
     "kpiWin": "V%",
     "kpiDraw": "E%",
-    "kpiLoss": "D%"
+    "kpiLoss": "D%",
+    "filterLabel": "Filtrado para",
+    "filterPlySuffix": "· {count} meios-lances dentro",
+    "clearFilter": "Limpar"
   },
   "continuations": {
     "move": "Lance",

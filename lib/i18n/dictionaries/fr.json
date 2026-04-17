@@ -97,7 +97,10 @@
     "kpiN": "N",
     "kpiWin": "V%",
     "kpiDraw": "N%",
-    "kpiLoss": "D%"
+    "kpiLoss": "D%",
+    "filterLabel": "Filtré sur",
+    "filterPlySuffix": "· {count} demi-coups plus loin",
+    "clearFilter": "Effacer"
   },
   "continuations": {
     "move": "Coup",

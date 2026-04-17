@@ -42,10 +42,12 @@ export function computeWeakOpenings(
     drawPct: s.draws / s.gameCount,
   }));
 
-  // Lowest win-rate first; break ties with sample size (more games = more
-  // reliable signal) and then higher loss-rate.
+  // Lowest expected score first (wins + 0.5·draws). Break ties with sample
+  // size (more games = more reliable signal) and then higher loss-rate.
   scored.sort((a, b) => {
-    if (a.winPct !== b.winPct) return a.winPct - b.winPct;
+    const scoreA = a.winPct + 0.5 * a.drawPct;
+    const scoreB = b.winPct + 0.5 * b.drawPct;
+    if (scoreA !== scoreB) return scoreA - scoreB;
     if (a.stats.gameCount !== b.stats.gameCount) {
       return b.stats.gameCount - a.stats.gameCount;
     }
@@ -58,25 +60,34 @@ export function computeWeakOpenings(
 /**
  * Walk an opening's tree and surface the worst-performing lines. Only nodes
  * with at least `minGames` games are kept so we're not ranking statistical
- * noise from one-off blunders.
+ * noise from one-off blunders. Weakness is gated on expected score
+ * (wins + 0.5·draws) rather than raw win-rate so 100%-draw lines don't
+ * masquerade as catastrophes while mixed-result lines get filtered out.
  */
+const WEAK_VARIATION_SCORE_MAX = 0.45;
+
 export function computeWeakVariations(
   opening: OpeningStats,
   limit = Number.MAX_SAFE_INTEGER,
-  minGames = 4,
+  minGames = 3,
   maxDepth = 12,
 ): WeakVariation[] {
   const out: WeakVariation[] = [];
 
   const visit = (node: MoveNode, path: string[]) => {
     if (path.length > 0 && node.count >= minGames) {
-      out.push({
-        path: [...path],
-        count: node.count,
-        winPct: node.playerWins / node.count,
-        lossPct: node.playerLosses / node.count,
-        drawPct: node.draws / node.count,
-      });
+      const winPct = node.playerWins / node.count;
+      const drawPct = node.draws / node.count;
+      const score = winPct + 0.5 * drawPct;
+      if (score < WEAK_VARIATION_SCORE_MAX) {
+        out.push({
+          path: [...path],
+          count: node.count,
+          winPct,
+          lossPct: node.playerLosses / node.count,
+          drawPct,
+        });
+      }
     }
     if (path.length >= maxDepth) return;
     for (const child of Object.values(node.children)) {
@@ -115,8 +126,12 @@ export function computeWeakVariations(
     if (!dominated) kept.push(v);
   }
 
+  // Ascending expected score — worst lines first. Ties broken by larger
+  // sample size (more reliable signal) then higher loss-rate.
   kept.sort((a, b) => {
-    if (a.winPct !== b.winPct) return a.winPct - b.winPct;
+    const scoreA = a.winPct + 0.5 * a.drawPct;
+    const scoreB = b.winPct + 0.5 * b.drawPct;
+    if (scoreA !== scoreB) return scoreA - scoreB;
     if (a.count !== b.count) return b.count - a.count;
     return b.lossPct - a.lossPct;
   });

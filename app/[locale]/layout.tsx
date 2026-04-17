@@ -148,22 +148,23 @@ export default async function LocaleLayout({
     <html
       lang={info.bcp47}
       dir={info.dir}
+      data-scroll-behavior="smooth"
       className={`${dmSans.variable} ${ibmPlexMono.variable} ${fraunces.variable}`}
     >
       <body className="antialiased bg-background text-foreground">
+        <Script
+          id="jsonld-webapp"
+          type="application/ld+json"
+          strategy="afterInteractive"
+        >
+          {jsonLdString}
+        </Script>
         <I18nProvider locale={locale} dict={dict}>
           <TooltipProvider delayDuration={200}>
             <NuqsAdapter>{children}</NuqsAdapter>
           </TooltipProvider>
           <Toaster richColors closeButton position="bottom-right" />
         </I18nProvider>
-        <Script
-          id="jsonld-webapp"
-          type="application/ld+json"
-          strategy="beforeInteractive"
-        >
-          {jsonLdString}
-        </Script>
       </body>
     </html>
   );
