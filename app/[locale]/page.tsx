@@ -195,7 +195,7 @@ function LandingHero({
             </p>
           </div>
 
-          <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)]">
+          <div className="grid gap-6 lg:grid-cols-[minmax(0,7fr)_minmax(0,3fr)]">
             <div className="bg-paper rounded-xl border border-border shadow-lg p-6 animate-scale-in paper-inset">
               <ScanForm
                 onSubmit={onSubmit}

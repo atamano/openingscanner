@@ -1,7 +1,28 @@
 {
-  "name": "repertoire-scanner",
+  "name": "openingscanner",
   "version": "0.1.0",
   "private": true,
+  "description": "Client-side scanner that extracts any Lichess or Chess.com player's real opening repertoire — frequency, win rate, weak spots, PGN export.",
+  "license": "MIT",
+  "author": "Antoine Tamano <antoine.tamano@gmail.com>",
+  "homepage": "https://openingscanner.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/atamano/openingscanner.git"
+  },
+  "bugs": {
+    "url": "https://github.com/atamano/openingscanner/issues"
+  },
+  "keywords": [
+    "chess",
+    "lichess",
+    "chess.com",
+    "opening",
+    "repertoire",
+    "eco",
+    "pgn",
+    "nextjs"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
