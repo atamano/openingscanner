@@ -19,6 +19,7 @@ import {
   type OpeningStats,
   type RepertoireStats,
 } from "@/lib/repertoire/aggregate";
+import { useDictionary } from "@/lib/i18n/context";
 import type { PlayerColor } from "@/lib/sources/types";
 import { formatNumber, formatPct } from "@/lib/utils";
 
@@ -27,6 +28,7 @@ interface DashboardProps {
 }
 
 export function Dashboard({ stats }: DashboardProps) {
+  const dict = useDictionary();
   const availableColors = useMemo<PlayerColor[]>(() => {
     const out: PlayerColor[] = [];
     if (stats.colorBreakdown.white > 0) out.push("white");
@@ -165,7 +167,7 @@ export function Dashboard({ stats }: DashboardProps) {
   return (
     <section className="space-y-3">
       {/* Main 3-col grid — board gets first-screen prominence. */}
-      <div className="grid items-stretch gap-3 xl:h-[calc(100dvh-6rem)] xl:grid-cols-[minmax(0,1fr)_minmax(0,460px)_minmax(300px,360px)]">
+      <div className="grid items-stretch gap-3 xl:h-[calc(min(460px,100dvh-20rem)+6rem)] xl:grid-cols-[minmax(0,1fr)_minmax(0,460px)_minmax(300px,360px)]">
         <RepertoireList
           stats={stats}
           color={color}
@@ -203,13 +205,13 @@ export function Dashboard({ stats }: DashboardProps) {
             <div className="flex flex-col gap-3">
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 <Info className="size-3.5" />
-                Preview of a recommended line — not yet in the player&apos;s games.
+                {dict.dashboard.previewNotice}
                 <button
                   type="button"
                   onClick={() => setPreviewMoves(null)}
                   className="ml-auto text-primary hover:underline"
                 >
-                  Close preview
+                  {dict.dashboard.closePreview}
                 </button>
               </div>
               <div className="mx-auto w-full max-w-[min(100%,calc(100dvh-20rem))]">
@@ -263,7 +265,11 @@ export function Dashboard({ stats }: DashboardProps) {
                 ),
               )
             }
-            title={selected ? "Continuations" : "First moves"}
+            title={
+              selected
+                ? dict.dashboard.continuations
+                : dict.dashboard.firstMoves
+            }
           />
         )}
       </div>
@@ -288,10 +294,13 @@ export function Dashboard({ stats }: DashboardProps) {
 }
 
 function EmptyContinuationsPanel({ previewing }: { previewing: boolean }) {
+  const dict = useDictionary();
   return (
     <div className="hidden h-full min-h-0 flex-col overflow-hidden rounded-xl border bg-card xl:flex">
       <div className="flex items-center justify-between px-4 py-3">
-        <span className="text-sm font-medium">Continuations</span>
+        <span className="text-sm font-medium">
+          {dict.dashboard.continuations}
+        </span>
         <span className="text-xs text-muted-foreground">—</span>
       </div>
       <div className="border-t" />
@@ -306,18 +315,18 @@ function EmptyContinuationsPanel({ previewing }: { previewing: boolean }) {
           </div>
           <div className="text-sm font-medium">
             {previewing
-              ? "Previewing a recommended line"
-              : "No opening selected"}
+              ? dict.dashboard.previewingLine
+              : dict.dashboard.noOpeningSelected}
           </div>
           <p className="text-xs leading-relaxed text-muted-foreground">
             {previewing
-              ? "This line isn't in your games yet, so there are no real continuations to show. Close the preview to drill back into your repertoire."
-              : "Pick an opening on the left to see the moves you actually played from that position, ranked by frequency and win rate."}
+              ? dict.dashboard.previewingDesc
+              : dict.dashboard.pickOpeningDesc}
           </p>
           {!previewing ? (
             <div className="flex items-center gap-1.5 rounded-full border bg-background/60 px-2.5 py-1 text-[11px] text-muted-foreground">
               <MousePointerClick className="size-3" />
-              Click any row on the left
+              {dict.dashboard.clickRow}
             </div>
           ) : null}
         </div>
@@ -335,16 +344,19 @@ function EmptyCenterPanel({
   boardMoves: string[];
   actions?: React.ReactNode;
 }) {
+  const dict = useDictionary();
   const hasMoves = boardMoves.length > 0;
   return (
     <div className="flex flex-col gap-3">
       <div className="flex items-start gap-3">
         <div className="min-w-0 flex-1">
-          <div className="text-xs text-muted-foreground">Board</div>
+          <div className="text-xs text-muted-foreground">
+            {dict.dashboard.boardLabel}
+          </div>
           <div className="mt-0.5 text-sm font-semibold leading-tight text-muted-foreground">
             {hasMoves
-              ? "Exploring from the initial position"
-              : "Pick an opening or press → to start exploring"}
+              ? dict.dashboard.exploringInitial
+              : dict.dashboard.pickOpeningHint}
           </div>
         </div>
         {actions ? <div className="shrink-0">{actions}</div> : null}
@@ -353,7 +365,7 @@ function EmptyCenterPanel({
         <ChessBoard moves={boardMoves} orientation={color} />
       </div>
       <p className="text-center text-[11px] text-muted-foreground">
-        Tip · ↑ ↓ pick alternative · → play · ← back
+        {dict.dashboard.tipLegend}
       </p>
     </div>
   );
@@ -370,6 +382,7 @@ function CenterPanel({
   boardMoves: string[];
   actions?: React.ReactNode;
 }) {
+  const dict = useDictionary();
   const winPct = stats.gameCount ? stats.playerWins / stats.gameCount : 0;
   const drawPct = stats.gameCount ? stats.draws / stats.gameCount : 0;
   const lossPct = stats.gameCount ? stats.playerLosses / stats.gameCount : 0;
@@ -390,7 +403,7 @@ function CenterPanel({
             ) : null}
           </div>
           <div className="mt-0.5 text-sm font-semibold leading-tight">
-            {stats.entry?.name ?? "Uncategorized"}
+            {stats.entry?.name ?? dict.dashboard.uncategorized}
           </div>
         </div>
         {actions ? <div className="shrink-0">{actions}</div> : null}
@@ -401,15 +414,27 @@ function CenterPanel({
       </div>
 
       <div className="grid grid-cols-4 gap-2 text-xs">
-        <MiniKpi label="N" value={stats.gameCount} />
-        <MiniKpi label="W%" value={formatPct(winPct, 0)} accent="emerald" />
-        <MiniKpi label="D%" value={formatPct(drawPct, 0)} accent="amber" />
-        <MiniKpi label="L%" value={formatPct(lossPct, 0)} accent="rose" />
+        <MiniKpi label={dict.dashboard.kpiN} value={stats.gameCount} />
+        <MiniKpi
+          label={dict.dashboard.kpiWin}
+          value={formatPct(winPct, 0)}
+          accent="emerald"
+        />
+        <MiniKpi
+          label={dict.dashboard.kpiDraw}
+          value={formatPct(drawPct, 0)}
+          accent="amber"
+        />
+        <MiniKpi
+          label={dict.dashboard.kpiLoss}
+          value={formatPct(lossPct, 0)}
+          accent="rose"
+        />
       </div>
 
       {stats.avgOpponentRating ? (
         <div className="rounded-md border bg-background/40 px-3 py-1.5 text-center text-xs text-muted-foreground">
-          Avg opp. rating ·{" "}
+          {dict.dashboard.avgOpponentRating} ·{" "}
           <span className="font-mono tabular-nums text-foreground">
             {Math.round(stats.avgOpponentRating)}
           </span>

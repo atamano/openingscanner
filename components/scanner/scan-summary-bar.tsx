@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronDown, Pencil, RotateCcw, UserCircle } from "lucide-react";
+import { useDictionary } from "@/lib/i18n/context";
 import type { RepertoireStats } from "@/lib/repertoire/aggregate";
 import type { ScanProgressEvent } from "@/lib/sources/types";
 import { cn, formatNumber } from "@/lib/utils";
@@ -25,19 +26,6 @@ const PLATFORM_LABEL: Record<string, string> = {
   chesscom: "Chess.com",
 };
 
-const COLOR_LABEL: Record<string, string> = {
-  white: "as White",
-  black: "as Black",
-  both: "both sides",
-};
-
-const WINDOW_LABEL: Record<string, string> = {
-  "30d": "last 30 days",
-  "6m": "last 6 months",
-  "1y": "last year",
-  all: "all time",
-};
-
 export function ScanSummaryBar({
   running,
   progress,
@@ -52,7 +40,20 @@ export function ScanSummaryBar({
   onReset,
   onAbort,
 }: ScanSummaryBarProps) {
+  const dict = useDictionary();
   const gameCount = stats?.totalGames ?? progress?.fetched ?? 0;
+
+  const colorLabelMap: Record<string, string> = {
+    white: dict.summary.asWhite,
+    black: dict.summary.asBlack,
+    both: dict.summary.bothSides,
+  };
+  const windowLabelMap: Record<string, string> = {
+    "30d": dict.summary.windowLast30d,
+    "6m": dict.summary.windowLast6m,
+    "1y": dict.summary.windowLast1y,
+    all: dict.summary.windowAllTime,
+  };
 
   return (
     <div className="rounded-xl border border-border bg-paper paper-inset">
@@ -69,10 +70,10 @@ export function ScanSummaryBar({
               </span>
             </div>
             <div className="truncate text-xs text-ink-light">
-              {COLOR_LABEL[color] ?? color}
+              {colorLabelMap[color] ?? color}
               {timeClasses.length ? ` · ${timeClasses.join(", ")}` : ""}
               {" · "}
-              {WINDOW_LABEL[window] ?? window}
+              {windowLabelMap[window] ?? window}
             </div>
           </div>
         </div>
@@ -95,7 +96,9 @@ export function ScanSummaryBar({
             <span className="font-mono tabular-nums text-foreground">
               {formatNumber(gameCount)}
             </span>
-            <span>{running ? "streaming" : "games"}</span>
+            <span>
+              {running ? dict.summary.streamingLabel : dict.summary.gamesLabel}
+            </span>
           </div>
 
           {running ? (
@@ -104,7 +107,7 @@ export function ScanSummaryBar({
               onClick={onAbort}
               className="h-8 px-3 rounded-md bg-destructive text-destructive-foreground text-xs font-semibold hover:bg-destructive/90 transition-colors"
             >
-              Stop
+              {dict.summary.stop}
             </button>
           ) : null}
 
@@ -120,7 +123,7 @@ export function ScanSummaryBar({
           >
             <Pencil className="h-3.5 w-3.5" />
             <span className="hidden sm:inline">
-              {expanded ? "Collapse" : "Edit filters"}
+              {expanded ? dict.summary.collapse : dict.summary.editFilters}
             </span>
             <ChevronDown
               className={cn(
@@ -136,7 +139,7 @@ export function ScanSummaryBar({
             className="flex items-center gap-1.5 h-8 px-3 rounded-md text-xs font-medium text-ink-light hover:text-foreground hover:bg-paper-dark transition-all"
           >
             <RotateCcw className="h-3.5 w-3.5" />
-            <span className="hidden sm:inline">New scan</span>
+            <span className="hidden sm:inline">{dict.summary.newScan}</span>
           </button>
         </div>
       </div>

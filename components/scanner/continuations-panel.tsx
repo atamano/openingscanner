@@ -2,6 +2,7 @@
 
 import { ContinuationsTable } from "@/components/chess/continuations-table";
 import { Separator } from "@/components/ui/separator";
+import { useDictionary } from "@/lib/i18n/context";
 import type { MoveNode } from "@/lib/repertoire/aggregate";
 
 interface ContinuationsPanelProps {
@@ -25,19 +26,22 @@ export function ContinuationsPanel({
   onReset,
   focusedSan,
   onFocus,
-  title = "Continuations",
+  title,
 }: ContinuationsPanelProps) {
+  const dict = useDictionary();
   const totalPly = baseDepth + path.length;
+  const heading = title ?? dict.continuations.move;
+
   return (
     <div className="flex h-full min-h-0 flex-col overflow-hidden rounded-xl border bg-card">
       <div className="flex items-center justify-between px-4 py-3">
-        <span className="text-sm font-medium">{title}</span>
+        <span className="text-sm font-medium">{heading}</span>
         <span className="text-xs text-muted-foreground">
           {totalPly === 0
-            ? "start"
+            ? dict.continuations.start
             : path.length > 0
-              ? `${totalPly} ply`
-              : `from ${baseDepth} ply`}
+              ? `${totalPly} ${dict.continuations.plySuffix}`
+              : `${dict.continuations.fromPlyPrefix} ${baseDepth} ${dict.continuations.plySuffix}`}
         </span>
       </div>
       <Separator />

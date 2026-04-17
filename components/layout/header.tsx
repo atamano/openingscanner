@@ -1,6 +1,7 @@
 "use client";
 
 import { Plus } from "lucide-react";
+import { useDictionary } from "@/lib/i18n/context";
 
 interface HeaderProps {
   onNewScan?: () => void;
@@ -8,6 +9,7 @@ interface HeaderProps {
 }
 
 export function Header({ onNewScan, subtitle }: HeaderProps) {
+  const dict = useDictionary();
   return (
     <header className="wood-panel border-b-2 border-amber-dark/30 shrink-0">
       <div className="flex h-11 items-center gap-4 px-5">
@@ -33,7 +35,7 @@ export function Header({ onNewScan, subtitle }: HeaderProps) {
             className="flex items-center gap-1.5 h-7 px-3 rounded-md text-xs font-medium text-amber-light/80 hover:text-amber-light hover:bg-wood-lighter/30 transition-all"
           >
             <Plus className="h-3.5 w-3.5" />
-            New scan
+            {dict.header.newScan}
           </button>
         ) : null}
       </div>

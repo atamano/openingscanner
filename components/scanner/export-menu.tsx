@@ -11,6 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useDictionary } from "@/lib/i18n/context";
 import {
   filterGamesByPath,
   serializeGamesToPGN,
@@ -35,6 +36,10 @@ export function ExportMenu({
   selectedOpeningId,
   path = [],
 }: ExportMenuProps) {
+  const dict = useDictionary();
+  const colorLabel =
+    color === "white" ? dict.form.colorWhite : dict.form.colorBlack;
+
   const selected = selectedOpeningId
     ? stats.byOpening[selectedOpeningId] ?? null
     : null;
@@ -58,11 +63,16 @@ export function ExportMenu({
         s.gameCount >= 3,
     );
 
+  const gamesSuffix = (n: number) =>
+    n === 1
+      ? dict.weakSpots.gameSuffixOne
+      : dict.weakSpots.gameSuffixMany;
+
   const exportGames = () => {
     if (selected) {
       const games = filterGamesByPath(selected, path);
       if (games.length === 0) {
-        toast.error("No games match this variation.");
+        toast.error(dict.export.toastNoGamesMatch);
         return;
       }
       const pgn = serializeGamesToPGN(games);
@@ -70,20 +80,26 @@ export function ExportMenu({
       const suffix = path.length ? `-${path.length}ply` : "";
       triggerDownload(pgn, `${stats.username}-${slug}${suffix}-games.pgn`);
       toast.success(
-        `${games.length} game${games.length === 1 ? "" : "s"} downloaded`,
+        (games.length === 1
+          ? dict.export.toastGamesDownloaded
+          : dict.export.toastGamesDownloadedPlural
+        ).replace("{count}", String(games.length)),
       );
       return;
     }
     const openings = openingsForColor();
     const games = openings.flatMap((s) => s.games);
     if (games.length === 0) {
-      toast.error("No games to export yet.");
+      toast.error(dict.export.toastNoGamesYet);
       return;
     }
     const pgn = serializeGamesToPGN(games);
     triggerDownload(pgn, `${stats.username}-${color}-games.pgn`);
     toast.success(
-      `${games.length} ${color} game${games.length === 1 ? "" : "s"} downloaded`,
+      (games.length === 1
+        ? dict.export.toastGamesDownloaded
+        : dict.export.toastGamesDownloadedPlural
+      ).replace("{count}", String(games.length)),
     );
   };
 
@@ -91,12 +107,12 @@ export function ExportMenu({
     if (selected) {
       const pgn = serializeOpeningWithVariations(selected, stats.username);
       if (!pgn) {
-        toast.error("Not enough data for this opening yet.");
+        toast.error(dict.export.toastNotEnough);
         return;
       }
       const slug = slugify(openingLabel ?? "opening");
       triggerDownload(pgn, `${stats.username}-${slug}-repertoire.pgn`);
-      toast.success("Repertoire downloaded");
+      toast.success(dict.export.toastRepertoireDownloaded);
       return;
     }
     const openings = openingsForColor();
@@ -104,11 +120,11 @@ export function ExportMenu({
       serializeRepertoireWithVariations(openings, stats.username) ||
       serializeRepertoireToPGN(openings, stats.username);
     if (!pgn) {
-      toast.error("Nothing to export yet.");
+      toast.error(dict.export.toastNothingYet);
       return;
     }
     triggerDownload(pgn, `${stats.username}-${color}-repertoire.pgn`);
-    toast.success("Repertoire downloaded");
+    toast.success(dict.export.toastRepertoireDownloaded);
   };
 
   const selectedGameCount = selected
@@ -116,21 +132,33 @@ export function ExportMenu({
     : 0;
   const scopeLabel = selected
     ? path.length
-      ? `this variation (${selectedGameCount} game${selectedGameCount === 1 ? "" : "s"})`
-      : (openingLabel ?? "selected opening")
-    : `all ${color} games`;
+      ? dict.export.scopeVariation
+          .replace("{count}", String(selectedGameCount))
+          .replace("{suffix}", gamesSuffix(selectedGameCount))
+      : (openingLabel ?? dict.export.scopeSelectedOpening)
+    : dict.export.scopeAllColorGames.replace(
+        "{color}",
+        colorLabel.toLowerCase(),
+      );
+
+  const gamesDescScope = selected
+    ? dict.export.exportGamesDescPosition
+    : dict.export.exportGamesDescRepertoire.replace(
+        "{color}",
+        colorLabel.toLowerCase(),
+      );
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button size="sm" variant="default">
           <Download />
-          Export
+          {dict.export.trigger}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-80">
         <DropdownMenuLabel className="flex flex-col gap-0.5">
-          <span>Export scope</span>
+          <span>{dict.export.scopeLabel}</span>
           <span className="truncate text-[11px] font-normal text-muted-foreground">
             {scopeLabel}
           </span>
@@ -142,19 +170,18 @@ export function ExportMenu({
         >
           <Layers className="size-4" />
           <div className="flex flex-col">
-            <span>Export the games (PGN)</span>
+            <span>{dict.export.exportGames}</span>
             <span className="text-xs text-muted-foreground">
-              Real games reaching{" "}
-              {selected ? "this position" : `your ${color} repertoire`}
+              {dict.export.exportGamesDesc.replace("{scope}", gamesDescScope)}
             </span>
           </div>
         </DropdownMenuItem>
         <DropdownMenuItem onSelect={exportRepertoire}>
           <FileDown className="size-4" />
           <div className="flex flex-col">
-            <span>Export the repertoire (PGN)</span>
+            <span>{dict.export.exportRepertoire}</span>
             <span className="text-xs text-muted-foreground">
-              Study-ready: mainline + every continuation as a nested variation
+              {dict.export.exportRepertoireDesc}
             </span>
           </div>
         </DropdownMenuItem>

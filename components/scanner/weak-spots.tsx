@@ -10,6 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useDictionary } from "@/lib/i18n/context";
 import type { OpeningStats, RepertoireStats } from "@/lib/repertoire/aggregate";
 import {
   computeWeakOpenings,
@@ -35,6 +36,7 @@ export function WeakSpots({
   onSelectOpening,
   onSelectVariation,
 }: WeakSpotsProps) {
+  const dict = useDictionary();
   const weakOpenings = useMemo(
     () =>
       selected
@@ -59,6 +61,8 @@ export function WeakSpots({
     ? weakVariations.slice(0, visible)
     : weakOpenings.slice(0, visible);
   const remaining = rowCount - shown.length;
+  const colorLabel =
+    color === "white" ? dict.form.colorWhite : dict.form.colorBlack;
 
   return (
     <Card>
@@ -66,12 +70,20 @@ export function WeakSpots({
         <AlertTriangle className="size-4 text-rose-500" />
         <div>
           <CardTitle>
-            {selected ? "Weak variations" : "Weak spots"}
+            {selected
+              ? dict.weakSpots.titleScoped
+              : dict.weakSpots.titleGlobal}
           </CardTitle>
           <CardDescription>
             {selected && selected.entry
-              ? `Lines under ${selected.entry.name} where you score the worst.`
-              : `Openings on the ${color} side where you score the worst.`}
+              ? dict.weakSpots.descScoped.replace(
+                  "{opening}",
+                  selected.entry.name,
+                )
+              : dict.weakSpots.descGlobal.replace(
+                  "{color}",
+                  colorLabel.toLowerCase(),
+                )}
           </CardDescription>
         </div>
       </CardHeader>
@@ -95,7 +107,10 @@ export function WeakSpots({
                   </span>
                 </div>
                 <div className="font-medium">
-                  after {v.path.length} ply
+                  {dict.weakSpots.afterPly.replace(
+                    "{count}",
+                    String(v.path.length),
+                  )}
                 </div>
                 <div className="mt-1 font-mono text-xs text-muted-foreground group-hover:text-foreground">
                   {renderPreview(
@@ -122,12 +137,14 @@ export function WeakSpots({
                   </span>
                 </div>
                 <div className="line-clamp-1 font-medium">
-                  {w.stats.entry?.name ?? "Uncategorized"}
+                  {w.stats.entry?.name ?? dict.dashboard.uncategorized}
                 </div>
                 <div className="mt-1 text-xs text-muted-foreground">
-                  {w.stats.gameCount} game
-                  {w.stats.gameCount === 1 ? "" : "s"} ·{" "}
-                  {w.stats.entry?.family ?? "—"}
+                  {w.stats.gameCount}{" "}
+                  {w.stats.gameCount === 1
+                    ? dict.weakSpots.gameSuffixOne
+                    : dict.weakSpots.gameSuffixMany}{" "}
+                  · {w.stats.entry?.family ?? "—"}
                 </div>
               </button>
             ))}
@@ -135,7 +152,9 @@ export function WeakSpots({
       {remaining > 0 ? (
         <div className="flex items-center justify-center gap-2 border-t px-6 py-3 text-xs text-muted-foreground">
           <span>
-            Showing {shown.length} of {rowCount}
+            {dict.weakSpots.showingOf
+              .replace("{shown}", String(shown.length))
+              .replace("{total}", String(rowCount))}
           </span>
           <span>·</span>
           <button
@@ -145,7 +164,10 @@ export function WeakSpots({
             }
             className="font-medium text-primary hover:underline"
           >
-            Show {Math.min(PAGE_SIZE, remaining)} more
+            {dict.weakSpots.showMore.replace(
+              "{count}",
+              String(Math.min(PAGE_SIZE, remaining)),
+            )}
           </button>
           {visible > PAGE_SIZE ? (
             <>
@@ -155,7 +177,7 @@ export function WeakSpots({
                 onClick={() => setVisible(PAGE_SIZE)}
                 className="font-medium hover:text-foreground hover:underline"
               >
-                Collapse
+                {dict.weakSpots.collapse}
               </button>
             </>
           ) : null}

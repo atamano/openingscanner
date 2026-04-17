@@ -2,6 +2,7 @@
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useMemo, useRef } from "react";
+import { useDictionary } from "@/lib/i18n/context";
 import type { MoveNode } from "@/lib/repertoire/aggregate";
 import { cn } from "@/lib/utils";
 
@@ -24,6 +25,7 @@ export function ContinuationsTable({
   focusedSan = null,
   onFocus,
 }: ContinuationsTableProps) {
+  const dict = useDictionary();
   const node = useMemo(() => descend(root, path), [root, path]);
 
   const children = useMemo(
@@ -40,17 +42,17 @@ export function ContinuationsTable({
   return (
     <div className="flex h-full min-h-0 flex-col">
       <div className="grid grid-cols-[auto_minmax(4rem,1fr)_minmax(5rem,56%)] items-center gap-3 border-b px-4 py-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-        <span>Move</span>
-        <span>Games</span>
-        <span>Results</span>
+        <span>{dict.continuations.move}</span>
+        <span>{dict.continuations.games}</span>
+        <span>{dict.continuations.results}</span>
       </div>
 
       <div className="flex-1 overflow-y-auto">
         {children.length === 0 ? (
           <div className="grid place-items-center px-4 py-12 text-sm text-muted-foreground">
             {path.length > 0
-              ? "No further continuations from this position."
-              : "No recurring continuations yet."}
+              ? dict.continuations.noFurther
+              : dict.continuations.noRecurring}
           </div>
         ) : (
           <ul className="divide-y">
@@ -80,7 +82,7 @@ export function ContinuationsTable({
               onClick={onPop}
               className="inline-flex items-center gap-1 rounded px-2 py-1 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
             >
-              <ChevronLeft className="size-3.5" /> Prev
+              <ChevronLeft className="size-3.5" /> {dict.continuations.prev}
             </button>
             <div className="mx-1 h-4 w-px bg-border" />
             <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
@@ -100,18 +102,18 @@ export function ContinuationsTable({
               onClick={onReset}
               className="rounded px-2 py-1 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
             >
-              Reset
+              {dict.continuations.reset}
             </button>
           </>
         ) : (
           <div className="flex w-full items-center justify-center gap-2 px-2 text-[11px] text-muted-foreground">
             <Kbd>↑</Kbd>
             <Kbd>↓</Kbd>
-            <span>pick</span>
+            <span>{dict.continuations.pick}</span>
             <Kbd>→</Kbd>
-            <span>play</span>
+            <span>{dict.continuations.play}</span>
             <Kbd>←</Kbd>
-            <span>back</span>
+            <span>{dict.continuations.back}</span>
           </div>
         )}
       </div>

@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Lightbulb } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useDictionary } from "@/lib/i18n/context";
 import { computeGaps } from "@/lib/repertoire/gaps";
 import type { RepertoireStats } from "@/lib/repertoire/aggregate";
 import type { PlayerColor } from "@/lib/sources/types";
@@ -12,12 +13,7 @@ interface GapAnalysisProps {
   stats: RepertoireStats;
   color: PlayerColor;
   onSelect: (moves: string[]) => void;
-  /**
-   * When set, narrows recommendations to curated entries that extend this
-   * move prefix — i.e. variations of the currently-selected opening.
-   */
   scopePrefix?: readonly string[];
-  /** Human-readable name of the opening the scope corresponds to. */
   scopeLabel?: string | null;
 }
 
@@ -30,6 +26,7 @@ export function GapAnalysis({
   scopePrefix,
   scopeLabel,
 }: GapAnalysisProps) {
+  const dict = useDictionary();
   const gaps = useMemo(
     () =>
       computeGaps(stats, color, Number.MAX_SAFE_INTEGER, {
@@ -39,9 +36,6 @@ export function GapAnalysis({
   );
 
   const [visible, setVisible] = useState(PAGE_SIZE);
-
-  // Reset the pager when the underlying list changes (e.g. switching color
-  // or selecting a new opening).
   useEffect(() => setVisible(PAGE_SIZE), [gaps]);
 
   if (gaps.length === 0) return null;
@@ -49,6 +43,7 @@ export function GapAnalysis({
   const shown = gaps.slice(0, visible);
   const remaining = gaps.length - shown.length;
   const scoped = Boolean(scopePrefix && scopePrefix.length > 0);
+  const colorLabel = color === "white" ? dict.form.colorWhite : dict.form.colorBlack;
 
   return (
     <Card>
@@ -56,12 +51,12 @@ export function GapAnalysis({
         <Lightbulb className="size-4 text-primary" />
         <div>
           <CardTitle>
-            {scoped ? "Variations worth exploring" : "Worth exploring"}
+            {scoped ? dict.gaps.titleScoped : dict.gaps.titleGlobal}
           </CardTitle>
           <CardDescription>
             {scoped && scopeLabel
-              ? `Lines under ${scopeLabel} you haven't played much.`
-              : `Openings missing from the player's ${color} repertoire.`}
+              ? dict.gaps.descScoped.replace("{opening}", scopeLabel)
+              : dict.gaps.descGlobal.replace("{color}", colorLabel.toLowerCase())}
           </CardDescription>
         </div>
       </CardHeader>
@@ -78,7 +73,9 @@ export function GapAnalysis({
               <span className="text-xs text-muted-foreground">{entry.family}</span>
             </div>
             <div className="font-medium">{entry.name}</div>
-            <div className="mt-1 text-xs text-muted-foreground">{reason}</div>
+            <div className="mt-1 text-xs text-muted-foreground">
+              {translateReason(reason, dict)}
+            </div>
             <div className="mt-2 font-mono text-xs text-muted-foreground group-hover:text-primary">
               {renderPreview(entry.moves)}
             </div>
@@ -88,7 +85,9 @@ export function GapAnalysis({
       {remaining > 0 ? (
         <div className="flex items-center justify-center gap-2 border-t px-6 py-3 text-xs text-muted-foreground">
           <span>
-            Showing {shown.length} of {gaps.length}
+            {dict.gaps.showingOf
+              .replace("{shown}", String(shown.length))
+              .replace("{total}", String(gaps.length))}
           </span>
           <span>·</span>
           <button
@@ -98,7 +97,10 @@ export function GapAnalysis({
             }
             className="font-medium text-primary hover:underline"
           >
-            Show {Math.min(PAGE_SIZE, remaining)} more
+            {dict.gaps.showMore.replace(
+              "{count}",
+              String(Math.min(PAGE_SIZE, remaining)),
+            )}
           </button>
           {visible > PAGE_SIZE ? (
             <>
@@ -108,7 +110,7 @@ export function GapAnalysis({
                 onClick={() => setVisible(PAGE_SIZE)}
                 className="font-medium hover:text-foreground hover:underline"
               >
-                Collapse
+                {dict.gaps.collapse}
               </button>
             </>
           ) : null}
@@ -116,6 +118,26 @@ export function GapAnalysis({
       ) : null}
     </Card>
   );
+}
+
+// The underlying `computeGaps` returns English reason strings. Map them back
+// to localized ones while preserving the count/family interpolation.
+function translateReason(
+  reason: string,
+  dict: ReturnType<typeof useDictionary>,
+): string {
+  const playedMatch = reason.match(/^You've played this (\d+) times?$/);
+  if (playedMatch) {
+    const n = Number.parseInt(playedMatch[1], 10);
+    const template =
+      n > 1 ? dict.gaps.reasonPlayedPlural : dict.gaps.reasonPlayed;
+    return template.replace("{count}", String(n));
+  }
+  const rareMatch = reason.match(/^You rarely explore (.+)$/);
+  if (rareMatch) {
+    return dict.gaps.reasonRare.replace("{family}", rareMatch[1]);
+  }
+  return reason;
 }
 
 function renderPreview(sans: string[]): string {

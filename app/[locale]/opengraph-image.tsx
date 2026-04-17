@@ -1,12 +1,28 @@
 import { ImageResponse } from "next/og";
-import { SITE } from "@/lib/seo/site";
+import { isLocale, LOCALES, type Locale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/dictionary";
 
 export const runtime = "nodejs";
-export const alt = `${SITE.name} — ${SITE.tagline}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-export default async function OpengraphImage() {
+export function generateImageMetadata() {
+  return LOCALES.map((locale) => ({
+    id: locale,
+    alt: `Repertoire Scanner — ${locale}`,
+    contentType: "image/png",
+    size,
+  }));
+}
+
+export default async function OpengraphImage({
+  params,
+}: {
+  params: { locale: string };
+}) {
+  const locale: Locale = isLocale(params.locale) ? params.locale : "en";
+  const dict = await getDictionary(locale);
+
   const PAPER = "#f5f0e6";
   const INK = "#1a1612";
   const INK_LIGHT = "#6b5d4f";
@@ -24,7 +40,8 @@ export default async function OpengraphImage() {
           display: "flex",
           flexDirection: "column",
           background: PAPER,
-          backgroundImage: `radial-gradient(circle at 20% 0%, rgba(139,107,71,0.08) 0%, transparent 50%), radial-gradient(circle at 80% 100%, rgba(90,168,116,0.06) 0%, transparent 50%)`,
+          backgroundImage:
+            "radial-gradient(circle at 20% 0%, rgba(139,107,71,0.08) 0%, transparent 50%), radial-gradient(circle at 80% 100%, rgba(90,168,116,0.06) 0%, transparent 50%)",
           padding: 72,
           position: "relative",
         }}
@@ -37,7 +54,6 @@ export default async function OpengraphImage() {
             color: INK_LIGHT,
             fontSize: 22,
             letterSpacing: 1,
-            textTransform: "uppercase",
           }}
         >
           <div
@@ -49,7 +65,7 @@ export default async function OpengraphImage() {
               background: AMBER,
             }}
           />
-          Scan · Classify · Export
+          Repertoire Scanner
         </div>
 
         <div
@@ -63,40 +79,40 @@ export default async function OpengraphImage() {
         >
           <div
             style={{
-              fontSize: 108,
+              fontSize: 72,
               fontWeight: 700,
               color: WOOD,
-              lineHeight: 1,
-              letterSpacing: -3,
+              lineHeight: 1.1,
+              letterSpacing: -2,
               display: "flex",
+              maxWidth: 1000,
             }}
           >
-            Repertoire
+            {dict.landing.h1}
           </div>
           <div
             style={{
-              fontSize: 108,
-              fontWeight: 700,
+              fontSize: 40,
               color: INK,
-              lineHeight: 1,
-              letterSpacing: -3,
-              marginTop: 8,
-              display: "flex",
-            }}
-          >
-            Scanner.
-          </div>
-          <div
-            style={{
-              fontSize: 36,
-              color: INK_LIGHT,
-              marginTop: 32,
+              marginTop: 24,
               lineHeight: 1.25,
               display: "flex",
-              maxWidth: 900,
+              maxWidth: 1000,
             }}
           >
-            What openings does any player actually play?
+            {dict.landing.subtitle}
+          </div>
+          <div
+            style={{
+              fontSize: 26,
+              color: INK_LIGHT,
+              marginTop: 20,
+              lineHeight: 1.35,
+              display: "flex",
+              maxWidth: 1000,
+            }}
+          >
+            {dict.landing.badge}
           </div>
         </div>
 
@@ -105,7 +121,7 @@ export default async function OpengraphImage() {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            borderTop: `1px solid rgba(26,22,18,0.12)`,
+            borderTop: "1px solid rgba(26,22,18,0.12)",
             paddingTop: 28,
           }}
         >
@@ -149,7 +165,7 @@ export default async function OpengraphImage() {
                   background: AMBER,
                 }}
               />
-              3000+ ECO openings
+              ECO
             </div>
           </div>
           <div
@@ -160,7 +176,7 @@ export default async function OpengraphImage() {
               fontFamily: "monospace",
             }}
           >
-            free · local-first
+            {locale}
           </div>
         </div>
       </div>

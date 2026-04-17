@@ -1,6 +1,7 @@
 "use client";
 
 import { Loader2 } from "lucide-react";
+import { useDictionary } from "@/lib/i18n/context";
 import type { ScanProgressEvent } from "@/lib/sources/types";
 import { formatNumber } from "@/lib/utils";
 
@@ -15,6 +16,7 @@ export function ScanProgress({
   running,
   expected = 2000,
 }: ScanProgressProps) {
+  const dict = useDictionary();
   if (!progress && !running) return null;
   const fetched = progress?.fetched ?? 0;
   const classified = progress?.classified ?? 0;
@@ -27,11 +29,12 @@ export function ScanProgress({
           <Loader2 className="h-4 w-4 animate-spin text-amber shrink-0" />
         )}
         <span className="text-ink-light">
-          {running ? "Streaming games…" : "Complete"}
+          {running ? dict.progress.streaming : dict.progress.complete}
         </span>
         <span className="ml-auto font-mono text-xs text-ink-light tabular-nums">
           <span className="text-foreground">{formatNumber(fetched)}</span>{" "}
-          fetched · {formatNumber(classified)} classified
+          {dict.progress.fetched} · {formatNumber(classified)}{" "}
+          {dict.progress.classified}
           {progress?.currentLabel ? ` · ${progress.currentLabel}` : ""}
         </span>
       </div>

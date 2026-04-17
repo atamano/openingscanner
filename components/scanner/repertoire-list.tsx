@@ -2,7 +2,8 @@
 
 import { ChevronLeft, ChevronRight, Search, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { UNCATEGORIZED_ID, UNCATEGORIZED_LABEL } from "@/lib/catalog/openings";
+import { UNCATEGORIZED_ID } from "@/lib/catalog/openings";
+import { useDictionary } from "@/lib/i18n/context";
 import type { OpeningStats, RepertoireStats } from "@/lib/repertoire/aggregate";
 import type { PlayerColor } from "@/lib/sources/types";
 import { cn, formatPct } from "@/lib/utils";
@@ -24,6 +25,8 @@ export function RepertoireList({
   onSelect,
   headerAction,
 }: RepertoireListProps) {
+  const dict = useDictionary();
+  const UNCATEGORIZED_LABEL = dict.dashboard.uncategorized;
   const [query, setQuery] = useState("");
   const [drilledFamily, setDrilledFamily] = useState<string | null>(null);
 
@@ -97,18 +100,20 @@ export function RepertoireList({
             className="flex w-full items-center gap-1.5 rounded-md px-1 py-0.5 text-left text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
             <ChevronLeft className="size-3.5" />
-            <span className="truncate">All openings</span>
+            <span className="truncate">{dict.dashboard.allOpenings}</span>
             <span className="ml-auto text-xs">
-              {drilledGroup?.entries.length} variant
-              {drilledGroup && drilledGroup.entries.length > 1 ? "s" : ""}
+              {drilledGroup?.entries.length}{" "}
+              {drilledGroup && drilledGroup.entries.length > 1
+                ? dict.dashboard.variantsMany
+                : dict.dashboard.variantsOne}
             </span>
           </button>
         ) : (
           <div className="flex items-center gap-2 px-1">
-            <span className="text-sm font-medium">Openings</span>
+            <span className="text-sm font-medium">{dict.dashboard.openings}</span>
             <span className="text-xs text-muted-foreground">
               {isSearching ? searchHits.length : groups.length}{" "}
-              {isSearching ? "hits" : "families"}
+              {isSearching ? dict.dashboard.hits : dict.dashboard.families}
             </span>
             {headerAction ? (
               <span className="ml-auto">{headerAction}</span>
@@ -124,7 +129,7 @@ export function RepertoireList({
             <Search className="pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
             <input
               type="search"
-              placeholder="Search (name, family, ECO…)"
+              placeholder={dict.dashboard.searchPlaceholder}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               className="h-8 w-full rounded-md border border-input bg-background pl-8 pr-7 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
@@ -134,7 +139,7 @@ export function RepertoireList({
                 type="button"
                 onClick={() => setQuery("")}
                 className="absolute right-1 top-1/2 -translate-y-1/2 rounded p-1 text-muted-foreground hover:bg-accent hover:text-foreground"
-                aria-label="Clear search"
+                aria-label={dict.dashboard.clearSearch}
               >
                 <X className="size-3.5" />
               </button>
@@ -146,7 +151,9 @@ export function RepertoireList({
       <div className="flex-1 overflow-y-auto overflow-x-hidden">
         {isSearching ? (
           searchHits.length === 0 ? (
-            <Empty label={`No opening matches "${query}"`} />
+            <Empty
+              label={dict.dashboard.noMatch.replace("{query}", query)}
+            />
           ) : (
             <ul className="divide-y">
               {searchHits.map((s) => (
@@ -178,7 +185,7 @@ export function RepertoireList({
             ))}
           </ul>
         ) : groups.length === 0 ? (
-          <Empty label="No data yet." />
+          <Empty label={dict.dashboard.noDataYet} />
         ) : (
           <ul className="divide-y">
             {groups.map((group) => (
@@ -323,12 +330,13 @@ function OpeningRow({
   uncategorized?: boolean;
   showFamily?: boolean;
 }) {
+  const dict = useDictionary();
   const pct = total ? stats.gameCount / total : 0;
   const winPct = stats.gameCount ? stats.playerWins / stats.gameCount : 0;
   const drawPct = stats.gameCount ? stats.draws / stats.gameCount : 0;
   const lossPct = stats.gameCount ? stats.playerLosses / stats.gameCount : 0;
   const label = uncategorized
-    ? UNCATEGORIZED_LABEL
+    ? dict.dashboard.uncategorized
     : stats.entry?.name ?? stats.openingId;
   const eco = !uncategorized ? stats.entry?.eco : null;
   const family = !uncategorized && showFamily ? stats.entry?.family : null;

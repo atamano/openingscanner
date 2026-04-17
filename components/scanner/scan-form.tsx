@@ -3,6 +3,7 @@
 import { Loader2, Search } from "lucide-react";
 import { useMemo } from "react";
 import { parseAsBoolean, parseAsString, useQueryState } from "nuqs";
+import { useDictionary } from "@/lib/i18n/context";
 import type {
   Platform,
   ScanColor,
@@ -10,19 +11,9 @@ import type {
   TimeClass,
 } from "@/lib/sources/types";
 
-const TIME_OPTIONS: { value: TimeClass; label: string }[] = [
-  { value: "bullet", label: "Bullet" },
-  { value: "blitz", label: "Blitz" },
-  { value: "rapid", label: "Rapid" },
-  { value: "classical", label: "Classical" },
-];
-
-const DATE_PRESETS = [
-  { value: "30d", label: "30 d" },
-  { value: "6m", label: "6 mo" },
-  { value: "1y", label: "1 yr" },
-  { value: "all", label: "All" },
-] as const;
+const TIME_VALUES = ["bullet", "blitz", "rapid", "classical"] as const;
+const DATE_VALUES = ["30d", "6m", "1y", "all"] as const;
+type DatePreset = (typeof DATE_VALUES)[number];
 
 // Curated list of handles that actually post games regularly (super-GMs and
 // active streamers). Lichess in particular — avoid accounts that are mostly
@@ -44,19 +35,15 @@ const POPULAR_PLAYERS: Record<Platform, { handle: string; label: string }[]> = {
   ],
 };
 
-type DatePreset = (typeof DATE_PRESETS)[number]["value"];
-
 interface ScanFormProps {
   onSubmit: (params: ScanParams) => void;
   running: boolean;
   onAbort: () => void;
 }
 
-export function ScanForm({
-  onSubmit,
-  running,
-  onAbort,
-}: ScanFormProps) {
+export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
+  const dict = useDictionary();
+
   const [username, setUsername] = useQueryState(
     "u",
     parseAsString.withDefault(""),
@@ -88,6 +75,26 @@ export function ScanForm({
   );
 
   const canSubmit = username.trim().length > 0 && !running;
+
+  const timeLabels: Record<(typeof TIME_VALUES)[number], string> = {
+    bullet: dict.form.timeBullet,
+    blitz: dict.form.timeBlitz,
+    rapid: dict.form.timeRapid,
+    classical: dict.form.timeClassical,
+  };
+
+  const dateLabels: Record<DatePreset, string> = {
+    "30d": dict.form.window30d,
+    "6m": dict.form.window6m,
+    "1y": dict.form.window1y,
+    all: dict.form.windowAll,
+  };
+
+  const colorLabel = (c: "white" | "black" | "both") => {
+    if (c === "both") return dict.form.colorBoth;
+    if (c === "white") return dict.form.colorWhite;
+    return dict.form.colorBlack;
+  };
 
   const submit = () => {
     if (!canSubmit) return;
@@ -159,8 +166,8 @@ export function ScanForm({
             onChange={(e) => setUsername(e.target.value)}
             placeholder={
               platform === "lichess"
-                ? "Player username (e.g. DrNykterstein)"
-                : "Player username (e.g. Hikaru)"
+                ? dict.form.placeholderLichess
+                : dict.form.placeholderChesscom
             }
             autoComplete="off"
             spellCheck={false}
@@ -170,7 +177,7 @@ export function ScanForm({
         </div>
         <div className="flex flex-wrap items-center gap-1.5">
           <span className="text-[11px] uppercase tracking-widest text-ink-light font-semibold">
-            Popular
+            {dict.form.popular}
           </span>
           {POPULAR_PLAYERS[platform as Platform].map((p) => {
             const active =
@@ -221,7 +228,7 @@ export function ScanForm({
               }
             >
               {c === "white" ? "\u25CB " : c === "black" ? "\u25CF " : ""}
-              {c === "both" ? "Both" : `As ${c}`}
+              {colorLabel(c)}
             </button>
           ))}
         </div>
@@ -232,7 +239,7 @@ export function ScanForm({
             disabled={!canSubmit}
             className="h-10 px-6 rounded-lg bg-wood text-paper text-sm font-semibold hover:bg-wood-light disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-md hover:shadow-lg active:scale-[0.98]"
           >
-            Scan repertoire
+            {dict.form.submit}
           </button>
         ) : (
           <button
@@ -241,7 +248,7 @@ export function ScanForm({
             className="h-10 px-5 rounded-lg bg-destructive text-destructive-foreground text-sm font-semibold hover:bg-destructive/90 transition-colors flex items-center gap-2"
           >
             <Loader2 className="h-4 w-4 animate-spin" />
-            Stop
+            {dict.form.stop}
           </button>
         )}
       </div>
@@ -250,16 +257,16 @@ export function ScanForm({
       <div className="grid gap-3 border-t border-border/60 pt-4 sm:grid-cols-2">
         <div className="space-y-1.5">
           <span className="text-[11px] uppercase tracking-widest text-ink-light font-semibold">
-            Time controls
+            {dict.form.timeControls}
           </span>
           <div className="flex flex-wrap gap-1.5">
-            {TIME_OPTIONS.map((t) => {
-              const active = selectedTimes.includes(t.value);
+            {TIME_VALUES.map((value) => {
+              const active = selectedTimes.includes(value);
               return (
                 <button
-                  key={t.value}
+                  key={value}
                   type="button"
-                  onClick={() => toggleTime(t.value)}
+                  onClick={() => toggleTime(value)}
                   disabled={running}
                   className={`h-8 px-3 rounded-md text-xs font-medium transition-all border ${
                     active
@@ -272,7 +279,7 @@ export function ScanForm({
                       : undefined
                   }
                 >
-                  {t.label}
+                  {timeLabels[value]}
                 </button>
               );
             })}
@@ -281,16 +288,16 @@ export function ScanForm({
 
         <div className="space-y-1.5">
           <span className="text-[11px] uppercase tracking-widest text-ink-light font-semibold">
-            Window
+            {dict.form.window}
           </span>
           <div className="flex flex-wrap gap-1.5">
-            {DATE_PRESETS.map((d) => {
-              const active = datePreset === d.value;
+            {DATE_VALUES.map((value) => {
+              const active = datePreset === value;
               return (
                 <button
-                  key={d.value}
+                  key={value}
                   type="button"
-                  onClick={() => setDatePreset(d.value)}
+                  onClick={() => setDatePreset(value)}
                   disabled={running}
                   className={`h-8 px-3 rounded-md text-xs font-medium transition-all border ${
                     active
@@ -303,7 +310,7 @@ export function ScanForm({
                       : undefined
                   }
                 >
-                  {d.label}
+                  {dateLabels[value]}
                 </button>
               );
             })}
@@ -319,7 +326,7 @@ export function ScanForm({
           disabled={running}
           className="h-3.5 w-3.5 rounded border-border accent-amber"
         />
-        Rated games only
+        {dict.form.ratedOnly}
       </label>
     </form>
   );
