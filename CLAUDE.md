@@ -16,11 +16,11 @@ Package manager is pnpm (see `pnpm-lock.yaml`). Path alias `@/*` maps to project
 
 ## Architecture
 
-Zero server state. The Next.js app is a single client-rendered page; all scanning, streaming, parsing, classification, and aggregation happens in the browser. No API routes exist beyond the OAuth callback page.
+Zero server state. The Next.js app is a single client-rendered page; all scanning, streaming, parsing, classification, and aggregation happens in the browser. No API routes exist.
 
 ### Scan pipeline (the main data flow)
 
-1. `app/page.tsx` renders `ScanForm`, which persists filters to the URL via `nuqs` and calls `useScanner().scan(params)`.
+1. `app/[locale]/page.tsx` renders `ScanForm`, which persists filters to the URL via `nuqs` and calls `useScanner().scan(params)`.
 2. `hooks/use-scanner.ts` spawns `workers/scanner.worker.ts` as a module Worker and talks to it via **Comlink**. Progress callbacks are wrapped in `Comlink.proxy`.
 3. The worker picks a streamer based on `params.platform`:
    - `lib/sources/lichess.ts` — NDJSON stream from `https://lichess.org/api/games/user/:name` with server-side filtering via query params. Optional Bearer token lifts rate limits.
@@ -40,11 +40,13 @@ Two parallel catalogs — **don't confuse them**:
 
 The move tree stored per opening (`OpeningStats.tree`) is capped at depth 20 and records wins/draws/losses at each node from the player's perspective.
 
-### Lichess OAuth
+### i18n
 
-Pure client-side PKCE flow (`lib/lichess/oauth.ts`). The access token lives in `sessionStorage` under `lichess_access_token` and is surfaced through `useLichessAuth`. The redirect URI is `${origin}/auth/lichess/callback`, handled by `app/auth/lichess/callback/page.tsx`. Token scopes are `study:write preference:read` (needed for `createLichessStudy` in `lib/lichess/study.ts` to POST to `/api/study/import`). Auth changes are broadcast via a `lichess-auth-changed` CustomEvent so the hook stays in sync across tabs.
+Locale routing lives under `app/[locale]/`. Supported locales are listed in `lib/i18n/config.ts`; dictionaries are JSON files under `lib/i18n/dictionaries/` and typed by `lib/i18n/dictionary.ts`. `proxy.ts` handles locale negotiation (cookie → Accept-Language → default) and `components/layout/locale-switcher.tsx` flips the first path segment while preserving the current query string (nuqs scan state).
 
-Register the app and set `NEXT_PUBLIC_LICHESS_CLIENT_ID` in `.env.local`. The variable must stay `NEXT_PUBLIC_` — the OAuth flow runs in the browser.
+### Dashboard filter state
+
+Drill state (`selectedId`, `path`, `previewMoves`) lives in `lib/state/dashboard-filters.tsx` as a React context. `DashboardFiltersProvider` accepts a `resetKey` prop — `app/[locale]/page.tsx` bumps a `scanGen` counter on each scan submit to wipe stale filters from the previous scan.
 
 ### URL-as-state
 
