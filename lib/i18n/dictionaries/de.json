@@ -142,6 +142,18 @@
     "showMore": "{count} weitere anzeigen",
     "collapse": "Einklappen"
   },
+  "strongSpots": {
+    "titleGlobal": "Stärken",
+    "titleScoped": "Starke Varianten",
+    "descGlobal": "Eröffnungen auf der {color}-Seite, wo du am besten abschneidest.",
+    "descScoped": "Linien unter {opening}, wo du am besten abschneidest.",
+    "afterPly": "nach {count} Halbzügen",
+    "gameSuffixOne": "Partie",
+    "gameSuffixMany": "Partien",
+    "showingOf": "Zeige {shown} von {total}",
+    "showMore": "{count} weitere anzeigen",
+    "collapse": "Einklappen"
+  },
   "export": {
     "trigger": "Exportieren",
     "scopeLabel": "Export-Umfang",

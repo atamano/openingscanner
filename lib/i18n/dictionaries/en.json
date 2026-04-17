@@ -142,6 +142,18 @@
     "showMore": "Show {count} more",
     "collapse": "Collapse"
   },
+  "strongSpots": {
+    "titleGlobal": "Strong spots",
+    "titleScoped": "Strong variations",
+    "descGlobal": "Openings on the {color} side where you score the best.",
+    "descScoped": "Lines under {opening} where you score the best.",
+    "afterPly": "after {count} ply",
+    "gameSuffixOne": "game",
+    "gameSuffixMany": "games",
+    "showingOf": "Showing {shown} of {total}",
+    "showMore": "Show {count} more",
+    "collapse": "Collapse"
+  },
   "export": {
     "trigger": "Export",
     "scopeLabel": "Export scope",

@@ -142,6 +142,18 @@
     "showMore": "再显示 {count} 项",
     "collapse": "折叠"
   },
+  "strongSpots": {
+    "titleGlobal": "优势开局",
+    "titleScoped": "优势变化",
+    "descGlobal": "{color} 方胜率最高的开局。",
+    "descScoped": "{opening} 下胜率最高的路线。",
+    "afterPly": "在 {count} 半步后",
+    "gameSuffixOne": "对局",
+    "gameSuffixMany": "对局",
+    "showingOf": "显示 {shown} / {total}",
+    "showMore": "再显示 {count} 项",
+    "collapse": "折叠"
+  },
   "export": {
     "trigger": "导出",
     "scopeLabel": "导出范围",

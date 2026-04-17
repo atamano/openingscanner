@@ -142,6 +142,18 @@
     "showMore": "{count} tane daha göster",
     "collapse": "Daralt"
   },
+  "strongSpots": {
+    "titleGlobal": "Güçlü noktalar",
+    "titleScoped": "Güçlü varyantlar",
+    "descGlobal": "{color} tarafta en yüksek skor aldığın açılışlar.",
+    "descScoped": "{opening} altında en yüksek skor aldığın hatlar.",
+    "afterPly": "{count} yarım-hamle sonrası",
+    "gameSuffixOne": "oyun",
+    "gameSuffixMany": "oyun",
+    "showingOf": "{total} içinden {shown} gösteriliyor",
+    "showMore": "{count} tane daha göster",
+    "collapse": "Daralt"
+  },
   "export": {
     "trigger": "Dışa aktar",
     "scopeLabel": "Dışa aktarım kapsamı",

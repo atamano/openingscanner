@@ -142,6 +142,18 @@
     "showMore": "Mostrar mais {count}",
     "collapse": "Recolher"
   },
+  "strongSpots": {
+    "titleGlobal": "Pontos fortes",
+    "titleScoped": "Variantes fortes",
+    "descGlobal": "Aberturas do lado {color} onde sua pontuação é melhor.",
+    "descScoped": "Linhas sob {opening} onde sua pontuação é melhor.",
+    "afterPly": "após {count} meio-lances",
+    "gameSuffixOne": "partida",
+    "gameSuffixMany": "partidas",
+    "showingOf": "Mostrando {shown} de {total}",
+    "showMore": "Mostrar mais {count}",
+    "collapse": "Recolher"
+  },
   "export": {
     "trigger": "Exportar",
     "scopeLabel": "Escopo da exportação",

@@ -142,6 +142,18 @@
     "showMore": "さらに{count}件表示",
     "collapse": "折りたたむ"
   },
+  "strongSpots": {
+    "titleGlobal": "強み",
+    "titleScoped": "強いバリエーション",
+    "descGlobal": "{color}側で最もスコアが高いオープニング。",
+    "descScoped": "{opening}配下で最もスコアが高いライン。",
+    "afterPly": "{count}半手後",
+    "gameSuffixOne": "対局",
+    "gameSuffixMany": "対局",
+    "showingOf": "{total}件中{shown}件を表示",
+    "showMore": "さらに{count}件表示",
+    "collapse": "折りたたむ"
+  },
   "export": {
     "trigger": "エクスポート",
     "scopeLabel": "エクスポート範囲",

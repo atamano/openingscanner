@@ -7,6 +7,7 @@ import { ContinuationsPanel } from "@/components/scanner/continuations-panel";
 import { ExportMenu } from "@/components/scanner/export-menu";
 import { GapAnalysis } from "@/components/scanner/gap-analysis";
 import { RepertoireList } from "@/components/scanner/repertoire-list";
+import { StrongSpots } from "@/components/scanner/strong-spots";
 import { WeakSpots } from "@/components/scanner/weak-spots";
 import {
   ToggleGroup,
@@ -274,6 +275,14 @@ export function Dashboard({ stats }: DashboardProps) {
         onSelect={(moves) => setPreviewMoves(moves)}
         scopePrefix={selected?.entry?.moves}
         scopeLabel={selected?.entry?.name ?? null}
+      />
+
+      <StrongSpots
+        stats={stats}
+        color={color}
+        selected={selected}
+        onSelectOpening={(openingId) => jumpToVariation(openingId, [])}
+        onSelectVariation={jumpToVariation}
       />
 
       <WeakSpots

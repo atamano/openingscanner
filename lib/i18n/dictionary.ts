@@ -145,6 +145,18 @@ export interface Dictionary {
     showMore: string;
     collapse: string;
   };
+  strongSpots: {
+    titleGlobal: string;
+    titleScoped: string;
+    descGlobal: string;
+    descScoped: string;
+    afterPly: string;
+    gameSuffixOne: string;
+    gameSuffixMany: string;
+    showingOf: string;
+    showMore: string;
+    collapse: string;
+  };
   export: {
     trigger: string;
     scopeLabel: string;

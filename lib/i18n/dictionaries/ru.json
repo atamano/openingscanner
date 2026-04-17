@@ -142,6 +142,18 @@
     "showMore": "Показать ещё {count}",
     "collapse": "Свернуть"
   },
+  "strongSpots": {
+    "titleGlobal": "Сильные стороны",
+    "titleScoped": "Сильные варианты",
+    "descGlobal": "Дебюты на стороне {color} с лучшим результатом.",
+    "descScoped": "Линии под {opening} с лучшим результатом.",
+    "afterPly": "после {count} полуходов",
+    "gameSuffixOne": "партия",
+    "gameSuffixMany": "партий",
+    "showingOf": "Показано {shown} из {total}",
+    "showMore": "Показать ещё {count}",
+    "collapse": "Свернуть"
+  },
   "export": {
     "trigger": "Экспорт",
     "scopeLabel": "Область экспорта",
