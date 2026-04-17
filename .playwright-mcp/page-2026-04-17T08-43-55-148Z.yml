@@ -1,0 +1,329 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]:
+          - img [ref=e6]
+          - generic [ref=e10]: Repertoire Scanner
+          - generic [ref=e11]: beta
+        - generic [ref=e12]:
+          - button "Connect Lichess" [ref=e13]:
+            - img [ref=e14]
+            - generic [ref=e17]: Connect Lichess
+          - button "Toggle theme" [ref=e18]:
+            - img [ref=e239]
+    - main [ref=e21]:
+      - generic [ref=e22]:
+        - generic [ref=e23]:
+          - generic [ref=e24]:
+            - generic [ref=e25]: Preview
+            - heading "Design alternatives" [level=1] [ref=e26]
+            - generic [ref=e27]: Mock data — pick a variant to preview the layout.
+          - generic [ref=e28]:
+            - button "Current 3-col with breadcrumb-drilled left list. What ships today. Balanced but the left list can feel narrow at 320px." [active] [ref=e29]:
+              - generic [ref=e32]: Current
+              - paragraph [ref=e33]: 3-col with breadcrumb-drilled left list. What ships today.
+              - paragraph [ref=e34]: Balanced but the left list can feel narrow at 320px.
+            - button "Focused Bigger board (600px), slimmer side panels, flat opening list. Best for casual analysis; less data density." [ref=e35]:
+              - generic [ref=e38]: Focused
+              - paragraph [ref=e39]: Bigger board (600px), slimmer side panels, flat opening list.
+              - paragraph [ref=e40]: Best for casual analysis; less data density.
+            - button "Studio Board + KPI cards on top, list and continuations as tabs below. More linear; harder to cross-compare openings at a glance." [ref=e41]:
+              - generic [ref=e44]: Studio
+              - paragraph [ref=e45]: Board + KPI cards on top, list and continuations as tabs below.
+              - paragraph [ref=e46]: More linear; harder to cross-compare openings at a glance.
+            - button "Dense KPI strip + full table + board + continuations side by side. Analyst vibe. Great on wide screens, busier on laptops." [ref=e47]:
+              - generic [ref=e50]: Dense
+              - paragraph [ref=e51]: KPI strip + full table + board + continuations side by side. Analyst vibe.
+              - paragraph [ref=e52]: Great on wide screens, busier on laptops.
+        - generic [ref=e53]:
+          - generic [ref=e54]:
+            - generic [ref=e55]: Current
+            - generic [ref=e56]: 3-col with breadcrumb-drilled left list. What ships today.
+          - generic [ref=e543]:
+            - generic [ref=e544]:
+              - generic [ref=e545]:
+                - heading "cameliris's repertoire" [level=2] [ref=e546]
+                - paragraph [ref=e547]: 1,917 games scanned · 1,875 as White, 42 as Black · 1,500 categorized
+              - generic [ref=e548]:
+                - group [ref=e549]:
+                  - radio "White (1,875)" [checked] [ref=e550]
+                  - radio "Black (42)" [ref=e551]
+                - button "Export" [ref=e552]:
+                  - img [ref=e553]
+                  - text: Export
+            - generic [ref=e556]:
+              - generic [ref=e557]:
+                - generic [ref=e558]:
+                  - generic [ref=e559]:
+                    - generic [ref=e560]: Openings
+                    - generic [ref=e561]: 9 families
+                  - generic [ref=e562]:
+                    - img
+                    - searchbox "Search (name, family, ECO…)" [ref=e563]
+                - list [ref=e565]:
+                  - listitem [ref=e566]:
+                    - button "2 Queen's Pawn Game 201 22%" [ref=e567]:
+                      - generic [ref=e568]: "2"
+                      - generic [ref=e570]: Queen's Pawn Game
+                      - generic [ref=e575]:
+                        - generic [ref=e576]: "201"
+                        - generic [ref=e577]: 22%
+                      - img [ref=e578]
+                  - listitem [ref=e580]:
+                    - button "2 Open Game 182 20%" [ref=e581]:
+                      - generic [ref=e582]: "2"
+                      - generic [ref=e584]: Open Game
+                      - generic [ref=e589]:
+                        - generic [ref=e590]: "182"
+                        - generic [ref=e591]: 20%
+                      - img [ref=e592]
+                  - listitem [ref=e594]:
+                    - button "B22 Alapin Variation 159 17% 57%" [ref=e595]:
+                      - generic [ref=e597]: B22
+                      - generic [ref=e599]: Alapin Variation
+                      - generic [ref=e604]:
+                        - generic [ref=e605]: "159"
+                        - generic [ref=e606]: 17%
+                        - generic [ref=e607]: 57%
+                  - listitem [ref=e608]:
+                    - button "B01 Scandinavian Defense 119 13% 53%" [ref=e609]:
+                      - generic [ref=e610]: B01
+                      - generic [ref=e612]: Scandinavian Defense
+                      - generic [ref=e617]:
+                        - generic [ref=e618]: "119"
+                        - generic [ref=e619]: 13%
+                        - generic [ref=e620]: 53%
+                  - listitem [ref=e621]:
+                    - button "B10 Caro-Kann Defense 84 9% 49%" [ref=e622]:
+                      - generic [ref=e623]: B10
+                      - generic [ref=e625]: Caro-Kann Defense
+                      - generic [ref=e630]:
+                        - generic [ref=e631]: "84"
+                        - generic [ref=e632]: 9%
+                        - generic [ref=e633]: 49%
+                  - listitem [ref=e634]:
+                    - button "2 French Defense 84 9%" [ref=e635]:
+                      - generic [ref=e636]: "2"
+                      - generic [ref=e638]: French Defense
+                      - generic [ref=e643]:
+                        - generic [ref=e644]: "84"
+                        - generic [ref=e645]: 9%
+                      - img [ref=e646]
+                  - listitem [ref=e648]:
+                    - button "B06 Modern Defense 36 4% 50%" [ref=e649]:
+                      - generic [ref=e650]: B06
+                      - generic [ref=e652]: Modern Defense
+                      - generic [ref=e657]:
+                        - generic [ref=e658]: "36"
+                        - generic [ref=e659]: 4%
+                        - generic [ref=e660]: 50%
+                  - listitem [ref=e661]:
+                    - button "A80 Dutch Defense 29 3% 48%" [ref=e662]:
+                      - generic [ref=e663]: A80
+                      - generic [ref=e665]: Dutch Defense
+                      - generic [ref=e670]:
+                        - generic [ref=e671]: "29"
+                        - generic [ref=e672]: 3%
+                        - generic [ref=e673]: 48%
+                  - listitem [ref=e674]:
+                    - button "B02 Alekhine Defense 22 2% 55%" [ref=e675]:
+                      - generic [ref=e676]: B02
+                      - generic [ref=e678]: Alekhine Defense
+                      - generic [ref=e682]:
+                        - generic [ref=e683]: "22"
+                        - generic [ref=e684]: 2%
+                        - generic [ref=e685]: 55%
+              - generic [ref=e687]:
+                - generic [ref=e688]:
+                  - generic [ref=e689]: B22
+                  - 'heading "Sicilian Defense: Alapin Variation" [level=2] [ref=e690]'
+                  - generic [ref=e691]: Sicilian Defense
+                - generic [ref=e693]:
+                  - generic [ref=e694]:
+                    - generic [ref=e696]:
+                      - generic [ref=e697]: "8"
+                      - button [disabled] [ref=e699]:
+                        - img [ref=e701] [cursor=pointer]
+                    - button [disabled] [ref=e712]:
+                      - img [ref=e714] [cursor=pointer]
+                    - button [disabled] [ref=e724]:
+                      - img [ref=e726] [cursor=pointer]
+                    - button [disabled] [ref=e736]:
+                      - img [ref=e738] [cursor=pointer]
+                    - button [disabled] [ref=e757]:
+                      - img [ref=e759] [cursor=pointer]
+                    - button [disabled] [ref=e768]:
+                      - img [ref=e770] [cursor=pointer]
+                    - button [disabled] [ref=e780]:
+                      - img [ref=e782] [cursor=pointer]
+                    - button [disabled] [ref=e792]:
+                      - img [ref=e794] [cursor=pointer]
+                    - generic [ref=e803]:
+                      - generic [ref=e804]: "7"
+                      - button [disabled] [ref=e806]:
+                        - img [ref=e808] [cursor=pointer]
+                    - button [disabled] [ref=e813]:
+                      - img [ref=e815] [cursor=pointer]
+                    - button [disabled] [ref=e823]:
+                      - img [ref=e825] [cursor=pointer]
+                    - button [disabled] [ref=e830]:
+                      - img [ref=e832] [cursor=pointer]
+                    - button [disabled] [ref=e837]:
+                      - img [ref=e839] [cursor=pointer]
+                    - button [disabled] [ref=e844]:
+                      - img [ref=e846] [cursor=pointer]
+                    - button [disabled] [ref=e851]:
+                      - img [ref=e853] [cursor=pointer]
+                    - generic [ref=e857]: "6"
+                    - generic [ref=e882]: "5"
+                    - button [disabled] [ref=e890]:
+                      - img [ref=e892] [cursor=pointer]
+                    - generic [ref=e911]: "4"
+                    - button [disabled] [ref=e925]:
+                      - img [ref=e927] [cursor=pointer]
+                    - generic [ref=e940]: "3"
+                    - button [disabled] [ref=e948]:
+                      - img [ref=e950] [cursor=pointer]
+                    - generic [ref=e968]:
+                      - generic [ref=e969]: "2"
+                      - button [disabled] [ref=e971]:
+                        - img [ref=e973] [cursor=pointer]
+                    - button [disabled] [ref=e978]:
+                      - img [ref=e980] [cursor=pointer]
+                    - button [disabled] [ref=e988]:
+                      - img [ref=e990] [cursor=pointer]
+                    - button [disabled] [ref=e998]:
+                      - img [ref=e1000] [cursor=pointer]
+                    - button [disabled] [ref=e1005]:
+                      - img [ref=e1007] [cursor=pointer]
+                    - button [disabled] [ref=e1012]:
+                      - img [ref=e1014] [cursor=pointer]
+                    - generic [ref=e1017]:
+                      - generic:
+                        - generic [ref=e1018]: a
+                        - generic [ref=e1019]: "1"
+                      - button [disabled] [ref=e1021]:
+                        - img [ref=e1023] [cursor=pointer]
+                    - generic [ref=e1032]:
+                      - generic [ref=e1033]: b
+                      - button [disabled] [ref=e1035]:
+                        - img [ref=e1037] [cursor=pointer]
+                    - generic [ref=e1044]:
+                      - generic [ref=e1045]: c
+                      - button [disabled] [ref=e1047]:
+                        - img [ref=e1049] [cursor=pointer]
+                    - generic [ref=e1057]:
+                      - generic [ref=e1058]: d
+                      - button [disabled] [ref=e1060]:
+                        - img [ref=e1062] [cursor=pointer]
+                    - generic [ref=e1074]:
+                      - generic [ref=e1075]: e
+                      - button [disabled] [ref=e1077]:
+                        - img [ref=e1079] [cursor=pointer]
+                    - generic [ref=e1087]:
+                      - generic [ref=e1088]: f
+                      - button [disabled] [ref=e1090]:
+                        - img [ref=e1092] [cursor=pointer]
+                    - generic [ref=e1100]:
+                      - generic [ref=e1101]: g
+                      - button [disabled] [ref=e1103]:
+                        - img [ref=e1105] [cursor=pointer]
+                    - generic [ref=e1112]:
+                      - generic [ref=e1113]: h
+                      - button [disabled] [ref=e1115]:
+                        - img [ref=e1117] [cursor=pointer]
+                    - img
+                  - status [ref=e1125]
+                - generic [ref=e1126]:
+                  - generic [ref=e1127]:
+                    - generic [ref=e1128]: Games
+                    - generic [ref=e1129]: "159"
+                  - generic [ref=e1130]:
+                    - generic [ref=e1131]: Win
+                    - generic [ref=e1132]: 57%
+                  - generic [ref=e1133]:
+                    - generic [ref=e1134]: Draw
+                    - generic [ref=e1135]: 3%
+                  - generic [ref=e1136]:
+                    - generic [ref=e1137]: Loss
+                    - generic [ref=e1138]: 40%
+                  - generic [ref=e1139]:
+                    - generic [ref=e1140]: Avg opp.
+                    - generic [ref=e1141]: "1922"
+              - generic [ref=e1142]:
+                - generic [ref=e1143]:
+                  - generic [ref=e1144]: Continuations
+                  - generic [ref=e1145]: from 3 ply
+                - generic [ref=e1146]:
+                  - generic [ref=e1147]:
+                    - generic [ref=e1148]: Move
+                    - generic [ref=e1149]: Games
+                    - generic [ref=e1150]: Results
+                  - list [ref=e1152]:
+                    - listitem [ref=e1153]:
+                      - button "d5 60 29 wins, 3 draws, 28 losses" [ref=e1154]:
+                        - generic [ref=e1155]: d5
+                        - generic [ref=e1156]: "60"
+                        - generic [ref=e1157]:
+                          - img "29 wins, 3 draws, 28 losses" [ref=e1158]:
+                            - generic [ref=e1160]: "29"
+                            - generic [ref=e1163]: "28"
+                          - img [ref=e1164]
+                    - listitem [ref=e1166]:
+                      - button "Nf6 55 23 wins, 3 draws, 29 losses" [ref=e1167]:
+                        - generic [ref=e1168]: Nf6
+                        - generic [ref=e1169]: "55"
+                        - generic [ref=e1170]:
+                          - img "23 wins, 3 draws, 29 losses" [ref=e1171]:
+                            - generic [ref=e1173]: "23"
+                            - generic [ref=e1176]: "29"
+                          - img [ref=e1177]
+                    - listitem [ref=e1179]:
+                      - button "e6 20 12 wins, 1 draws, 7 losses" [ref=e1180]:
+                        - generic [ref=e1181]: e6
+                        - generic [ref=e1182]: "20"
+                        - generic [ref=e1183]:
+                          - img "12 wins, 1 draws, 7 losses" [ref=e1184]:
+                            - generic [ref=e1186]: "12"
+                            - generic [ref=e1189]: "7"
+                          - img [ref=e1190]
+                    - listitem [ref=e1192]:
+                      - button "c5 0 0 wins, 0 draws, 0 losses" [ref=e1193]:
+                        - generic [ref=e1194]: c5
+                        - generic [ref=e1195]: "0"
+                        - generic [ref=e1196]:
+                          - img "0 wins, 0 draws, 0 losses" [ref=e1197]
+                          - img [ref=e1198]
+            - generic [ref=e1200]:
+              - generic [ref=e1201]:
+                - img [ref=e1202]
+                - generic [ref=e1204]:
+                  - heading "Worth exploring" [level=3] [ref=e1205]
+                  - paragraph [ref=e1206]: Openings missing from the player's white repertoire.
+              - generic [ref=e1207]:
+                - button "C60 1.e4 e5 Ruy López You rarely explore 1.e4 e5 1. e4 e5 2. Nf3 Nc6 3. Bb5" [ref=e1208]:
+                  - generic [ref=e1209]:
+                    - generic [ref=e1210]: C60
+                    - generic [ref=e1211]: 1.e4 e5
+                  - generic [ref=e1212]: Ruy López
+                  - generic [ref=e1213]: You rarely explore 1.e4 e5
+                  - generic [ref=e1214]: 1. e4 e5 2. Nf3 Nc6 3. Bb5
+                - button "C50 1.e4 e5 Italian Game You rarely explore 1.e4 e5 1. e4 e5 2. Nf3 Nc6 3. Bc4" [ref=e1215]:
+                  - generic [ref=e1216]:
+                    - generic [ref=e1217]: C50
+                    - generic [ref=e1218]: 1.e4 e5
+                  - generic [ref=e1219]: Italian Game
+                  - generic [ref=e1220]: You rarely explore 1.e4 e5
+                  - generic [ref=e1221]: 1. e4 e5 2. Nf3 Nc6 3. Bc4
+                - button "D06 Queen's Gambit Queen's Gambit You rarely explore Queen's Gambit 1. d4 d5 2. c4" [ref=e1222]:
+                  - generic [ref=e1223]:
+                    - generic [ref=e1224]: D06
+                    - generic [ref=e1225]: Queen's Gambit
+                  - generic [ref=e1226]: Queen's Gambit
+                  - generic [ref=e1227]: You rarely explore Queen's Gambit
+                  - generic [ref=e1228]: 1. d4 d5 2. c4
+  - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=e235] [cursor=pointer]:
+    - img [ref=e236]
+  - alert [ref=e542]
