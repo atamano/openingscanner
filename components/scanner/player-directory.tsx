@@ -7,6 +7,7 @@ import {
   playerCountries,
   type PopularPlayer,
 } from "@/lib/landing/players";
+import { useDictionary } from "@/lib/i18n/context";
 import type { Platform } from "@/lib/sources/types";
 
 interface PlayerDirectoryProps {
@@ -72,6 +73,7 @@ const COUNTRY_LABELS: Record<string, string> = {
 };
 
 export function PlayerDirectory({ platform, onPick }: PlayerDirectoryProps) {
+  const dict = useDictionary();
   const [country, setCountry] = useState<string>("");
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(0);
@@ -94,11 +96,11 @@ export function PlayerDirectory({ platform, onPick }: PlayerDirectoryProps) {
     const scored: { player: (typeof base)[number]; score: number }[] = [];
     for (const p of base) {
       const handle = handleFor(p, platform) ?? "";
-      const country = COUNTRY_LABELS[p.country] ?? p.country;
+      const countryLabel = COUNTRY_LABELS[p.country] ?? p.country;
       const scores = [
         fuzzyScore(normalizedQuery, p.name.toLowerCase()),
         fuzzyScore(normalizedQuery, handle.toLowerCase()),
-        fuzzyScore(normalizedQuery, country.toLowerCase()),
+        fuzzyScore(normalizedQuery, countryLabel.toLowerCase()),
       ];
       const best = Math.max(...scores);
       if (best > 0) scored.push({ player: p, score: best });
@@ -134,10 +136,16 @@ export function PlayerDirectory({ platform, onPick }: PlayerDirectoryProps) {
         </div>
         <div className="flex-1">
           <div className="text-sm font-semibold">
-            Popular on {PLATFORM_LABEL[platform]}
+            {dict.playerDirectory.popularOn.replace(
+              "{platform}",
+              PLATFORM_LABEL[platform],
+            )}
           </div>
           <div className="text-[11px] text-ink-light">
-            {filtered.length} handles · click to fill
+            {dict.playerDirectory.handlesHint.replace(
+              "{count}",
+              String(filtered.length),
+            )}
           </div>
         </div>
       </div>
@@ -149,7 +157,7 @@ export function PlayerDirectory({ platform, onPick }: PlayerDirectoryProps) {
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search name or handle"
+            placeholder={dict.playerDirectory.searchPlaceholder}
             className="h-8 w-full rounded-md border border-border bg-paper-dark pl-8 pr-7 text-xs placeholder:text-ink-light/40 focus:border-amber focus:ring-2 focus:ring-amber/20 outline-none"
           />
           {query ? (
@@ -157,7 +165,7 @@ export function PlayerDirectory({ platform, onPick }: PlayerDirectoryProps) {
               type="button"
               onClick={() => setQuery("")}
               className="absolute right-1 top-1/2 -translate-y-1/2 rounded p-1 text-ink-light hover:text-foreground"
-              aria-label="Clear search"
+              aria-label={dict.playerDirectory.clearSearch}
             >
               <X className="size-3" />
             </button>
@@ -168,7 +176,7 @@ export function PlayerDirectory({ platform, onPick }: PlayerDirectoryProps) {
           onChange={(e) => setCountry(e.target.value)}
           className="h-8 rounded-md border border-border bg-paper-dark px-2 text-xs text-ink-light focus:border-amber focus:ring-2 focus:ring-amber/20 outline-none"
         >
-          <option value="">All countries</option>
+          <option value="">{dict.playerDirectory.allCountries}</option>
           {countries.map((c) => (
             <option key={c} value={c}>
               {COUNTRY_LABELS[c] ?? c}
@@ -181,7 +189,7 @@ export function PlayerDirectory({ platform, onPick }: PlayerDirectoryProps) {
       <div className="flex-1 overflow-y-auto">
         {shown.length === 0 ? (
           <div className="grid h-full place-items-center p-6 text-center text-xs text-ink-light">
-            No player matches these filters.
+            {dict.playerDirectory.noMatch}
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
@@ -225,7 +233,9 @@ export function PlayerDirectory({ platform, onPick }: PlayerDirectoryProps) {
       {/* Pagination */}
       <div className="mt-3 flex items-center justify-between border-t border-border pt-2 text-[11px] text-ink-light">
         <span>
-          Page {safePage + 1} / {totalPages}
+          {dict.playerDirectory.page
+            .replace("{current}", String(safePage + 1))
+            .replace("{total}", String(totalPages))}
         </span>
         <div className="flex items-center gap-1">
           <button
@@ -233,7 +243,7 @@ export function PlayerDirectory({ platform, onPick }: PlayerDirectoryProps) {
             onClick={() => setPage((p) => Math.max(0, p - 1))}
             disabled={safePage === 0}
             className="flex h-7 w-7 items-center justify-center rounded-md border border-border hover:border-amber/40 hover:text-foreground disabled:opacity-30"
-            aria-label="Previous page"
+            aria-label={dict.playerDirectory.prevPage}
           >
             <ChevronLeft className="size-3.5" />
           </button>
@@ -242,7 +252,7 @@ export function PlayerDirectory({ platform, onPick }: PlayerDirectoryProps) {
             onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
             disabled={safePage >= totalPages - 1}
             className="flex h-7 w-7 items-center justify-center rounded-md border border-border hover:border-amber/40 hover:text-foreground disabled:opacity-30"
-            aria-label="Next page"
+            aria-label={dict.playerDirectory.nextPage}
           >
             <ChevronRight className="size-3.5" />
           </button>

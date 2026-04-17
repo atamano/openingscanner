@@ -23,7 +23,8 @@
     "footer": "Бесплатно. Local-first. Ничего не покидает ваш браузер."
   },
   "header": {
-    "newScan": "Новое сканирование"
+    "newScan": "Новое сканирование",
+    "backToHome": "На главную"
   },
   "form": {
     "placeholderLichess": "Имя игрока (напр. DrNykterstein)",
@@ -166,5 +167,16 @@
     "noGamesMatched": "Нет партий, соответствующих фильтрам.",
     "widenTryHint": "Попробуйте расширить период, отключить «только рейтинговые» или сменить платформу."
   },
-  "loading": "Загрузка…"
+  "loading": "Загрузка…",
+  "playerDirectory": {
+    "popularOn": "Популярные на {platform}",
+    "handlesHint": "{count} аккаунтов · нажмите, чтобы подставить",
+    "searchPlaceholder": "Поиск по имени или нику",
+    "clearSearch": "Очистить поиск",
+    "allCountries": "Все страны",
+    "noMatch": "Ни один игрок не соответствует этим фильтрам.",
+    "page": "Страница {current} / {total}",
+    "prevPage": "Предыдущая страница",
+    "nextPage": "Следующая страница"
+  }
 }

@@ -35,7 +35,7 @@ export function computeGaps(
   options: GapOptions = {},
 ): GapRecommendation[] {
   const played = Object.values(stats.byOpening).filter(
-    (s) => s.entry?.color === color && s.gameCount >= 1,
+    (s) => s.color === color && s.entry !== null && s.gameCount >= 1,
   );
 
   const prefixCount = new Map<string, number>();

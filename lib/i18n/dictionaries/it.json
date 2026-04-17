@@ -23,7 +23,8 @@
     "footer": "Gratuito. Local-first. Nulla lascia il tuo browser."
   },
   "header": {
-    "newScan": "Nuova scansione"
+    "newScan": "Nuova scansione",
+    "backToHome": "Torna alla home"
   },
   "form": {
     "placeholderLichess": "Nome giocatore (es. DrNykterstein)",
@@ -166,5 +167,16 @@
     "noGamesMatched": "Nessuna partita corrisponde ai filtri.",
     "widenTryHint": "Prova ad ampliare il periodo, disattivare «solo valutate» o cambiare piattaforma."
   },
-  "loading": "Caricamento…"
+  "loading": "Caricamento…",
+  "playerDirectory": {
+    "popularOn": "Popolari su {platform}",
+    "handlesHint": "{count} account · clicca per compilare",
+    "searchPlaceholder": "Cerca nome o username",
+    "clearSearch": "Cancella la ricerca",
+    "allCountries": "Tutti i paesi",
+    "noMatch": "Nessun giocatore corrisponde a questi filtri.",
+    "page": "Pagina {current} / {total}",
+    "prevPage": "Pagina precedente",
+    "nextPage": "Pagina successiva"
+  }
 }

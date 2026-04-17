@@ -16,6 +16,18 @@ export interface Dictionary {
   };
   header: {
     newScan: string;
+    backToHome: string;
+  };
+  playerDirectory: {
+    popularOn: string;
+    handlesHint: string;
+    searchPlaceholder: string;
+    clearSearch: string;
+    allCountries: string;
+    noMatch: string;
+    page: string;
+    prevPage: string;
+    nextPage: string;
   };
   form: {
     placeholderLichess: string;

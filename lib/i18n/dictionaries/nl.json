@@ -23,7 +23,8 @@
     "footer": "Gratis. Local-first. Niets verlaat je browser."
   },
   "header": {
-    "newScan": "Nieuwe scan"
+    "newScan": "Nieuwe scan",
+    "backToHome": "Terug naar start"
   },
   "form": {
     "placeholderLichess": "Gebruikersnaam (bijv. DrNykterstein)",
@@ -166,5 +167,16 @@
     "noGamesMatched": "Geen partijen passen bij de filters.",
     "widenTryHint": "Probeer de periode te verruimen, \"alleen gewaardeerd\" uit te zetten of van platform te wisselen."
   },
-  "loading": "Laden…"
+  "loading": "Laden…",
+  "playerDirectory": {
+    "popularOn": "Populair op {platform}",
+    "handlesHint": "{count} accounts · klik om in te vullen",
+    "searchPlaceholder": "Zoek naam of gebruikersnaam",
+    "clearSearch": "Zoekopdracht wissen",
+    "allCountries": "Alle landen",
+    "noMatch": "Geen speler komt overeen met deze filters.",
+    "page": "Pagina {current} / {total}",
+    "prevPage": "Vorige pagina",
+    "nextPage": "Volgende pagina"
+  }
 }

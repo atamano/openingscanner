@@ -1005,3 +1005,10 @@ export const CATALOG_BY_ID: Record<string, CatalogEntry> = Object.fromEntries(
 export const UNCATEGORIZED_ID = "__uncategorized__";
 
 export const UNCATEGORIZED_LABEL = "Uncategorized";
+
+export function isUncategorizedId(openingId: string): boolean {
+  return (
+    openingId === UNCATEGORIZED_ID ||
+    openingId.startsWith(`${UNCATEGORIZED_ID}|`)
+  );
+}

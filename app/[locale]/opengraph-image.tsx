@@ -18,9 +18,10 @@ export function generateImageMetadata() {
 export default async function OpengraphImage({
   params,
 }: {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
-  const locale: Locale = isLocale(params.locale) ? params.locale : "en";
+  const { locale: raw } = await params;
+  const locale: Locale = isLocale(raw) ? raw : "en";
   const dict = await getDictionary(locale);
 
   const PAPER = "#f5f0e6";

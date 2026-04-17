@@ -4,6 +4,16 @@ import type {
   TimeClass,
 } from "@/lib/sources/types";
 
+const TERMINAL_STATUSES = new Set([
+  "mate",
+  "resign",
+  "stalemate",
+  "timeout",
+  "draw",
+  "outoftime",
+  "variantEnd",
+]);
+
 const LICHESS_PERF_TO_TIMECLASS: Record<string, TimeClass> = {
   ultraBullet: "bullet",
   bullet: "bullet",
@@ -119,13 +129,13 @@ function parseLichessLine(line: string): GameSummary | null {
   }
   if (raw.variant !== "standard") return null;
   if (!raw.moves) return null;
+  if (!TERMINAL_STATUSES.has(raw.status)) return null;
 
   const moves = raw.moves.split(" ").filter(Boolean);
   if (moves.length === 0) return null;
 
   const timeClass = LICHESS_PERF_TO_TIMECLASS[raw.perf] ?? "blitz";
-  const result =
-    raw.winner ?? (raw.status === "draw" || !raw.winner ? "draw" : "draw");
+  const result: GameSummary["result"] = raw.winner ?? "draw";
 
   return {
     id: raw.id,
@@ -140,7 +150,7 @@ function parseLichessLine(line: string): GameSummary | null {
       name: raw.players.black.user?.name ?? "Anonymous",
       rating: raw.players.black.rating,
     },
-    result: result as GameSummary["result"],
+    result,
     timeClass,
     rated: raw.rated,
     moves,

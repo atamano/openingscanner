@@ -2,7 +2,7 @@
 
 import { ChevronLeft, ChevronRight, Search, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { UNCATEGORIZED_ID } from "@/lib/catalog/openings";
+import { isUncategorizedId } from "@/lib/catalog/openings";
 import { useDictionary } from "@/lib/i18n/context";
 import type { OpeningStats, RepertoireStats } from "@/lib/repertoire/aggregate";
 import type { PlayerColor } from "@/lib/sources/types";
@@ -31,11 +31,7 @@ export function RepertoireList({
   const [drilledFamily, setDrilledFamily] = useState<string | null>(null);
 
   const colorEntries = useMemo(
-    () =>
-      Object.values(stats.byOpening).filter((s) => {
-        if (s.openingId === UNCATEGORIZED_ID) return true;
-        return s.entry?.color === color;
-      }),
+    () => Object.values(stats.byOpening).filter((s) => s.color === color),
     [stats, color],
   );
 
@@ -53,7 +49,7 @@ export function RepertoireList({
     if (!isSearching) return [];
     return colorEntries
       .filter((s) => {
-        if (s.openingId === UNCATEGORIZED_ID) {
+        if (isUncategorizedId(s.openingId)) {
           return UNCATEGORIZED_LABEL.toLowerCase().includes(normalized);
         }
         const e = s.entry;
@@ -73,7 +69,7 @@ export function RepertoireList({
     if (!selectedId || isSearching) return;
     const s = stats.byOpening[selectedId];
     const fam =
-      s?.openingId === UNCATEGORIZED_ID
+      s && isUncategorizedId(s.openingId)
         ? OTHER_FAMILY
         : s?.entry?.family ?? OTHER_FAMILY;
     setDrilledFamily((prev) =>
@@ -163,7 +159,7 @@ export function RepertoireList({
                     total={total}
                     selected={selectedId === s.openingId}
                     onSelect={() => onSelect(s.openingId)}
-                    uncategorized={s.openingId === UNCATEGORIZED_ID}
+                    uncategorized={isUncategorizedId(s.openingId)}
                     showFamily
                   />
                 </li>
@@ -179,7 +175,7 @@ export function RepertoireList({
                   total={total}
                   selected={selectedId === s.openingId}
                   onSelect={() => onSelect(s.openingId)}
-                  uncategorized={s.openingId === UNCATEGORIZED_ID}
+                  uncategorized={isUncategorizedId(s.openingId)}
                 />
               </li>
             ))}
@@ -196,9 +192,9 @@ export function RepertoireList({
                     total={total}
                     selected={selectedId === group.entries[0].openingId}
                     onSelect={() => onSelect(group.entries[0].openingId)}
-                    uncategorized={
-                      group.entries[0].openingId === UNCATEGORIZED_ID
-                    }
+                    uncategorized={isUncategorizedId(
+                      group.entries[0].openingId,
+                    )}
                   />
                 ) : (
                   <FamilyRow
@@ -232,10 +228,9 @@ interface FamilyGroup {
 function groupByFamily(entries: OpeningStats[]): FamilyGroup[] {
   const map = new Map<string, OpeningStats[]>();
   for (const s of entries) {
-    const key =
-      s.openingId === UNCATEGORIZED_ID
-        ? OTHER_FAMILY
-        : s.entry?.family ?? OTHER_FAMILY;
+    const key = isUncategorizedId(s.openingId)
+      ? OTHER_FAMILY
+      : s.entry?.family ?? OTHER_FAMILY;
     if (!map.has(key)) map.set(key, []);
     map.get(key)!.push(s);
   }
@@ -256,8 +251,8 @@ function groupByFamily(entries: OpeningStats[]): FamilyGroup[] {
 }
 
 function sortByCount(a: OpeningStats, b: OpeningStats): number {
-  if (a.openingId === UNCATEGORIZED_ID) return 1;
-  if (b.openingId === UNCATEGORIZED_ID) return -1;
+  if (isUncategorizedId(a.openingId)) return 1;
+  if (isUncategorizedId(b.openingId)) return -1;
   return b.gameCount - a.gameCount;
 }
 

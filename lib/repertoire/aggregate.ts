@@ -25,6 +25,7 @@ export interface GameRecord {
 export interface OpeningStats {
   openingId: string;
   entry: CatalogEntry | null;
+  color: PlayerColor;
   gameCount: number;
   playerWins: number;
   playerLosses: number;
@@ -73,7 +74,9 @@ export class RepertoireAccumulator {
     this.colorBreakdown[playerColor]++;
 
     const match = classifyByEco(game.moves);
-    const id = match ? `${match.epd}|${playerColor}` : UNCATEGORIZED_ID;
+    const id = match
+      ? `${match.epd}|${playerColor}`
+      : `${UNCATEGORIZED_ID}|${playerColor}`;
 
     if (match) this.totalClassified++;
 
@@ -82,6 +85,7 @@ export class RepertoireAccumulator {
       stats = {
         openingId: id,
         entry: match ? ecoToEntry(match, playerColor) : null,
+        color: playerColor,
         gameCount: 0,
         playerWins: 0,
         playerLosses: 0,

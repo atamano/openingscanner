@@ -63,9 +63,10 @@ const api = {
         if (fetched % 25 === 0) await emit();
       }
     } catch (err) {
-      if ((err as Error).name !== "AbortError") {
-        throw err;
+      if ((err as Error).name === "AbortError") {
+        throw new DOMException("Scan aborted", "AbortError");
       }
+      throw err;
     }
 
     await emit();

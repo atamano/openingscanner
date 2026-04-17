@@ -58,8 +58,12 @@ export async function* streamChessComGames(
     const label = archiveLabel(archiveUrl);
     onLabel?.(label);
 
-    const monthRes = await fetch(archiveUrl, { signal });
-    if (!monthRes.ok) continue;
+    const monthRes = await fetchArchiveWithRetry(archiveUrl, signal);
+    if (!monthRes.ok) {
+      throw new Error(
+        `Chess.com archive ${archiveLabel(archiveUrl)} failed: ${monthRes.status}`,
+      );
+    }
     const { games } = (await monthRes.json()) as { games: ChessComGame[] };
 
     // Within a month, newest first too.
@@ -111,6 +115,28 @@ export async function* streamChessComGames(
       if (filters.maxGames && emitted >= filters.maxGames) return;
     }
   }
+}
+
+async function fetchArchiveWithRetry(
+  url: string,
+  signal?: AbortSignal,
+): Promise<Response> {
+  const res = await fetch(url, { signal });
+  if (res.ok) return res;
+  if (res.status !== 429 && res.status < 500) return res;
+
+  const retryAfter = Number(res.headers.get("retry-after"));
+  const delayMs = Number.isFinite(retryAfter) && retryAfter > 0
+    ? Math.min(retryAfter * 1000, 5000)
+    : 750;
+  await new Promise<void>((resolve, reject) => {
+    const t = setTimeout(resolve, delayMs);
+    signal?.addEventListener("abort", () => {
+      clearTimeout(t);
+      reject(new DOMException("Aborted", "AbortError"));
+    }, { once: true });
+  });
+  return fetch(url, { signal });
 }
 
 function archiveInRange(archiveUrl: string, filters: ScanFilters): boolean {

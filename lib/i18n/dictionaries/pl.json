@@ -23,7 +23,8 @@
     "footer": "Darmowy. Local-first. Nic nie opuszcza twojej przeglądarki."
   },
   "header": {
-    "newScan": "Nowy skan"
+    "newScan": "Nowy skan",
+    "backToHome": "Powrót na stronę główną"
   },
   "form": {
     "placeholderLichess": "Nazwa gracza (np. DrNykterstein)",
@@ -166,5 +167,16 @@
     "noGamesMatched": "Żadne partie nie pasują do filtrów.",
     "widenTryHint": "Spróbuj rozszerzyć okres, wyłączyć „tylko rankingowe” lub zmienić platformę."
   },
-  "loading": "Ładowanie…"
+  "loading": "Ładowanie…",
+  "playerDirectory": {
+    "popularOn": "Popularne na {platform}",
+    "handlesHint": "{count} kont · kliknij, aby wypełnić",
+    "searchPlaceholder": "Szukaj imienia lub nicku",
+    "clearSearch": "Wyczyść wyszukiwanie",
+    "allCountries": "Wszystkie kraje",
+    "noMatch": "Żaden gracz nie pasuje do tych filtrów.",
+    "page": "Strona {current} / {total}",
+    "prevPage": "Poprzednia strona",
+    "nextPage": "Następna strona"
+  }
 }

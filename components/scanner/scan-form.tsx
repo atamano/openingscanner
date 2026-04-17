@@ -2,18 +2,24 @@
 
 import { Loader2, Search } from "lucide-react";
 import { useMemo } from "react";
-import { parseAsBoolean, parseAsString, useQueryState } from "nuqs";
+import {
+  parseAsBoolean,
+  parseAsString,
+  parseAsStringLiteral,
+  useQueryState,
+} from "nuqs";
 import { useDictionary } from "@/lib/i18n/context";
-import type {
-  Platform,
-  ScanColor,
-  ScanParams,
-  TimeClass,
-} from "@/lib/sources/types";
+import {
+  DATE_PRESETS,
+  PLATFORMS,
+  SCAN_COLORS,
+  TIME_CLASSES,
+  type DatePreset,
+} from "@/lib/scan/params";
+import type { Platform, ScanParams, TimeClass } from "@/lib/sources/types";
 
 const TIME_VALUES = ["bullet", "blitz", "rapid", "classical"] as const;
-const DATE_VALUES = ["30d", "6m", "1y", "all"] as const;
-type DatePreset = (typeof DATE_VALUES)[number];
+const DATE_VALUES = DATE_PRESETS;
 
 // Curated list of handles that actually post games regularly (super-GMs and
 // active streamers). Lichess in particular — avoid accounts that are mostly
@@ -50,11 +56,11 @@ export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
   );
   const [platform, setPlatform] = useQueryState(
     "p",
-    parseAsString.withDefault("chesscom"),
+    parseAsStringLiteral(PLATFORMS).withDefault("chesscom"),
   );
   const [color, setColor] = useQueryState(
     "c",
-    parseAsString.withDefault("both"),
+    parseAsStringLiteral(SCAN_COLORS).withDefault("both"),
   );
   const [rated, setRated] = useQueryState(
     "rated",
@@ -66,11 +72,16 @@ export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
   );
   const [datePreset, setDatePreset] = useQueryState(
     "d",
-    parseAsString.withDefault("1y"),
+    parseAsStringLiteral(DATE_PRESETS).withDefault("1y"),
   );
 
-  const selectedTimes = useMemo(
-    () => (times ? times.split(",").filter(Boolean) : []) as TimeClass[],
+  const selectedTimes = useMemo<TimeClass[]>(
+    () =>
+      times
+        ? (times.split(",").filter((v): v is TimeClass =>
+            (TIME_CLASSES as readonly string[]).includes(v),
+          ) as TimeClass[])
+        : [],
     [times],
   );
 
@@ -98,12 +109,12 @@ export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
 
   const submit = () => {
     if (!canSubmit) return;
-    const since = datePresetToSince(datePreset as DatePreset);
+    const since = datePresetToSince(datePreset);
     onSubmit({
-      platform: platform as Platform,
+      platform,
       username: username.trim(),
       filters: {
-        color: color as ScanColor,
+        color,
         ratedOnly: rated,
         timeClasses: selectedTimes,
         since,
@@ -182,7 +193,7 @@ export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
           <span className="text-[11px] uppercase tracking-widest text-ink-light font-semibold">
             {dict.form.popular}
           </span>
-          {POPULAR_PLAYERS[platform as Platform].map((p) => {
+          {POPULAR_PLAYERS[platform].map((p) => {
             const active =
               username.trim().toLowerCase() === p.handle.toLowerCase();
             return (

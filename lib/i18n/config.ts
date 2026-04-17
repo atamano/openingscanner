@@ -81,7 +81,7 @@ export function negotiateLocale(acceptLanguage: string | null): Locale {
       const quality = q ? Number.parseFloat(q.slice(2)) : 1;
       return { tag: tag.toLowerCase(), quality };
     })
-    .filter((p) => p.tag && !Number.isNaN(p.quality))
+    .filter((p) => p.tag && !Number.isNaN(p.quality) && p.quality > 0)
     .sort((a, b) => b.quality - a.quality);
 
   for (const pref of preferences) {

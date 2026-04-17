@@ -1,4 +1,3 @@
-import { CATALOG_BY_ID } from "@/lib/catalog/openings";
 import type {
   GameRecord,
   MoveNode,
@@ -22,7 +21,7 @@ export function serializeOpeningToPGN(
   stats: OpeningStats,
   username: string,
 ): string {
-  const entry = stats.entry ?? CATALOG_BY_ID[stats.openingId];
+  const entry = stats.entry;
   const chapterName = entry?.name ?? "Repertoire";
   const lines: string[] = [];
 
@@ -102,7 +101,7 @@ export function serializeOpeningWithVariations(
   username: string,
   minCount = 1,
 ): string {
-  const entry = stats.entry ?? CATALOG_BY_ID[stats.openingId];
+  const entry = stats.entry;
   const chapterName = entry?.name ?? "Repertoire";
   const baseMoves = entry?.moves ?? [];
 

@@ -23,7 +23,8 @@
     "footer": "Free. Local-first. Nothing leaves your browser."
   },
   "header": {
-    "newScan": "New scan"
+    "newScan": "New scan",
+    "backToHome": "Back to home"
   },
   "form": {
     "placeholderLichess": "Player username (e.g. DrNykterstein)",
@@ -166,5 +167,16 @@
     "noGamesMatched": "No games matched the filters.",
     "widenTryHint": "Try widening the time-window, toggling rated-only off, or switching platform."
   },
-  "loading": "Loading…"
+  "loading": "Loading…",
+  "playerDirectory": {
+    "popularOn": "Popular on {platform}",
+    "handlesHint": "{count} handles · click to fill",
+    "searchPlaceholder": "Search name or handle",
+    "clearSearch": "Clear search",
+    "allCountries": "All countries",
+    "noMatch": "No player matches these filters.",
+    "page": "Page {current} / {total}",
+    "prevPage": "Previous page",
+    "nextPage": "Next page"
+  }
 }

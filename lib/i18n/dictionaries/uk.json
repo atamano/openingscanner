@@ -23,7 +23,8 @@
     "footer": "Безкоштовно. Local-first. Ніщо не покидає ваш браузер."
   },
   "header": {
-    "newScan": "Нове сканування"
+    "newScan": "Нове сканування",
+    "backToHome": "На головну"
   },
   "form": {
     "placeholderLichess": "Імʼя гравця (напр. DrNykterstein)",
@@ -166,5 +167,16 @@
     "noGamesMatched": "Жодна партія не відповідає фільтрам.",
     "widenTryHint": "Спробуйте розширити період, вимкнути «тільки рейтингові» або змінити платформу."
   },
-  "loading": "Завантаження…"
+  "loading": "Завантаження…",
+  "playerDirectory": {
+    "popularOn": "Популярні на {platform}",
+    "handlesHint": "{count} акаунтів · натисніть, щоб підставити",
+    "searchPlaceholder": "Пошук за іменем або ніком",
+    "clearSearch": "Очистити пошук",
+    "allCountries": "Усі країни",
+    "noMatch": "Жоден гравець не відповідає цим фільтрам.",
+    "page": "Сторінка {current} / {total}",
+    "prevPage": "Попередня сторінка",
+    "nextPage": "Наступна сторінка"
+  }
 }

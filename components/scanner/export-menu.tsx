@@ -19,7 +19,6 @@ import {
   serializeRepertoireToPGN,
   serializeRepertoireWithVariations,
 } from "@/lib/pgn/serialize";
-import { UNCATEGORIZED_ID } from "@/lib/catalog/openings";
 import type { RepertoireStats } from "@/lib/repertoire/aggregate";
 import type { PlayerColor } from "@/lib/sources/types";
 
@@ -56,12 +55,11 @@ export function ExportMenu({
     URL.revokeObjectURL(url);
   };
 
-  const openingsForColor = () =>
-    Object.values(stats.byOpening).filter(
-      (s) =>
-        (s.entry?.color === color || s.openingId === UNCATEGORIZED_ID) &&
-        s.gameCount >= 3,
-    );
+  const allOpeningsForColor = () =>
+    Object.values(stats.byOpening).filter((s) => s.color === color);
+
+  const repertoireOpeningsForColor = () =>
+    allOpeningsForColor().filter((s) => s.gameCount >= 3);
 
   const gamesSuffix = (n: number) =>
     n === 1
@@ -87,7 +85,7 @@ export function ExportMenu({
       );
       return;
     }
-    const openings = openingsForColor();
+    const openings = allOpeningsForColor();
     const games = openings.flatMap((s) => s.games);
     if (games.length === 0) {
       toast.error(dict.export.toastNoGamesYet);
@@ -115,7 +113,7 @@ export function ExportMenu({
       toast.success(dict.export.toastRepertoireDownloaded);
       return;
     }
-    const openings = openingsForColor();
+    const openings = repertoireOpeningsForColor();
     const pgn =
       serializeRepertoireWithVariations(openings, stats.username) ||
       serializeRepertoireToPGN(openings, stats.username);

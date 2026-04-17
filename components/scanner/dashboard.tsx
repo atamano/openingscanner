@@ -12,7 +12,6 @@ import {
   ToggleGroup,
   ToggleGroupItem,
 } from "@/components/ui/toggle-group";
-import { UNCATEGORIZED_ID } from "@/lib/catalog/openings";
 import {
   buildGlobalTree,
   type MoveNode,
@@ -53,9 +52,7 @@ export function Dashboard({ stats }: DashboardProps) {
   const rowsForColor = useMemo(
     () =>
       Object.values(stats.byOpening)
-        .filter(
-          (s) => s.entry?.color === color || s.openingId === UNCATEGORIZED_ID,
-        )
+        .filter((s) => s.color === color)
         .sort((a, b) => b.gameCount - a.gameCount),
     [stats, color],
   );

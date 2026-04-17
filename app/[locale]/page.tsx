@@ -1,7 +1,7 @@
 "use client";
 
 import { AlertCircle, Radar } from "lucide-react";
-import { parseAsString, useQueryState } from "nuqs";
+import { parseAsString, parseAsStringLiteral, useQueryState } from "nuqs";
 import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { Header } from "@/components/layout/header";
 import { Dashboard } from "@/components/scanner/dashboard";
@@ -12,7 +12,14 @@ import { ScanSummaryBar } from "@/components/scanner/scan-summary-bar";
 import { useScanner } from "@/hooks/use-scanner";
 import { useDictionary } from "@/lib/i18n/context";
 import { DashboardFiltersProvider } from "@/lib/state/dashboard-filters";
-import type { Platform, ScanParams } from "@/lib/sources/types";
+import {
+  DATE_PRESETS,
+  PLATFORMS,
+  SCAN_COLORS,
+  TIME_CLASSES,
+  type DatePreset,
+} from "@/lib/scan/params";
+import type { Platform, ScanParams, TimeClass } from "@/lib/sources/types";
 
 export default function HomePage() {
   return (
@@ -33,12 +40,22 @@ function HomeInner() {
   );
   const [platform, setPlatform] = useQueryState(
     "p",
-    parseAsString.withDefault("chesscom"),
+    parseAsStringLiteral(PLATFORMS).withDefault("chesscom"),
   );
-  const [color] = useQueryState("c", parseAsString.withDefault("both"));
+  const [color] = useQueryState(
+    "c",
+    parseAsStringLiteral(SCAN_COLORS).withDefault("both"),
+  );
   const [times] = useQueryState("tc", parseAsString.withDefault("blitz,rapid"));
-  const [window] = useQueryState("d", parseAsString.withDefault("1y"));
-  const timeClasses = times ? times.split(",").filter(Boolean) : [];
+  const [window] = useQueryState(
+    "d",
+    parseAsStringLiteral(DATE_PRESETS).withDefault("1y"),
+  );
+  const timeClasses: TimeClass[] = times
+    ? (times.split(",").filter((v): v is TimeClass =>
+        (TIME_CLASSES as readonly string[]).includes(v),
+      ) as TimeClass[])
+    : [];
 
   const started = status !== "idle";
   const [expanded, setExpanded] = useState(false);
@@ -77,7 +94,7 @@ function HomeInner() {
   if (!started) {
     return (
       <LandingHero
-        platform={platform as Platform}
+        platform={platform}
         onSubmit={submit}
         onPickPlayer={fillPlayer}
       />

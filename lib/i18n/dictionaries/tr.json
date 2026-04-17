@@ -23,7 +23,8 @@
     "footer": "Ücretsiz. Local-first. Tarayıcınızdan hiçbir şey çıkmaz."
   },
   "header": {
-    "newScan": "Yeni tarama"
+    "newScan": "Yeni tarama",
+    "backToHome": "Ana sayfaya dön"
   },
   "form": {
     "placeholderLichess": "Oyuncu kullanıcı adı (örn. DrNykterstein)",
@@ -166,5 +167,16 @@
     "noGamesMatched": "Filtrelerle eşleşen oyun yok.",
     "widenTryHint": "Aralığı genişletmeyi, \"yalnızca dereceli\" seçeneğini kapatmayı veya platformu değiştirmeyi deneyin."
   },
-  "loading": "Yükleniyor…"
+  "loading": "Yükleniyor…",
+  "playerDirectory": {
+    "popularOn": "{platform} üzerinde popüler",
+    "handlesHint": "{count} hesap · doldurmak için tıklayın",
+    "searchPlaceholder": "İsim veya kullanıcı adı ara",
+    "clearSearch": "Aramayı temizle",
+    "allCountries": "Tüm ülkeler",
+    "noMatch": "Bu filtrelere uyan oyuncu yok.",
+    "page": "Sayfa {current} / {total}",
+    "prevPage": "Önceki sayfa",
+    "nextPage": "Sonraki sayfa"
+  }
 }

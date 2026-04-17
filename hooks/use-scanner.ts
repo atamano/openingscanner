@@ -22,6 +22,9 @@ export function useScanner() {
   const [restored, setRestored] = useState(false);
   const workerRef = useRef<Worker | null>(null);
   const apiRef = useRef<Comlink.Remote<ScannerAPI> | null>(null);
+  const scanIdRef = useRef(0);
+  const statusRef = useRef<ScanStatus>("idle");
+  statusRef.current = status;
 
   useEffect(() => {
     const worker = new Worker(
@@ -53,6 +56,7 @@ export function useScanner() {
       if (cancelled) return;
       setRestored(true);
       if (!saved) return;
+      if (statusRef.current !== "idle") return;
       setStats(saved.stats);
       setMaxGames(saved.params.filters.maxGames);
       setStatus("done");
@@ -64,6 +68,7 @@ export function useScanner() {
 
   const scan = useCallback(async (params: ScanParams) => {
     if (!apiRef.current) return;
+    const myId = ++scanIdRef.current;
     setStatus("running");
     setProgress({ fetched: 0, classified: 0, elapsedMs: 0 });
     setStats(null);
@@ -73,8 +78,12 @@ export function useScanner() {
     try {
       const result = await apiRef.current.scan(
         params,
-        Comlink.proxy((p: ScanProgressEvent) => setProgress(p)),
+        Comlink.proxy((p: ScanProgressEvent) => {
+          if (scanIdRef.current !== myId) return;
+          setProgress(p);
+        }),
       );
+      if (scanIdRef.current !== myId) return;
       setStats(result);
       setStatus("done");
       void saveLastScan({
@@ -83,17 +92,21 @@ export function useScanner() {
         finishedAt: Date.now(),
       });
     } catch (e) {
+      if (scanIdRef.current !== myId) return;
+      if ((e as Error).name === "AbortError") return;
       setError((e as Error).message || "Scan failed");
       setStatus("error");
     }
   }, []);
 
   const abort = useCallback(() => {
+    scanIdRef.current++;
     apiRef.current?.abort();
     setStatus("idle");
   }, []);
 
   const reset = useCallback(() => {
+    scanIdRef.current++;
     apiRef.current?.abort();
     setStatus("idle");
     setProgress(null);

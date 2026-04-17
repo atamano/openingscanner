@@ -1,4 +1,4 @@
-import { UNCATEGORIZED_ID } from "@/lib/catalog/openings";
+import { isUncategorizedId } from "@/lib/catalog/openings";
 import type { PlayerColor } from "@/lib/sources/types";
 import type { MoveNode, OpeningStats, RepertoireStats } from "./aggregate";
 
@@ -30,8 +30,8 @@ export function computeWeakOpenings(
 ): WeakOpening[] {
   const rows = Object.values(stats.byOpening).filter(
     (s) =>
-      s.openingId !== UNCATEGORIZED_ID &&
-      s.entry?.color === color &&
+      !isUncategorizedId(s.openingId) &&
+      s.color === color &&
       s.gameCount >= minGames,
   );
 

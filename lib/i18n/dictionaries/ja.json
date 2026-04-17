@@ -23,7 +23,8 @@
     "footer": "無料。ローカルファースト。ブラウザから何も送信されません。"
   },
   "header": {
-    "newScan": "新しいスキャン"
+    "newScan": "新しいスキャン",
+    "backToHome": "ホームに戻る"
   },
   "form": {
     "placeholderLichess": "プレイヤー名（例：DrNykterstein）",
@@ -166,5 +167,16 @@
     "noGamesMatched": "フィルターに一致する対局がありません。",
     "widenTryHint": "期間を広げたり、レート戦のみをオフにしたり、プラットフォームを切り替えてみてください。"
   },
-  "loading": "読み込み中…"
+  "loading": "読み込み中…",
+  "playerDirectory": {
+    "popularOn": "{platform} の人気プレイヤー",
+    "handlesHint": "{count} アカウント · クリックで入力",
+    "searchPlaceholder": "名前またはハンドルで検索",
+    "clearSearch": "検索をクリア",
+    "allCountries": "すべての国",
+    "noMatch": "このフィルタに一致するプレイヤーはいません。",
+    "page": "ページ {current} / {total}",
+    "prevPage": "前のページ",
+    "nextPage": "次のページ"
+  }
 }
