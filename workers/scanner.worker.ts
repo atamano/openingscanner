@@ -44,7 +44,7 @@ const api = {
         ? streamLichessGames(
             params.username,
             params.filters,
-            params.lichessToken,
+            undefined,
             controller.signal,
           )
         : streamChessComGames(

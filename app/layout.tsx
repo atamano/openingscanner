@@ -1,43 +1,114 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { DM_Sans, Fraunces, IBM_Plex_Mono } from "next/font/google";
+import Script from "next/script";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Toaster } from "sonner";
-import { Header } from "@/components/layout/header";
-import { ThemeProvider } from "@/components/layout/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { SITE, getSiteUrl } from "@/lib/seo/site";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
   subsets: ["latin"],
   display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const ibmPlexMono = IBM_Plex_Mono({
+  variable: "--font-ibm-plex-mono",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
   subsets: ["latin"],
   display: "swap",
 });
+
+const siteUrl = getSiteUrl();
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#0a0c12" },
-  ],
+  themeColor: "#f5f0e6",
 };
 
 export const metadata: Metadata = {
-  title: "Repertoire Scanner — Extract opening repertoires from online games",
-  description:
-    "Scan a Lichess or Chess.com player and extract their opening repertoire matched against a curated catalog of popular openings.",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: `${SITE.name} — Extract chess opening repertoires from online games`,
+    template: `%s · ${SITE.name}`,
+  },
+  description: SITE.description,
+  applicationName: SITE.name,
+  keywords: [...SITE.keywords],
+  authors: [{ name: SITE.name }],
+  creator: SITE.name,
+  publisher: SITE.name,
+  category: "Chess",
+  alternates: {
+    canonical: "/",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-snippet": -1,
+      "max-image-preview": "large",
+      "max-video-preview": -1,
+    },
+  },
   openGraph: {
-    title: "Repertoire Scanner",
-    description: "Extract opening repertoires from online chess games.",
     type: "website",
+    locale: SITE.locale,
+    url: siteUrl,
+    siteName: SITE.name,
+    title: `${SITE.name} — Extract chess opening repertoires from online games`,
+    description: SITE.description,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE.name,
+    description: SITE.tagline,
+    creator: SITE.twitter,
+  },
+  formatDetection: {
+    telephone: false,
+    email: false,
+    address: false,
   },
 };
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: SITE.name,
+  description: SITE.description,
+  url: siteUrl,
+  applicationCategory: "GameApplication",
+  applicationSubCategory: "Chess",
+  operatingSystem: "Any (web browser)",
+  browserRequirements: "Requires JavaScript. Requires a modern browser.",
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "USD",
+  },
+  featureList: [
+    "Scan Lichess and Chess.com players",
+    "Classify games against the full ECO catalog (3000+ openings)",
+    "Win rate statistics by opening and by color",
+    "Interactive chessboard with continuation tree",
+    "Gap analysis against popular openings",
+    "Export repertoire to Lichess study or PGN",
+  ],
+  inLanguage: "en",
+};
+
+const jsonLdString = JSON.stringify(jsonLd).replace(/</g, "\\u003c");
 
 export default function RootLayout({
   children,
@@ -45,37 +116,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
+    <html
+      lang="en"
+      className={`${dmSans.variable} ${ibmPlexMono.variable} ${fraunces.variable}`}
+    >
+      <body className="antialiased bg-background text-foreground">
+        <TooltipProvider delayDuration={200}>
+          <NuqsAdapter>{children}</NuqsAdapter>
+        </TooltipProvider>
+        <Toaster richColors closeButton position="bottom-right" />
+        <Script
+          id="jsonld-webapp"
+          type="application/ld+json"
+          strategy="beforeInteractive"
         >
-          <TooltipProvider delayDuration={200}>
-            <NuqsAdapter>
-              <div className="relative min-h-screen">
-                <div
-                  aria-hidden
-                  className="pointer-events-none fixed inset-0 -z-10 grid-pattern opacity-40"
-                />
-                <Header />
-                <main className="mx-auto max-w-7xl px-4 py-10 sm:py-14">
-                  {children}
-                </main>
-              </div>
-            </NuqsAdapter>
-          </TooltipProvider>
-        </ThemeProvider>
-        <Toaster
-          theme="system"
-          richColors
-          closeButton
-          position="bottom-right"
-        />
+          {jsonLdString}
+        </Script>
       </body>
     </html>
   );

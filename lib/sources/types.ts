@@ -44,7 +44,6 @@ export interface ScanParams {
   platform: Platform;
   username: string;
   filters: ScanFilters;
-  lichessToken?: string;
 }
 
 export interface ScanProgressEvent {

@@ -15,6 +15,13 @@ export interface MoveNode {
   children: Record<string, MoveNode>;
 }
 
+export interface GameRecord {
+  game: GameSummary;
+  playerColor: PlayerColor;
+  /** Ply depth at which the ECO match landed for this specific game. */
+  atPly: number;
+}
+
 export interface OpeningStats {
   openingId: string;
   entry: CatalogEntry | null;
@@ -28,6 +35,8 @@ export interface OpeningStats {
   tree: MoveNode;
   /** Ply depth at which the ECO match was detected (for labelling). */
   classifiedAtPly: number;
+  /** Raw games classified into this opening, kept for expert exports. */
+  games: GameRecord[];
 }
 
 export interface RepertoireStats {
@@ -81,9 +90,12 @@ export class RepertoireAccumulator {
         lastPlayedAt: 0,
         tree: emptyNode(""),
         classifiedAtPly: match ? match.atPly : 0,
+        games: [],
       };
       this.byOpening[id] = stats;
     }
+
+    stats.games.push({ game, playerColor, atPly: match ? match.atPly : 0 });
 
     stats.gameCount++;
     stats.lastPlayedAt = Math.max(stats.lastPlayedAt, game.date);
@@ -125,6 +137,26 @@ export class RepertoireAccumulator {
       byOpening: this.byOpening,
     };
   }
+}
+
+/**
+ * Build a move tree rooted at the initial position from every game in the
+ * repertoire matching `color`. Unlike `OpeningStats.tree`, this is computed
+ * across all openings so the Continuations panel can show "first moves
+ * actually played" when no opening is yet selected.
+ */
+export function buildGlobalTree(
+  stats: RepertoireStats,
+  color: PlayerColor,
+): MoveNode {
+  const root = emptyNode("");
+  for (const opening of Object.values(stats.byOpening)) {
+    for (const rec of opening.games) {
+      if (rec.playerColor !== color) continue;
+      addGameToTree(root, rec.game.moves, rec.playerColor, rec.game.result);
+    }
+  }
+  return root;
 }
 
 function ecoToEntry(

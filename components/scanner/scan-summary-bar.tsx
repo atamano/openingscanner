@@ -1,11 +1,9 @@
 "use client";
 
-import { ChevronDown, Pencil, RotateCcw, User2 } from "lucide-react";
-import { cn, formatNumber } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { ChevronDown, Pencil, RotateCcw, UserCircle } from "lucide-react";
 import type { RepertoireStats } from "@/lib/repertoire/aggregate";
 import type { ScanProgressEvent } from "@/lib/sources/types";
+import { cn, formatNumber } from "@/lib/utils";
 
 interface ScanSummaryBarProps {
   running: boolean;
@@ -57,24 +55,22 @@ export function ScanSummaryBar({
   const gameCount = stats?.totalGames ?? progress?.fetched ?? 0;
 
   return (
-    <div className="sticky top-14 z-30 -mx-4 border-b bg-background/85 px-4 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-3 py-2.5">
-        <div className="flex min-w-0 items-center gap-2">
-          <div className="grid size-8 shrink-0 place-items-center rounded-full bg-primary/10 text-primary">
-            <User2 className="size-4" />
+    <div className="rounded-xl border border-border bg-paper paper-inset">
+      <div className="flex flex-wrap items-center gap-3 px-4 py-3">
+        <div className="flex min-w-0 items-center gap-2.5">
+          <div className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-amber/10 text-amber-dark">
+            <UserCircle className="h-4 w-4" />
           </div>
           <div className="min-w-0">
-            <div className="flex items-center gap-1.5 truncate text-sm font-semibold leading-tight">
-              <span className="truncate">{username || "—"}</span>
-              <Badge variant="outline" className="hidden shrink-0 sm:inline-flex">
+            <div className="flex items-center gap-2 truncate text-sm font-semibold leading-tight">
+              <span className="truncate font-mono">{username || "—"}</span>
+              <span className="hidden sm:inline-flex shrink-0 rounded-full border border-border px-2 py-0.5 text-[10px] font-medium uppercase tracking-widest text-ink-light">
                 {PLATFORM_LABEL[platform] ?? platform}
-              </Badge>
+              </span>
             </div>
-            <div className="truncate text-xs text-muted-foreground">
+            <div className="truncate text-xs text-ink-light">
               {COLOR_LABEL[color] ?? color}
-              {timeClasses.length
-                ? ` · ${timeClasses.join(", ")}`
-                : ""}
+              {timeClasses.length ? ` · ${timeClasses.join(", ")}` : ""}
               {" · "}
               {WINDOW_LABEL[window] ?? window}
             </div>
@@ -86,49 +82,62 @@ export function ScanSummaryBar({
             className={cn(
               "hidden items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs sm:flex",
               running
-                ? "border-primary/30 bg-primary/5 text-primary"
-                : "text-muted-foreground",
+                ? "border-amber/40 bg-amber/10 text-amber-dark"
+                : "border-border text-ink-light",
             )}
           >
             <span
               className={cn(
-                "size-1.5 rounded-full",
-                running ? "animate-pulse bg-primary" : "bg-muted-foreground/50",
+                "h-1.5 w-1.5 rounded-full",
+                running ? "animate-warm-pulse bg-amber" : "bg-ink-light/40",
               )}
             />
-            <span className="font-mono tabular-nums">
+            <span className="font-mono tabular-nums text-foreground">
               {formatNumber(gameCount)}
             </span>
             <span>{running ? "streaming" : "games"}</span>
           </div>
 
           {running ? (
-            <Button size="sm" variant="outline" onClick={onAbort}>
+            <button
+              type="button"
+              onClick={onAbort}
+              className="h-8 px-3 rounded-md bg-destructive text-destructive-foreground text-xs font-semibold hover:bg-destructive/90 transition-colors"
+            >
               Stop
-            </Button>
+            </button>
           ) : null}
 
-          <Button
-            size="sm"
-            variant={expanded ? "default" : "outline"}
+          <button
+            type="button"
             onClick={onToggle}
+            className={cn(
+              "flex items-center gap-1.5 h-8 px-3 rounded-md text-xs font-medium transition-all border",
+              expanded
+                ? "border-amber/40 bg-amber/10 text-amber-dark"
+                : "border-border text-ink-light hover:border-amber/30 hover:text-foreground",
+            )}
           >
-            <Pencil className="size-3.5" />
+            <Pencil className="h-3.5 w-3.5" />
             <span className="hidden sm:inline">
               {expanded ? "Collapse" : "Edit filters"}
             </span>
             <ChevronDown
               className={cn(
-                "size-3.5 transition-transform",
+                "h-3.5 w-3.5 transition-transform",
                 expanded && "rotate-180",
               )}
             />
-          </Button>
+          </button>
 
-          <Button size="sm" variant="ghost" onClick={onReset}>
-            <RotateCcw className="size-3.5" />
+          <button
+            type="button"
+            onClick={onReset}
+            className="flex items-center gap-1.5 h-8 px-3 rounded-md text-xs font-medium text-ink-light hover:text-foreground hover:bg-paper-dark transition-all"
+          >
+            <RotateCcw className="h-3.5 w-3.5" />
             <span className="hidden sm:inline">New scan</span>
-          </Button>
+          </button>
         </div>
       </div>
     </div>

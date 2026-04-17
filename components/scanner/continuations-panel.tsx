@@ -11,6 +11,9 @@ interface ContinuationsPanelProps {
   onPush: (san: string) => void;
   onPop: () => void;
   onReset: () => void;
+  focusedSan?: string | null;
+  onFocus?: (san: string) => void;
+  title?: string;
 }
 
 export function ContinuationsPanel({
@@ -20,15 +23,21 @@ export function ContinuationsPanel({
   onPush,
   onPop,
   onReset,
+  focusedSan,
+  onFocus,
+  title = "Continuations",
 }: ContinuationsPanelProps) {
+  const totalPly = baseDepth + path.length;
   return (
     <div className="flex h-full min-h-0 flex-col overflow-hidden rounded-xl border bg-card">
       <div className="flex items-center justify-between px-4 py-3">
-        <span className="text-sm font-medium">Continuations</span>
+        <span className="text-sm font-medium">{title}</span>
         <span className="text-xs text-muted-foreground">
-          {path.length > 0
-            ? `${baseDepth + path.length} ply`
-            : `from ${baseDepth} ply`}
+          {totalPly === 0
+            ? "start"
+            : path.length > 0
+              ? `${totalPly} ply`
+              : `from ${baseDepth} ply`}
         </span>
       </div>
       <Separator />
@@ -38,6 +47,8 @@ export function ContinuationsPanel({
         onPush={onPush}
         onPop={onPop}
         onReset={onReset}
+        focusedSan={focusedSan ?? null}
+        onFocus={onFocus}
       />
     </div>
   );

@@ -11,7 +11,7 @@ const Chessboard = dynamic(
 
 function BoardSkeleton() {
   return (
-    <div className="aspect-square w-full animate-pulse rounded-lg bg-muted" />
+    <div className="aspect-square w-full animate-warm-pulse rounded-md bg-muted" />
   );
 }
 
@@ -33,25 +33,31 @@ interface ChessBoardProps {
   id?: string;
 }
 
-export function ChessBoard({ moves, orientation = "white", id }: ChessBoardProps) {
+export function ChessBoard({
+  moves,
+  orientation = "white",
+  id,
+}: ChessBoardProps) {
   const fen = useMemo(() => fenFromMoves(moves), [moves]);
 
   return (
-    <div className="aspect-square w-full overflow-hidden rounded-xl border bg-card shadow-sm">
-      <Chessboard
-        options={{
-          id: id ?? "repertoire-board",
-          position: fen,
-          boardOrientation: orientation,
-          allowDragging: false,
-          lightSquareStyle: { backgroundColor: "var(--board-light)" },
-          darkSquareStyle: { backgroundColor: "var(--board-dark)" },
-          boardStyle: {
-            borderRadius: "0",
-          },
-          animationDurationInMs: 150,
-        }}
-      />
+    <div className="wood-frame rounded-lg p-1.5">
+      <div className="aspect-square w-full overflow-hidden rounded-sm">
+        <Chessboard
+          options={{
+            id: id ?? "repertoire-board",
+            position: fen,
+            boardOrientation: orientation,
+            allowDragging: false,
+            lightSquareStyle: { backgroundColor: "var(--color-board-light)" },
+            darkSquareStyle: { backgroundColor: "var(--color-board-dark)" },
+            boardStyle: {
+              borderRadius: "0",
+            },
+            animationDurationInMs: 150,
+          }}
+        />
+      </div>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import type { MoveNode } from "@/lib/repertoire/aggregate";
 import { cn } from "@/lib/utils";
 
@@ -11,6 +11,8 @@ interface ContinuationsTableProps {
   onPush: (san: string) => void;
   onPop: () => void;
   onReset: () => void;
+  focusedSan?: string | null;
+  onFocus?: (san: string) => void;
 }
 
 export function ContinuationsTable({
@@ -19,6 +21,8 @@ export function ContinuationsTable({
   onPush,
   onPop,
   onReset,
+  focusedSan = null,
+  onFocus,
 }: ContinuationsTableProps) {
   const node = useMemo(() => descend(root, path), [root, path]);
 
@@ -27,6 +31,11 @@ export function ContinuationsTable({
       Object.values(node.children).sort((a, b) => b.count - a.count),
     [node.children],
   );
+
+  const focusedRef = useRef<HTMLButtonElement | null>(null);
+  useEffect(() => {
+    focusedRef.current?.scrollIntoView({ block: "nearest" });
+  }, [focusedSan, path]);
 
   return (
     <div className="flex h-full min-h-0 flex-col">
@@ -49,54 +58,87 @@ export function ContinuationsTable({
               <ContinuationRow
                 key={child.san}
                 node={child}
+                focused={child.san === focusedSan}
+                buttonRef={
+                  child.san === focusedSan ? focusedRef : undefined
+                }
                 onClick={() => onPush(child.san)}
+                onHover={
+                  onFocus ? () => onFocus(child.san) : undefined
+                }
               />
             ))}
           </ul>
         )}
       </div>
 
-      {path.length > 0 ? (
-        <div className="flex items-center gap-1 border-t px-2 py-1.5 text-xs">
-          <button
-            type="button"
-            onClick={onPop}
-            className="inline-flex items-center gap-1 rounded px-2 py-1 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-          >
-            <ChevronLeft className="size-3.5" /> Prev
-          </button>
-          <div className="mx-1 h-4 w-px bg-border" />
-          <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
-            {path.map((san, i) => {
-              const moveNum = Math.floor(i / 2) + 1;
-              const isWhite = i % 2 === 0;
-              return (
-                <span key={i} className="font-mono text-muted-foreground">
-                  {isWhite ? `${moveNum}.` : ""}
-                  <span className="text-foreground">{san}</span>
-                </span>
-              );
-            })}
+      <div className="flex items-center gap-1 border-t px-2 py-1.5 text-xs">
+        {path.length > 0 ? (
+          <>
+            <button
+              type="button"
+              onClick={onPop}
+              className="inline-flex items-center gap-1 rounded px-2 py-1 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+            >
+              <ChevronLeft className="size-3.5" /> Prev
+            </button>
+            <div className="mx-1 h-4 w-px bg-border" />
+            <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
+              {path.map((san, i) => {
+                const moveNum = Math.floor(i / 2) + 1;
+                const isWhite = i % 2 === 0;
+                return (
+                  <span key={i} className="font-mono text-muted-foreground">
+                    {isWhite ? `${moveNum}.` : ""}
+                    <span className="text-foreground">{san}</span>
+                  </span>
+                );
+              })}
+            </div>
+            <button
+              type="button"
+              onClick={onReset}
+              className="rounded px-2 py-1 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+            >
+              Reset
+            </button>
+          </>
+        ) : (
+          <div className="flex w-full items-center justify-center gap-2 px-2 text-[11px] text-muted-foreground">
+            <Kbd>↑</Kbd>
+            <Kbd>↓</Kbd>
+            <span>pick</span>
+            <Kbd>→</Kbd>
+            <span>play</span>
+            <Kbd>←</Kbd>
+            <span>back</span>
           </div>
-          <button
-            type="button"
-            onClick={onReset}
-            className="rounded px-2 py-1 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-          >
-            Reset
-          </button>
-        </div>
-      ) : null}
+        )}
+      </div>
     </div>
+  );
+}
+
+function Kbd({ children }: { children: React.ReactNode }) {
+  return (
+    <kbd className="inline-flex min-w-[1.25rem] items-center justify-center rounded border bg-background px-1 py-0.5 font-mono text-[10px] font-semibold leading-none text-foreground">
+      {children}
+    </kbd>
   );
 }
 
 function ContinuationRow({
   node,
+  focused,
+  buttonRef,
   onClick,
+  onHover,
 }: {
   node: MoveNode;
+  focused: boolean;
+  buttonRef?: React.Ref<HTMLButtonElement>;
   onClick: () => void;
+  onHover?: () => void;
 }) {
   const total = node.count;
   const winPct = total ? node.playerWins / total : 0;
@@ -107,12 +149,18 @@ function ContinuationRow({
     <li>
       <button
         type="button"
+        ref={buttonRef}
         onClick={onClick}
+        onMouseEnter={onHover}
         className={cn(
-          "group grid w-full grid-cols-[auto_minmax(4rem,1fr)_minmax(5rem,56%)] items-center gap-3 px-4 py-2.5 text-left text-sm transition-colors",
+          "group relative grid w-full grid-cols-[auto_minmax(4rem,1fr)_minmax(5rem,56%)] items-center gap-3 px-4 py-2.5 text-left text-sm transition-colors",
           "hover:bg-accent/40 focus-visible:bg-accent/60 focus-visible:outline-none",
+          focused && "bg-primary/10",
         )}
       >
+        {focused ? (
+          <span className="absolute inset-y-0 left-0 w-0.5 bg-primary" />
+        ) : null}
         <span className="font-mono text-sm font-semibold tabular-nums">
           {node.san}
         </span>

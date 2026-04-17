@@ -12,6 +12,7 @@ interface RepertoireListProps {
   color: PlayerColor;
   selectedId: string | null;
   onSelect: (id: string) => void;
+  headerAction?: React.ReactNode;
 }
 
 const OTHER_FAMILY = "Other";
@@ -21,6 +22,7 @@ export function RepertoireList({
   color,
   selectedId,
   onSelect,
+  headerAction,
 }: RepertoireListProps) {
   const [query, setQuery] = useState("");
   const [drilledFamily, setDrilledFamily] = useState<string | null>(null);
@@ -102,12 +104,15 @@ export function RepertoireList({
             </span>
           </button>
         ) : (
-          <div className="flex items-center justify-between px-1">
+          <div className="flex items-center gap-2 px-1">
             <span className="text-sm font-medium">Openings</span>
             <span className="text-xs text-muted-foreground">
               {isSearching ? searchHits.length : groups.length}{" "}
               {isSearching ? "hits" : "families"}
             </span>
+            {headerAction ? (
+              <span className="ml-auto">{headerAction}</span>
+            ) : null}
           </div>
         )}
         {showingVariants ? (
@@ -195,7 +200,11 @@ export function RepertoireList({
                     containsSelection={group.entries.some(
                       (s) => s.openingId === selectedId,
                     )}
-                    onOpen={() => setDrilledFamily(group.family)}
+                    onOpen={() => {
+                      setDrilledFamily(group.family);
+                      const top = group.entries[0];
+                      if (top) onSelect(top.openingId);
+                    }}
                   />
                 )}
               </li>

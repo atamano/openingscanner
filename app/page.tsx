@@ -3,18 +3,11 @@
 import { AlertCircle, Radar } from "lucide-react";
 import { parseAsString, useQueryState } from "nuqs";
 import { Suspense, useEffect, useRef, useState } from "react";
+import { Header } from "@/components/layout/header";
 import { Dashboard } from "@/components/scanner/dashboard";
 import { ScanForm } from "@/components/scanner/scan-form";
 import { ScanProgress } from "@/components/scanner/scan-progress";
 import { ScanSummaryBar } from "@/components/scanner/scan-summary-bar";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { useLichessAuth } from "@/hooks/use-lichess-auth";
 import { useScanner } from "@/hooks/use-scanner";
 import type { ScanParams } from "@/lib/sources/types";
 
@@ -26,11 +19,14 @@ export default function HomePage() {
   );
 }
 
-function HomeInner() {
-  const { token } = useLichessAuth();
-  const { status, progress, stats, error, scan, abort, reset } = useScanner();
+// ---------------------------------------------------------------------------
+// Phase-based root — idle hero vs workspace after the first scan
+// ---------------------------------------------------------------------------
 
-  // Read the current filter state from the URL so the summary bar can echo it.
+function HomeInner() {
+  const { status, progress, stats, error, maxGames, scan, abort, reset } =
+    useScanner();
+
   const [username] = useQueryState("u", parseAsString.withDefault(""));
   const [platform] = useQueryState("p", parseAsString.withDefault("lichess"));
   const [color] = useQueryState("c", parseAsString.withDefault("both"));
@@ -41,7 +37,6 @@ function HomeInner() {
   const started = status !== "idle";
   const [expanded, setExpanded] = useState(false);
 
-  // Auto-collapse the form the first time a scan starts, but respect manual toggles after.
   const autoCollapsedRef = useRef(false);
   useEffect(() => {
     if (status === "running" && !autoCollapsedRef.current) {
@@ -61,10 +56,16 @@ function HomeInner() {
     setExpanded(true);
   };
 
+  if (!started) {
+    return <LandingHero onSubmit={submit} />;
+  }
+
   return (
-    <div className="space-y-6">
-      {started ? (
-        <>
+    <div className="min-h-screen flex flex-col bg-paper-dark">
+      <Header onNewScan={newScan} />
+
+      <div className="paper-texture animate-workspace-enter">
+        <div className="mx-auto max-w-7xl px-4 py-6 space-y-5">
           <ScanSummaryBar
             running={status === "running"}
             progress={progress}
@@ -81,10 +82,9 @@ function HomeInner() {
           />
 
           {expanded ? (
-            <section className="rounded-xl border bg-card/70 p-5 backdrop-blur">
+            <section className="rounded-xl border border-border bg-paper p-5 paper-inset animate-fade-up">
               <ScanForm
                 onSubmit={submit}
-                lichessToken={token}
                 running={status === "running"}
                 onAbort={abort}
               />
@@ -92,71 +92,92 @@ function HomeInner() {
           ) : null}
 
           {status === "running" ? (
-            <ScanProgress progress={progress} running />
+            <ScanProgress
+              progress={progress}
+              running
+              expected={maxGames}
+            />
           ) : null}
-        </>
-      ) : (
-        <section className="relative overflow-hidden rounded-3xl border bg-card/70 backdrop-blur">
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-x-0 -top-40 h-80 bg-[radial-gradient(ellipse_at_top,_var(--primary)_0%,_transparent_60%)] opacity-20"
-          />
-          <div className="relative grid gap-8 p-6 md:grid-cols-[minmax(0,1fr)_auto] md:p-10">
-            <div className="space-y-3">
-              <div className="inline-flex items-center gap-2 rounded-full border bg-background/80 px-3 py-1 text-xs text-muted-foreground">
-                <Radar className="size-3.5 text-primary" />
-                Scan &amp; classify online games against a curated opening catalog
+
+          {error ? (
+            <div className="rounded-xl border border-destructive/30 bg-destructive/5 p-4">
+              <div className="flex items-start gap-3">
+                <AlertCircle className="mt-0.5 h-4 w-4 text-destructive shrink-0" />
+                <div>
+                  <div className="text-sm font-semibold text-destructive">
+                    Scan failed
+                  </div>
+                  <div className="text-xs text-ink-light mt-0.5">{error}</div>
+                </div>
               </div>
-              <h1 className="text-balance text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
-                What openings does any player actually play?
-              </h1>
-              <p className="max-w-xl text-pretty text-muted-foreground">
-                Stream a Lichess or Chess.com player's games in your browser,
-                classify them against ~40 popular openings, and drill into the
-                most-played lines. Everything runs client-side — no data leaves
-                your machine.
+            </div>
+          ) : null}
+
+          {status === "done" && stats && stats.totalGames > 0 ? (
+            <Dashboard stats={stats} />
+          ) : null}
+
+          {status === "done" && stats && stats.totalGames === 0 ? (
+            <div className="rounded-xl border border-border bg-paper p-10 text-center text-sm text-ink-light paper-inset">
+              <p className="font-medium text-foreground">
+                No games matched the filters.
+              </p>
+              <p className="mt-1">
+                Try widening the time-window, toggling rated-only off, or
+                switching platform.
               </p>
             </div>
-          </div>
-
-          <div className="border-t bg-background/30 p-6 backdrop-blur md:p-10">
-            <ScanForm
-              onSubmit={submit}
-              lichessToken={token}
-              running={false}
-              onAbort={abort}
-            />
-          </div>
-        </section>
-      )}
-
-      {error ? (
-        <Card className="border-destructive/40 bg-destructive/5">
-          <CardHeader className="flex-row items-start gap-3 space-y-0">
-            <AlertCircle className="mt-0.5 size-4 text-destructive" />
-            <div>
-              <CardTitle className="text-destructive">Scan failed</CardTitle>
-              <CardDescription>{error}</CardDescription>
-            </div>
-          </CardHeader>
-        </Card>
-      ) : null}
-
-      {status === "done" && stats && stats.totalGames > 0 ? (
-        <Dashboard stats={stats} />
-      ) : null}
-
-      {status === "done" && stats && stats.totalGames === 0 ? (
-        <Card>
-          <CardContent className="flex flex-col items-center gap-2 py-12 text-center text-sm text-muted-foreground">
-            <p>No games matched the filters.</p>
-            <p>
-              Try widening the time-window, toggling rated-only off, or
-              switching platform.
-            </p>
-          </CardContent>
-        </Card>
-      ) : null}
+          ) : null}
+        </div>
+      </div>
     </div>
   );
 }
+
+// ---------------------------------------------------------------------------
+// Landing hero — first-visit, idle state
+// ---------------------------------------------------------------------------
+
+function LandingHero({
+  onSubmit,
+}: {
+  onSubmit: (params: ScanParams) => void;
+}) {
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Header />
+      <div className="hero-bg paper-texture flex-1 flex flex-col items-center justify-center px-4 py-14">
+        <div className="w-full max-w-lg relative z-10">
+          <div className="text-center mb-10 stagger-children">
+            <div className="inline-flex items-center gap-2 rounded-full border border-border bg-paper/80 px-3 py-1 text-xs text-ink-light">
+              <Radar className="h-3.5 w-3.5 text-amber" />
+              Scan &amp; classify online games against the ECO catalog
+            </div>
+            <h1
+              className="mt-4 text-5xl font-bold text-wood tracking-tight"
+              style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
+            >
+              Repertoire Scanner
+            </h1>
+            <p className="text-lg text-ink-light mt-3 leading-relaxed">
+              What openings does any player actually play?
+            </p>
+          </div>
+
+          <div className="bg-paper rounded-xl border border-border shadow-lg p-6 animate-scale-in paper-inset">
+            <ScanForm
+              onSubmit={onSubmit}
+              running={false}
+              onAbort={() => {}}
+            />
+          </div>
+
+          <p className="text-center text-xs text-ink-light/60 mt-10">
+            Free. Local-first. Nothing leaves your browser.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
