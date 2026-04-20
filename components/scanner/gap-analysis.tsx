@@ -5,7 +5,8 @@ import { Lightbulb } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useDictionary } from "@/lib/i18n/context";
-import { computeGaps } from "@/lib/repertoire/gaps";
+import { renderPreview } from "@/lib/pgn/format";
+import { computeGaps, type GapReason } from "@/lib/repertoire/gaps";
 import type { RepertoireStats } from "@/lib/repertoire/aggregate";
 import type { PlayerColor } from "@/lib/sources/types";
 
@@ -74,10 +75,10 @@ export function GapAnalysis({
             </div>
             <div className="font-medium">{entry.name}</div>
             <div className="mt-1 text-xs text-muted-foreground">
-              {translateReason(reason, dict)}
+              {formatReason(reason, dict)}
             </div>
             <div className="mt-2 font-mono text-xs text-muted-foreground group-hover:text-primary">
-              {renderPreview(entry.moves)}
+              {renderPreview(entry.moves, 8)}
             </div>
           </button>
         ))}
@@ -120,32 +121,15 @@ export function GapAnalysis({
   );
 }
 
-// The underlying `computeGaps` returns English reason strings. Map them back
-// to localized ones while preserving the count/family interpolation.
-function translateReason(
-  reason: string,
+function formatReason(
+  reason: GapReason,
   dict: ReturnType<typeof useDictionary>,
 ): string {
-  const playedMatch = reason.match(/^You've played this (\d+) times?$/);
-  if (playedMatch) {
-    const n = Number.parseInt(playedMatch[1], 10);
+  if (reason.kind === "played") {
     const template =
-      n > 1 ? dict.gaps.reasonPlayedPlural : dict.gaps.reasonPlayed;
-    return template.replace("{count}", String(n));
+      reason.count > 1 ? dict.gaps.reasonPlayedPlural : dict.gaps.reasonPlayed;
+    return template.replace("{count}", String(reason.count));
   }
-  const rareMatch = reason.match(/^You rarely explore (.+)$/);
-  if (rareMatch) {
-    return dict.gaps.reasonRare.replace("{family}", rareMatch[1]);
-  }
-  return reason;
+  return dict.gaps.reasonRare.replace("{family}", reason.family);
 }
 
-function renderPreview(sans: string[]): string {
-  const limit = Math.min(sans.length, 8);
-  const out: string[] = [];
-  for (let i = 0; i < limit; i++) {
-    if (i % 2 === 0) out.push(`${i / 2 + 1}.`);
-    out.push(sans[i]);
-  }
-  return out.join(" ") + (sans.length > limit ? " …" : "");
-}

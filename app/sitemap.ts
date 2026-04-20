@@ -4,9 +4,11 @@ import {
   LOCALES,
   LOCALE_INFO,
 } from "@/lib/i18n/config";
-import { getSiteUrl } from "@/lib/seo/site";
+import { getSiteUrl, isProductionDeployment } from "@/lib/seo/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  if (!isProductionDeployment()) return [];
+
   const base = getSiteUrl();
   const now = new Date();
 
@@ -20,7 +22,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: "weekly" as const,
     priority: locale === DEFAULT_LOCALE ? 1 : 0.8,
     alternates: {
-      languages: { ...languages, "x-default": `${base}/${DEFAULT_LOCALE}` },
+      languages: { ...languages, "x-default": base },
     },
   }));
 }

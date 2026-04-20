@@ -1,4 +1,5 @@
 import { pgnToSanMoves } from "@/lib/pgn/parse-chesscom";
+import { fetchWithRetry } from "@/lib/sources/fetch-retry";
 import type {
   GameSummary,
   ScanFilters,
@@ -17,8 +18,8 @@ interface ChessComGame {
   time_class: string;
   rules: string;
   uuid: string;
-  white: { username: string; rating: number; result: string };
-  black: { username: string; rating: number; result: string };
+  white: { username: string; rating?: number; result: string };
+  black: { username: string; rating?: number; result: string };
 }
 
 const TIME_CLASS_SET: Record<string, TimeClass> = {
@@ -74,10 +75,11 @@ export async function* streamChessComGames(
     const monthBody = (await monthRes.json()) as { games?: ChessComGame[] };
     const games = Array.isArray(monthBody.games) ? monthBody.games : [];
 
-    // Within a month, newest first too.
-    const sorted = [...games].sort((a, b) => b.end_time - a.end_time);
+    // Chess.com returns each month chronologically ascending; reverse once for
+    // newest-first without paying for a full sort.
+    const reversed = games.slice().reverse();
 
-    for (const raw of sorted) {
+    for (const raw of reversed) {
       if (signal?.aborted) return;
       if (raw.rules !== "chess") continue;
 
@@ -125,39 +127,16 @@ export async function* streamChessComGames(
   }
 }
 
-async function fetchArchiveWithRetry(
+function fetchArchiveWithRetry(
   url: string,
   signal?: AbortSignal,
 ): Promise<Response> {
-  // Retry up to 3 times with exponential backoff. 429 or 5xx are retryable.
-  const backoffs = [750, 1500, 3000];
-  let res = await fetch(url, { signal });
-  for (const base of backoffs) {
-    if (res.ok) return res;
-    if (res.status !== 429 && res.status < 500) return res;
-    const retryAfter = Number(res.headers.get("retry-after"));
-    const delayMs =
-      Number.isFinite(retryAfter) && retryAfter > 0
-        ? Math.min(retryAfter * 1000, 15000)
-        : base;
-    await sleepOrAbort(delayMs, signal);
-    res = await fetch(url, { signal });
-  }
-  return res;
-}
-
-function sleepOrAbort(ms: number, signal?: AbortSignal): Promise<void> {
-  return new Promise((resolve, reject) => {
-    const t = setTimeout(resolve, ms);
-    signal?.addEventListener(
-      "abort",
-      () => {
-        clearTimeout(t);
-        reject(new DOMException("Aborted", "AbortError"));
-      },
-      { once: true },
-    );
-  });
+  return fetchWithRetry(
+    url,
+    {},
+    { backoffs: [750, 1500, 3000], maxRetryAfterMs: 15000 },
+    signal,
+  );
 }
 
 function archiveBounds(

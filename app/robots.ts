@@ -1,8 +1,14 @@
 import type { MetadataRoute } from "next";
-import { getSiteUrl } from "@/lib/seo/site";
+import { getSiteUrl, isProductionDeployment } from "@/lib/seo/site";
 
 export default function robots(): MetadataRoute.Robots {
   const base = getSiteUrl();
+
+  if (!isProductionDeployment()) {
+    return {
+      rules: [{ userAgent: "*", disallow: "/" }],
+    };
+  }
 
   return {
     rules: [

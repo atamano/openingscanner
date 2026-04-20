@@ -1,3 +1,4 @@
+import { fetchWithRetry } from "@/lib/sources/fetch-retry";
 import type {
   GameSummary,
   ScanFilters,
@@ -120,35 +121,17 @@ export async function* streamLichessGames(
   }
 }
 
-async function fetchLichessWithRetry(
+function fetchLichessWithRetry(
   url: string,
   headers: HeadersInit,
   signal?: AbortSignal,
 ): Promise<Response> {
-  const backoffs = [1500, 4000];
-  let res = await fetch(url, { headers, signal });
-  for (const base of backoffs) {
-    if (res.ok) return res;
-    if (res.status !== 429 && res.status < 500) return res;
-    const retryAfter = Number(res.headers.get("retry-after"));
-    const delayMs =
-      Number.isFinite(retryAfter) && retryAfter > 0
-        ? Math.min(retryAfter * 1000, 60000)
-        : base;
-    await new Promise<void>((resolve, reject) => {
-      const t = setTimeout(resolve, delayMs);
-      signal?.addEventListener(
-        "abort",
-        () => {
-          clearTimeout(t);
-          reject(new DOMException("Aborted", "AbortError"));
-        },
-        { once: true },
-      );
-    });
-    res = await fetch(url, { headers, signal });
-  }
-  return res;
+  return fetchWithRetry(
+    url,
+    { headers },
+    { backoffs: [1500, 4000], maxRetryAfterMs: 60000 },
+    signal,
+  );
 }
 
 function parseLichessLine(line: string): GameSummary | null {

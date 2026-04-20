@@ -62,11 +62,17 @@ export function createRepertoireAccumulator(
   return new RepertoireAccumulator(username);
 }
 
+type StatsWithRatedCount = OpeningStats & { _ratedCount?: number };
+
 export class RepertoireAccumulator {
   public totalGames = 0;
   public totalClassified = 0;
   public byOpening: Record<string, OpeningStats> = {};
   public colorBreakdown = { white: 0, black: 0 };
+  private globalTreeByColor = {
+    white: emptyNode(""),
+    black: emptyNode(""),
+  };
 
   constructor(public readonly username: string) {}
 
@@ -115,12 +121,12 @@ export class RepertoireAccumulator {
     const opponentRating =
       playerColor === "white" ? game.black.rating : game.white.rating;
     if (opponentRating) {
-      const prev = stats.avgOpponentRating ?? opponentRating;
-      const prevCount = (stats as unknown as { _ratedCount?: number })
-        ._ratedCount ?? 0;
+      const s = stats as StatsWithRatedCount;
+      const prev = s.avgOpponentRating ?? opponentRating;
+      const prevCount = s._ratedCount ?? 0;
       const nextCount = prevCount + 1;
-      stats.avgOpponentRating = (prev * prevCount + opponentRating) / nextCount;
-      (stats as unknown as { _ratedCount?: number })._ratedCount = nextCount;
+      s.avgOpponentRating = (prev * prevCount + opponentRating) / nextCount;
+      s._ratedCount = nextCount;
     }
 
     const playerWon = game.result === playerColor;
@@ -138,26 +144,25 @@ export class RepertoireAccumulator {
       ? game.moves.slice(match.atPly)
       : game.moves;
     addGameToTree(stats.tree, continuation, playerColor, game.result);
+
+    // Build the global-from-initial-position tree incrementally so finalize()
+    // stays O(openings) instead of re-walking every game at the end.
+    addGameToTree(
+      this.globalTreeByColor[playerColor],
+      game.moves,
+      playerColor,
+      game.result,
+    );
   }
 
   finalize(): RepertoireStats {
-    const globalTreeByColor = {
-      white: emptyNode(""),
-      black: emptyNode(""),
-    };
-    for (const opening of Object.values(this.byOpening)) {
-      const root = globalTreeByColor[opening.color];
-      for (const rec of opening.games) {
-        addGameToTree(root, rec.game.moves, rec.playerColor, rec.game.result);
-      }
-    }
     return {
       totalGames: this.totalGames,
       totalClassified: this.totalClassified,
       username: this.username,
       colorBreakdown: this.colorBreakdown,
       byOpening: this.byOpening,
-      globalTreeByColor,
+      globalTreeByColor: this.globalTreeByColor,
       gamesRetained: true,
     };
   }

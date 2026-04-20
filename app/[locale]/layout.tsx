@@ -7,14 +7,13 @@ import { Toaster } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { I18nProvider } from "@/lib/i18n/context";
 import {
-  DEFAULT_LOCALE,
   LOCALES,
   LOCALE_INFO,
   isLocale,
   type Locale,
 } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionary";
-import { getSiteUrl } from "@/lib/seo/site";
+import { getSiteUrl, isProductionDeployment } from "@/lib/seo/site";
 import "../globals.css";
 
 const dmSans = DM_Sans({
@@ -61,7 +60,8 @@ export async function generateMetadata({
   const languages = Object.fromEntries(
     LOCALES.map((l) => [LOCALE_INFO[l].bcp47, `${siteUrl}/${l}`]),
   );
-  languages["x-default"] = `${siteUrl}/${DEFAULT_LOCALE}`;
+  languages["x-default"] = siteUrl;
+  const indexable = isProductionDeployment();
 
   return {
     metadataBase: new URL(siteUrl),
@@ -80,17 +80,19 @@ export async function generateMetadata({
       canonical: `${siteUrl}/${locale}`,
       languages,
     },
-    robots: {
-      index: true,
-      follow: true,
-      googleBot: {
-        index: true,
-        follow: true,
-        "max-snippet": -1,
-        "max-image-preview": "large",
-        "max-video-preview": -1,
-      },
-    },
+    robots: indexable
+      ? {
+          index: true,
+          follow: true,
+          googleBot: {
+            index: true,
+            follow: true,
+            "max-snippet": -1,
+            "max-image-preview": "large",
+            "max-video-preview": -1,
+          },
+        }
+      : { index: false, follow: false },
     openGraph: {
       type: "website",
       locale: info.og,

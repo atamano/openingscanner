@@ -2,9 +2,13 @@ import { CATALOG, type CatalogEntry } from "@/lib/catalog/openings";
 import type { PlayerColor } from "@/lib/sources/types";
 import type { RepertoireStats } from "./aggregate";
 
+export type GapReason =
+  | { kind: "played"; count: number }
+  | { kind: "rare"; family: string };
+
 export interface GapRecommendation {
   entry: CatalogEntry;
-  reason: string;
+  reason: GapReason;
 }
 
 export interface GapOptions {
@@ -73,8 +77,8 @@ export function computeGaps(
     entry,
     reason:
       familiar > 0
-        ? `You've played this ${familiar} time${familiar > 1 ? "s" : ""}`
-        : `You rarely explore ${entry.family}`,
+        ? ({ kind: "played", count: familiar } as const)
+        : ({ kind: "rare", family: entry.family } as const),
   }));
 }
 

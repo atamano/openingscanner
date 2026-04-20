@@ -4,6 +4,13 @@ function stripTrailingSlash(url: string): string {
   return url.endsWith("/") ? url.slice(0, -1) : url;
 }
 
+export function isProductionDeployment(): boolean {
+  // Treat any non-Vercel environment (local dev, self-hosted) as production so
+  // running `next start` locally still emits a standard robots/sitemap.
+  const vercelEnv = process.env.VERCEL_ENV;
+  return !vercelEnv || vercelEnv === "production";
+}
+
 export function getSiteUrl(): string {
   const explicit = process.env.NEXT_PUBLIC_SITE_URL;
   if (explicit) return stripTrailingSlash(explicit);
