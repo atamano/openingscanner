@@ -197,7 +197,7 @@ function LandingHero({
             <a
               href="https://darksquares.net"
               target="_blank"
-              rel="noopener noreferrer"
+              rel="noopener"
               className="underline hover:text-ink-light"
             >
               darksquares.net
@@ -206,7 +206,7 @@ function LandingHero({
             <a
               href="https://chessatlas.net"
               target="_blank"
-              rel="noopener noreferrer"
+              rel="noopener"
               className="underline hover:text-ink-light"
             >
               chessatlas.net

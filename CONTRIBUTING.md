@@ -44,4 +44,4 @@ Include:
 
 ## Code of conduct
 
-Be kind. Don't target people. If someone's behavior is a problem, email antoine.tamano@gmail.com.
+Be kind. Don't target people. If someone's behavior is a problem, email antoine@chessatlas.net.
