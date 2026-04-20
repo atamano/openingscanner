@@ -66,6 +66,15 @@ export function ScanSummaryBar({
     "1y": dict.summary.windowLast1y,
     all: dict.summary.windowAllTime,
   };
+  const timeClassLabelMap: Record<string, string> = {
+    bullet: dict.form.timeBullet,
+    blitz: dict.form.timeBlitz,
+    rapid: dict.form.timeRapid,
+    classical: dict.form.timeClassical,
+  };
+  const localizedTimeClasses = timeClasses
+    .map((tc) => timeClassLabelMap[tc] ?? tc)
+    .join(", ");
 
   const selectedStats = selectedId ? stats?.byOpening[selectedId] : null;
   const derivedFamily = selectedStats?.entry?.family ?? null;
@@ -107,7 +116,7 @@ export function ScanSummaryBar({
             </div>
             <div className="truncate text-xs text-ink-light">
               {colorLabelMap[color] ?? color}
-              {timeClasses.length ? ` · ${timeClasses.join(", ")}` : ""}
+              {localizedTimeClasses ? ` · ${localizedTimeClasses}` : ""}
               {" · "}
               {windowLabelMap[window] ?? window}
             </div>

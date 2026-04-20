@@ -17,7 +17,6 @@ import {
   PLATFORMS,
   SCAN_COLORS,
   TIME_CLASSES,
-  type DatePreset,
 } from "@/lib/scan/params";
 import type { ScanParams, TimeClass } from "@/lib/sources/types";
 

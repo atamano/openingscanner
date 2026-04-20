@@ -100,6 +100,13 @@ export function useScanner() {
       if ((e as Error).name === "AbortError") return;
       setError((e as Error).message || "Scan failed");
       setStatus("error");
+    } finally {
+      // Close the MessagePort Comlink opened for the callback so its
+      // listener is released on the main side. The worker already released
+      // its side; this call is idempotent if the symbol is missing.
+      (
+        progressProxy as unknown as { [Comlink.releaseProxy]?: () => void }
+      )[Comlink.releaseProxy]?.();
     }
   }, []);
 

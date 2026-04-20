@@ -22,7 +22,7 @@ export function Header({ onNewScan, subtitle }: HeaderProps) {
             onClick={onNewScan}
             className="text-base font-bold tracking-tight text-amber-light select-none rounded-md -mx-1 px-1 hover:text-paper transition-colors"
             style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
-            aria-label={dict.header.backToHome}
+            aria-label={dict.header.newScan}
           >
             Opening Scanner
           </button>

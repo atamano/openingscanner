@@ -65,22 +65,20 @@ export function RepertoireList({
       .sort(sortByCount);
   }, [colorEntries, isSearching, normalized]);
 
-  // Keep the list in sync with an externally-updated selection:
-  // if the selection lands in a different family than the one currently
-  // drilled, follow it — but don't auto-drill when the user is browsing root.
+  // Keep the list in sync with an externally-updated selection: if the user
+  // jumps to a variation in a different family than the one currently drilled,
+  // follow it. Don't auto-drill when the user is browsing the root view.
   useEffect(() => {
     if (isSearching) return;
     if (!selectedId) return;
+    if (selectedFamily === null) return;
     const s = stats.byOpening[selectedId];
     const fam =
       s && isUncategorizedId(s.openingId)
         ? OTHER_FAMILY
         : s?.entry?.family ?? OTHER_FAMILY;
-    setSelectedFamily(
-      selectedFamily === null || selectedFamily === fam ? selectedFamily : fam,
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedId]);
+    if (selectedFamily !== fam) setSelectedFamily(fam);
+  }, [selectedId, selectedFamily, isSearching, stats, setSelectedFamily]);
 
   const drilledGroup = selectedFamily
     ? groups.find((g) => g.family === selectedFamily) ?? null

@@ -17,6 +17,7 @@ import {
   type DatePreset,
 } from "@/lib/scan/params";
 import type { Platform, ScanParams, TimeClass } from "@/lib/sources/types";
+import { ChipButton } from "./chip-button";
 
 const TIME_VALUES = ["bullet", "blitz", "rapid", "classical"] as const;
 const DATE_VALUES = DATE_PRESETS;
@@ -146,28 +147,20 @@ export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
             { value: "lichess" as const, label: "Lichess", icon: "\u265E" },
           ]
         ).map(({ value, label, icon }) => (
-          <button
+          <ChipButton
             key={value}
-            type="button"
+            active={platform === value}
             onClick={() => {
               setPlatform(value);
               if (value !== platform) setUsername("");
             }}
             disabled={running}
-            className={`h-10 rounded-lg text-sm font-medium transition-all border ${
-              platform === value
-                ? "bg-amber/12 border-amber/40 text-amber-dark shadow-sm"
-                : "border-border text-ink-light hover:border-amber/30 hover:text-foreground"
-            } disabled:opacity-40`}
-            style={
-              platform === value
-                ? { backgroundColor: "rgba(176,122,46,0.12)" }
-                : undefined
-            }
+            className="h-10 rounded-lg text-sm font-medium border"
+            activeClassName="bg-amber/12 border-amber/40 text-amber-dark shadow-sm"
           >
             <span className="mr-1.5">{icon}</span>
             {label}
-          </button>
+          </ChipButton>
         ))}
       </div>
 
@@ -197,25 +190,16 @@ export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
             const active =
               username.trim().toLowerCase() === p.handle.toLowerCase();
             return (
-              <button
+              <ChipButton
                 key={p.handle}
-                type="button"
+                active={active}
                 onClick={() => setUsername(p.handle)}
                 disabled={running}
                 title={p.handle}
-                className={`h-7 px-2.5 rounded-full text-xs font-medium transition-all border ${
-                  active
-                    ? "border-amber/40 text-amber-dark"
-                    : "border-border text-ink-light hover:border-amber/30 hover:text-foreground"
-                } disabled:opacity-40`}
-                style={
-                  active
-                    ? { backgroundColor: "rgba(176,122,46,0.12)" }
-                    : undefined
-                }
+                className="h-7 px-2.5 rounded-full text-xs font-medium border"
               >
                 {p.label}
-              </button>
+              </ChipButton>
             );
           })}
         </div>
@@ -225,25 +209,18 @@ export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
       <div className="flex items-center gap-2">
         <div className="flex rounded-lg border border-border overflow-hidden">
           {(["white", "black", "both"] as const).map((c) => (
-            <button
+            <ChipButton
               key={c}
-              type="button"
+              active={color === c}
               onClick={() => setColor(c)}
               disabled={running}
-              className={`h-10 px-4 text-sm font-medium transition-all ${
-                color === c
-                  ? "text-amber-dark"
-                  : "text-ink-light hover:text-foreground hover:bg-paper-dark"
-              } disabled:opacity-40`}
-              style={
-                color === c
-                  ? { backgroundColor: "rgba(176,122,46,0.12)" }
-                  : undefined
-              }
+              className="h-10 px-4 text-sm font-medium"
+              activeClassName="text-amber-dark"
+              inactiveClassName="text-ink-light hover:text-foreground hover:bg-paper-dark"
             >
               {c === "white" ? "\u25CB " : c === "black" ? "\u25CF " : ""}
               {colorLabel(c)}
-            </button>
+            </ChipButton>
           ))}
         </div>
         <div className="flex-1" />
@@ -277,24 +254,15 @@ export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
             {TIME_VALUES.map((value) => {
               const active = selectedTimes.includes(value);
               return (
-                <button
+                <ChipButton
                   key={value}
-                  type="button"
+                  active={active}
                   onClick={() => toggleTime(value)}
                   disabled={running}
-                  className={`h-8 px-3 rounded-md text-xs font-medium transition-all border ${
-                    active
-                      ? "border-amber/40 text-amber-dark"
-                      : "border-border text-ink-light hover:border-amber/30 hover:text-foreground"
-                  } disabled:opacity-40`}
-                  style={
-                    active
-                      ? { backgroundColor: "rgba(176,122,46,0.12)" }
-                      : undefined
-                  }
+                  className="h-8 px-3 rounded-md text-xs font-medium border"
                 >
                   {timeLabels[value]}
-                </button>
+                </ChipButton>
               );
             })}
           </div>
@@ -308,24 +276,15 @@ export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
             {DATE_VALUES.map((value) => {
               const active = datePreset === value;
               return (
-                <button
+                <ChipButton
                   key={value}
-                  type="button"
+                  active={active}
                   onClick={() => setDatePreset(value)}
                   disabled={running}
-                  className={`h-8 px-3 rounded-md text-xs font-medium transition-all border ${
-                    active
-                      ? "border-amber/40 text-amber-dark"
-                      : "border-border text-ink-light hover:border-amber/30 hover:text-foreground"
-                  } disabled:opacity-40`}
-                  style={
-                    active
-                      ? { backgroundColor: "rgba(176,122,46,0.12)" }
-                      : undefined
-                  }
+                  className="h-8 px-3 rounded-md text-xs font-medium border"
                 >
                   {dateLabels[value]}
-                </button>
+                </ChipButton>
               );
             })}
           </div>

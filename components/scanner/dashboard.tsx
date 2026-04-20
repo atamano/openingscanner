@@ -58,12 +58,12 @@ export function Dashboard({ stats }: DashboardProps) {
     [stats, color],
   );
 
-  // Reset the *variation* drill when color/stats change, but keep the family
-  // filter — it's orthogonal to the color toggle.
+  // Reset the variation drill when the color toggle flips. New scans bring a
+  // different `stats` object, but that case is already handled by the
+  // DashboardFiltersProvider's resetKey bump in page.tsx.
   useEffect(() => {
     clearOpening();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [color, stats]);
+  }, [color, clearOpening]);
 
   const selected = selectedId ? stats.byOpening[selectedId] : null;
   const baseMoves = selected?.entry?.moves ?? [];
@@ -79,8 +79,7 @@ export function Dashboard({ stats }: DashboardProps) {
     }
     setPath([]);
     setPreviewMoves(null);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedId]);
+  }, [selectedId, setPath, setPreviewMoves, skipNextPathResetRef]);
 
   // Pre-aggregated move tree across *all* games of the current color. Used
   // when no opening is selected so the Continuations panel stays useful from
@@ -130,6 +129,14 @@ export function Dashboard({ stats }: DashboardProps) {
         return;
       }
       if (e.metaKey || e.ctrlKey || e.altKey) return;
+      // Don't steal arrow keys from open Radix menus/dropdowns/dialogs — they
+      // use them for roving tabindex and option cycling.
+      if (
+        typeof document !== "undefined" &&
+        document.querySelector('[data-state="open"][role="menu"], [data-state="open"][role="listbox"], [role="dialog"][data-state="open"]')
+      ) {
+        return;
+      }
 
       if (e.key === "ArrowLeft") {
         e.preventDefault();

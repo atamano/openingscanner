@@ -14,6 +14,13 @@ export default function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // Only negotiate on the root. Unknown non-localized paths get passed through
+  // to Next.js, which returns a proper 404 instead of a redirect into an
+  // invalid locale prefix.
+  if (pathname !== "/") {
+    return NextResponse.next();
+  }
+
   const cookieLocale = request.cookies.get(LOCALE_COOKIE)?.value;
   const headerLocale = negotiateLocale(
     request.headers.get("accept-language"),
@@ -22,13 +29,17 @@ export default function proxy(request: NextRequest) {
     cookieLocale && LOCALE_SET.has(cookieLocale) ? cookieLocale : headerLocale;
 
   const url = request.nextUrl.clone();
-  url.pathname = `/${locale}${pathname === "/" ? "" : pathname}`;
+  url.pathname = `/${locale}`;
   const response = NextResponse.redirect(url);
   response.cookies.set(LOCALE_COOKIE, locale, {
     path: "/",
     maxAge: 60 * 60 * 24 * 365,
     sameSite: "lax",
   });
+  // The redirect target depends on both the cookie and Accept-Language so any
+  // shared cache in front of `/` must key on them. Without this, the first
+  // visitor's locale would be served to everyone.
+  response.headers.set("Vary", "Accept-Language, Cookie");
   return response;
 }
 
