@@ -56,12 +56,12 @@
     "react-chessboard": "^5.2.0",
     "react-dom": "^19.0.0",
     "sonner": "^1.7.1",
-    "tailwind-merge": "^2.6.0",
+    "tailwind-merge": "^3.5.0",
     "zustand": "^5.0.2"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.0.0",
-    "@types/node": "^22.10.0",
+    "@types/node": "^25.6.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "eslint": "^9.17.0",
