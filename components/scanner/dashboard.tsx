@@ -164,7 +164,7 @@ export function Dashboard({ stats }: DashboardProps) {
   return (
     <section className="space-y-3">
       {/* Main 3-col grid — board gets first-screen prominence. */}
-      <div className="grid items-stretch gap-3 xl:h-[calc(min(460px,100dvh-20rem)+6rem)] xl:grid-cols-[minmax(0,1fr)_minmax(0,460px)_minmax(300px,360px)]">
+      <div className="grid items-stretch gap-3 xl:h-[calc(min(460px,100dvh-20rem)+7rem)] xl:grid-cols-[minmax(0,1fr)_minmax(0,460px)_minmax(300px,360px)]">
         <RepertoireList
           stats={stats}
           color={color}
