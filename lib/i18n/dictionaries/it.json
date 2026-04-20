@@ -182,7 +182,7 @@
   "page": {
     "scanFailed": "Scansione fallita",
     "noGamesMatched": "Nessuna partita corrisponde ai filtri.",
-    "widenTryHint": "Prova ad ampliare il periodo, disattivare «solo valutate» o cambiare piattaforma."
+    "widenTryHint": "Prova ad ampliare il periodo, disattivare «solo con rating» o cambiare piattaforma."
   },
   "loading": "Caricamento…",
   "playerDirectory": {

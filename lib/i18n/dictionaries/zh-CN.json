@@ -21,7 +21,7 @@
     "h1": "Opening Scanner",
     "subtitle": "任何棋手到底在下哪些开局?",
     "footer": "免费。本地优先。数据不离开你的浏览器。",
-    "sisterSitesPrefix": "姊妹站点"
+    "sisterSitesPrefix": "我们的其他项目"
   },
   "header": {
     "newScan": "新扫描",
@@ -39,8 +39,8 @@
     "stop": "停止",
     "timeControls": "用时",
     "window": "时段",
-    "ratedOnly": "仅等级分对局",
-    "timeBullet": "子弹",
+    "ratedOnly": "仅限有等级分的对局",
+    "timeBullet": "子弹棋",
     "timeBlitz": "闪电",
     "timeRapid": "快棋",
     "timeClassical": "慢棋",
@@ -76,8 +76,8 @@
   },
   "dashboard": {
     "openings": "开局",
-    "families": "家族",
-    "hits": "结果",
+    "families": "体系",
+    "hits": "匹配项",
     "variantsOne": "变化",
     "variantsMany": "变化",
     "allOpenings": "所有开局",
@@ -105,7 +105,7 @@
     "kpiDraw": "和%",
     "kpiLoss": "负%",
     "filterLabel": "已筛选:",
-    "filterPlySuffix": "· 深入 {count} 步",
+    "filterPlySuffix": "· 深入 {count} 个半回合",
     "clearFilter": "清除"
   },
   "continuations": {
@@ -120,7 +120,7 @@
     "play": "前进",
     "back": "返回",
     "fromPlyPrefix": "从",
-    "plySuffix": "半步",
+    "plySuffix": "半回合",
     "start": "起点"
   },
   "gaps": {
@@ -182,7 +182,7 @@
   "page": {
     "scanFailed": "扫描失败",
     "noGamesMatched": "没有对局匹配筛选条件。",
-    "widenTryHint": "尝试放宽时段、关闭“仅等级分”或切换平台。"
+    "widenTryHint": "尝试放宽时段、关闭“仅限有等级分的对局”或切换平台。"
   },
   "loading": "加载中…",
   "playerDirectory": {

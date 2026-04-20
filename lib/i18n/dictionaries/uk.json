@@ -20,16 +20,16 @@
     "badge": "Скануйте та класифікуйте партії за каталогом ECO",
     "h1": "Opening Scanner",
     "subtitle": "Які дебюти насправді грає гравець?",
-    "footer": "Безкоштовно. Local-first. Ніщо не покидає ваш браузер.",
-    "sisterSitesPrefix": "Також від нас"
+    "footer": "Безкоштовно. Усе працює локально. Ніщо не покидає ваш браузер.",
+    "sisterSitesPrefix": "Наші інші проєкти"
   },
   "header": {
     "newScan": "Нове сканування",
     "backToHome": "На головну"
   },
   "form": {
-    "placeholderLichess": "Імʼя гравця (напр. DrNykterstein)",
-    "placeholderChesscom": "Імʼя гравця (напр. Hikaru)",
+    "placeholderLichess": "Нік гравця (напр. DrNykterstein)",
+    "placeholderChesscom": "Нік гравця (напр. Hikaru)",
     "popular": "Популярні",
     "colorWhite": "За білих",
     "colorBlack": "За чорних",
@@ -39,8 +39,8 @@
     "stop": "Стоп",
     "timeControls": "Контроль",
     "window": "Період",
-    "ratedOnly": "Тільки рейтингові",
-    "timeBullet": "Куля",
+    "ratedOnly": "Тільки рейтингові партії",
+    "timeBullet": "Буліт",
     "timeBlitz": "Бліц",
     "timeRapid": "Рапід",
     "timeClassical": "Класика",
@@ -101,7 +101,7 @@
     "pickOpeningDesc": "Виберіть дебют ліворуч, щоб побачити реально зіграні ходи з цієї позиції, впорядковані за частотою та відсотком перемог.",
     "clickRow": "Натисніть будь-який рядок ліворуч",
     "kpiN": "N",
-    "kpiWin": "П%",
+    "kpiWin": "В%",
     "kpiDraw": "Н%",
     "kpiLoss": "П%",
     "filterLabel": "Фільтр:",
@@ -182,7 +182,7 @@
   "page": {
     "scanFailed": "Сканування не вдалося",
     "noGamesMatched": "Жодна партія не відповідає фільтрам.",
-    "widenTryHint": "Спробуйте розширити період, вимкнути «тільки рейтингові» або змінити платформу."
+    "widenTryHint": "Спробуйте розширити період, вимкнути «тільки рейтингові партії» або змінити платформу."
   },
   "loading": "Завантаження…",
   "playerDirectory": {

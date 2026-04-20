@@ -20,16 +20,16 @@
     "badge": "Сканируйте и классифицируйте партии по каталогу ECO",
     "h1": "Opening Scanner",
     "subtitle": "Какие дебюты на самом деле играет игрок?",
-    "footer": "Бесплатно. Local-first. Ничего не покидает ваш браузер.",
-    "sisterSitesPrefix": "Также от нас"
+    "footer": "Бесплатно. Всё работает локально. Ничего не покидает ваш браузер.",
+    "sisterSitesPrefix": "Наши другие проекты"
   },
   "header": {
     "newScan": "Новое сканирование",
     "backToHome": "На главную"
   },
   "form": {
-    "placeholderLichess": "Имя игрока (напр. DrNykterstein)",
-    "placeholderChesscom": "Имя игрока (напр. Hikaru)",
+    "placeholderLichess": "Ник игрока (напр. DrNykterstein)",
+    "placeholderChesscom": "Ник игрока (напр. Hikaru)",
     "popular": "Популярные",
     "colorWhite": "За белых",
     "colorBlack": "За чёрных",
@@ -40,7 +40,7 @@
     "timeControls": "Контроль",
     "window": "Период",
     "ratedOnly": "Только рейтинговые",
-    "timeBullet": "Пуля",
+    "timeBullet": "Буллет",
     "timeBlitz": "Блиц",
     "timeRapid": "Рапид",
     "timeClassical": "Классика",
@@ -101,7 +101,7 @@
     "pickOpeningDesc": "Выберите дебют слева, чтобы увидеть реально сыгранные ходы с этой позиции, отсортированные по частоте и проценту побед.",
     "clickRow": "Нажмите любую строку слева",
     "kpiN": "N",
-    "kpiWin": "П%",
+    "kpiWin": "В%",
     "kpiDraw": "Н%",
     "kpiLoss": "П%",
     "filterLabel": "Фильтр:",
@@ -173,7 +173,7 @@
     "exportRepertoireDesc": "Готово к изучению: основная линия + каждое продолжение как вложенный вариант",
     "toastNoGamesMatch": "Нет партий, соответствующих этому варианту.",
     "toastNoGamesYet": "Пока нечего экспортировать.",
-    "toastGamesDownloaded": "Скачано {count} партия",
+    "toastGamesDownloaded": "Скачана {count} партия",
     "toastGamesDownloadedPlural": "Скачано {count} партий",
     "toastRepertoireDownloaded": "Репертуар скачан",
     "toastNothingYet": "Пока нечего экспортировать.",

@@ -182,7 +182,7 @@
   "page": {
     "scanFailed": "Scan mislukt",
     "noGamesMatched": "Geen partijen passen bij de filters.",
-    "widenTryHint": "Probeer de periode te verruimen, \"alleen gewaardeerd\" uit te zetten of van platform te wisselen."
+    "widenTryHint": "Probeer de periode te verruimen, \"alleen met rating\" uit te zetten of van platform te wisselen."
   },
   "loading": "Laden…",
   "playerDirectory": {

@@ -21,15 +21,15 @@
     "h1": "Opening Scanner",
     "subtitle": "そのプレイヤーは実際にどのオープニングを指すのか？",
     "footer": "無料。ローカルファースト。ブラウザから何も送信されません。",
-    "sisterSitesPrefix": "姉妹サイト"
+    "sisterSitesPrefix": "他のプロジェクト"
   },
   "header": {
     "newScan": "新しいスキャン",
     "backToHome": "ホームに戻る"
   },
   "form": {
-    "placeholderLichess": "プレイヤー名（例：DrNykterstein）",
-    "placeholderChesscom": "プレイヤー名（例：Hikaru）",
+    "placeholderLichess": "ユーザー名（例：DrNykterstein）",
+    "placeholderChesscom": "ユーザー名（例：Hikaru）",
     "popular": "人気",
     "colorWhite": "白番",
     "colorBlack": "黒番",
@@ -93,7 +93,7 @@
     "avgOpponentRating": "相手の平均レート",
     "previewNotice": "推奨ラインのプレビュー — プレイヤーの対局にはまだありません。",
     "closePreview": "プレビューを閉じる",
-    "continuations": "継続手",
+    "continuations": "続きの手",
     "firstMoves": "最初の手",
     "noOpeningSelected": "オープニング未選択",
     "previewingLine": "推奨ラインをプレビュー中",
@@ -105,7 +105,7 @@
     "kpiDraw": "引%",
     "kpiLoss": "負%",
     "filterLabel": "フィルタ:",
-    "filterPlySuffix": "· {count}手先",
+    "filterPlySuffix": "· {count}半手先",
     "clearFilter": "クリア"
   },
   "continuations": {
