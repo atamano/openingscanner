@@ -75,12 +75,10 @@ export function useScanner() {
     setError(null);
     setMaxGames(params.filters.maxGames);
 
-    const progressProxy: ((p: ScanProgressEvent) => void) &
-      Comlink.ProxyMarked & { [Comlink.releaseProxy]: () => void } =
-      Comlink.proxy((p: ScanProgressEvent) => {
-        if (scanIdRef.current !== myId) return;
-        setProgress(p);
-      }) as never;
+    const progressProxy = Comlink.proxy((p: ScanProgressEvent) => {
+      if (scanIdRef.current !== myId) return;
+      setProgress(p);
+    });
     try {
       const result = await apiRef.current.scan(params, progressProxy);
       if (scanIdRef.current !== myId) return;
@@ -102,8 +100,6 @@ export function useScanner() {
       if ((e as Error).name === "AbortError") return;
       setError((e as Error).message || "Scan failed");
       setStatus("error");
-    } finally {
-      progressProxy[Comlink.releaseProxy]();
     }
   }, []);
 

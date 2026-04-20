@@ -24,14 +24,14 @@ export function ScanProgress({
 
   return (
     <div className="rounded-xl border border-amber/20 bg-amber/5 p-4 animate-fade-up">
-      <div className="flex items-center gap-2.5 text-sm">
+      <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-sm">
         {running && (
           <Loader2 className="h-4 w-4 animate-spin text-amber shrink-0" />
         )}
         <span className="text-ink-light">
           {running ? dict.progress.streaming : dict.progress.complete}
         </span>
-        <span className="ml-auto font-mono text-xs text-ink-light tabular-nums">
+        <span className="ml-auto min-w-0 truncate font-mono text-xs text-ink-light tabular-nums">
           <span className="text-foreground">{formatNumber(fetched)}</span>{" "}
           {dict.progress.fetched} · {formatNumber(classified)}{" "}
           {dict.progress.classified}

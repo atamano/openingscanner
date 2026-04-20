@@ -78,6 +78,10 @@ const api = {
     }
 
     await emit();
+    const release = (onProgress as unknown as { [Comlink.releaseProxy]?: () => void })[
+      Comlink.releaseProxy
+    ];
+    release?.();
     return partialError
       ? { stats: acc.finalize(), error: partialError }
       : { stats: acc.finalize() };
