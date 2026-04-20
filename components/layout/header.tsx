@@ -1,6 +1,6 @@
 "use client";
 
-import { Plus } from "lucide-react";
+import { Github, Plus } from "lucide-react";
 import Link from "next/link";
 import { LocaleSwitcher } from "@/components/layout/locale-switcher";
 import { useDictionary, useLocale } from "@/lib/i18n/context";
@@ -55,6 +55,16 @@ export function Header({ onNewScan, subtitle }: HeaderProps) {
             {dict.header.newScan}
           </button>
         ) : null}
+
+        <a
+          href="https://github.com/atamano/openingscanner"
+          target="_blank"
+          rel="noopener"
+          aria-label="GitHub"
+          className="flex items-center justify-center h-7 w-7 rounded-md text-amber-light/80 hover:text-amber-light hover:bg-wood-lighter/30 transition-all"
+        >
+          <Github className="h-4 w-4" />
+        </a>
 
         <LocaleSwitcher />
       </div>
