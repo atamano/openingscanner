@@ -6,7 +6,7 @@ Everything runs **client-side in your browser**. No account, no server, no datab
 
 🔗 **Live app:** <https://openingscanner.com>
 
-![repertoire-scanner screenshot](./public/og.png)
+![repertoire-scanner screenshot](./public/og.webp)
 
 ## Features
 
@@ -117,6 +117,13 @@ Nothing leaves your browser. The app calls the Lichess and Chess.com public APIs
 - [Lichess API](https://lichess.org/api) and [Chess.com Published-Data API](https://www.chess.com/news/view/published-data-api) for game streams.
 - Everyone who tests the tool and reports broken handles.
 
+## Sister sites
+
+OpeningScanner is part of a small family of free, player-first chess tools:
+
+- [darksquares.net](https://darksquares.net)
+- [chessatlas.net](https://chessatlas.net)
+
 ## License
 
-[MIT](./LICENSE) © Antoine Tamano
+[MIT](./LICENSE)
