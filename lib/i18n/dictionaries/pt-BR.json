@@ -25,7 +25,9 @@
   },
   "header": {
     "newScan": "Novo escaneamento",
-    "backToHome": "Voltar ao início"
+    "backToHome": "Voltar ao início",
+    "changeLanguage": "Alterar idioma",
+    "languageLabel": "Idioma"
   },
   "form": {
     "placeholderLichess": "Usuário do jogador (ex: DrNykterstein)",
@@ -106,7 +108,8 @@
     "kpiLoss": "D%",
     "filterLabel": "Filtrado para",
     "filterPlySuffix": "· {count} meios-lances dentro",
-    "clearFilter": "Limpar"
+    "clearFilter": "Limpar",
+    "colorFilterLabel": "Filtrar por cor"
   },
   "continuations": {
     "move": "Lance",
@@ -184,16 +187,5 @@
     "noGamesMatched": "Nenhuma partida corresponde aos filtros.",
     "widenTryHint": "Tente ampliar o período, desativar \"apenas valendo rating\" ou trocar de plataforma."
   },
-  "loading": "Carregando…",
-  "playerDirectory": {
-    "popularOn": "Populares no {platform}",
-    "handlesHint": "{count} contas · clique para preencher",
-    "searchPlaceholder": "Buscar nome ou usuário",
-    "clearSearch": "Limpar busca",
-    "allCountries": "Todos os países",
-    "noMatch": "Nenhum jogador corresponde a esses filtros.",
-    "page": "Página {current} / {total}",
-    "prevPage": "Página anterior",
-    "nextPage": "Próxima página"
-  }
+  "loading": "Carregando…"
 }

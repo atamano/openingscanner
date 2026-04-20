@@ -81,7 +81,7 @@ export async function* streamLichessGames(
   const headers: HeadersInit = { Accept: "application/x-ndjson" };
   if (token) headers.Authorization = `Bearer ${token}`;
 
-  const response = await fetch(url, { headers, signal });
+  const response = await fetchLichessWithRetry(url, headers, signal);
   if (!response.ok) {
     if (response.status === 404) {
       throw new Error(`Lichess user "${username}" not found`);
@@ -120,6 +120,37 @@ export async function* streamLichessGames(
   }
 }
 
+async function fetchLichessWithRetry(
+  url: string,
+  headers: HeadersInit,
+  signal?: AbortSignal,
+): Promise<Response> {
+  const backoffs = [1500, 4000];
+  let res = await fetch(url, { headers, signal });
+  for (const base of backoffs) {
+    if (res.ok) return res;
+    if (res.status !== 429 && res.status < 500) return res;
+    const retryAfter = Number(res.headers.get("retry-after"));
+    const delayMs =
+      Number.isFinite(retryAfter) && retryAfter > 0
+        ? Math.min(retryAfter * 1000, 60000)
+        : base;
+    await new Promise<void>((resolve, reject) => {
+      const t = setTimeout(resolve, delayMs);
+      signal?.addEventListener(
+        "abort",
+        () => {
+          clearTimeout(t);
+          reject(new DOMException("Aborted", "AbortError"));
+        },
+        { once: true },
+      );
+    });
+    res = await fetch(url, { headers, signal });
+  }
+  return res;
+}
+
 function parseLichessLine(line: string): GameSummary | null {
   let raw: LichessGame;
   try {
@@ -134,7 +165,8 @@ function parseLichessLine(line: string): GameSummary | null {
   const moves = raw.moves.split(" ").filter(Boolean);
   if (moves.length === 0) return null;
 
-  const timeClass = LICHESS_PERF_TO_TIMECLASS[raw.perf] ?? "blitz";
+  const timeClass = LICHESS_PERF_TO_TIMECLASS[raw.perf];
+  if (!timeClass) return null;
   const result: GameSummary["result"] = raw.winner ?? "draw";
 
   return {

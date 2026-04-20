@@ -16,10 +16,6 @@ export function classifyByEco(moves: readonly string[]): EcoMatch | null {
   const chess = new Chess();
   let best: EcoMatch | null = null;
 
-  const initialEpd = fenToEpd(chess.fen());
-  const initial = ECO_BY_EPD[initialEpd];
-  if (initial) best = { ...initial, epd: initialEpd, atPly: 0 };
-
   const scanDepth = Math.min(moves.length, 24);
   for (let i = 0; i < scanDepth; i++) {
     try {

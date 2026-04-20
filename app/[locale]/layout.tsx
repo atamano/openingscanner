@@ -36,8 +36,6 @@ const fraunces = Fraunces({
   display: "swap",
 });
 
-const siteUrl = getSiteUrl();
-
 export function generateStaticParams() {
   return LOCALES.map((locale) => ({ locale }));
 }
@@ -58,6 +56,7 @@ export async function generateMetadata({
   const locale: Locale = raw;
   const dict = await getDictionary(locale);
   const info = LOCALE_INFO[locale];
+  const siteUrl = getSiteUrl();
 
   const languages = Object.fromEntries(
     LOCALES.map((l) => [LOCALE_INFO[l].bcp47, `${siteUrl}/${l}`]),
@@ -105,7 +104,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title: "Opening Scanner",
+      title: dict.meta.title,
       description: dict.meta.tagline,
     },
     formatDetection: {
@@ -128,6 +127,7 @@ export default async function LocaleLayout({
   const locale: Locale = raw;
   const dict = await getDictionary(locale);
   const info = LOCALE_INFO[locale];
+  const siteUrl = getSiteUrl();
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -152,10 +152,12 @@ export default async function LocaleLayout({
       className={`${dmSans.variable} ${ibmPlexMono.variable} ${fraunces.variable}`}
     >
       <body className="antialiased bg-background text-foreground">
+        {/* beforeInteractive renders the tag in the SSR HTML so crawlers that
+            don't execute JS still see the structured data. */}
         <Script
           id="jsonld-webapp"
           type="application/ld+json"
-          strategy="afterInteractive"
+          strategy="beforeInteractive"
         >
           {jsonLdString}
         </Script>

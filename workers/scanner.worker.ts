@@ -10,13 +10,19 @@ import type { ScanParams, ScanProgressEvent } from "@/lib/sources/types";
 
 type ProgressCallback = (p: ScanProgressEvent) => void | Promise<void>;
 
+export interface ScanResult {
+  stats: RepertoireStats;
+  /** Present when the scan failed mid-stream. Stats are still partial. */
+  error?: string;
+}
+
 let currentController: AbortController | null = null;
 
 const api = {
   async scan(
     params: ScanParams,
     onProgress: ProgressCallback,
-  ): Promise<RepertoireStats> {
+  ): Promise<ScanResult> {
     currentController?.abort();
     const controller = new AbortController();
     currentController = controller;
@@ -57,6 +63,7 @@ const api = {
             controller.signal,
           );
 
+    let partialError: string | undefined;
     try {
       for await (const game of iterator) {
         fetched++;
@@ -67,11 +74,13 @@ const api = {
       if ((err as Error).name === "AbortError") {
         throw new DOMException("Scan aborted", "AbortError");
       }
-      throw err;
+      partialError = (err as Error).message || "Scan failed";
     }
 
     await emit();
-    return acc.finalize();
+    return partialError
+      ? { stats: acc.finalize(), error: partialError }
+      : { stats: acc.finalize() };
   },
 
   abort() {

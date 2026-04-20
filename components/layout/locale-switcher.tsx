@@ -11,12 +11,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { LOCALES, LOCALE_INFO, type Locale } from "@/lib/i18n/config";
-import { useLocale } from "@/lib/i18n/context";
+import { useDictionary, useLocale } from "@/lib/i18n/context";
 
 const LOCALE_COOKIE = "NEXT_LOCALE";
 
 export function LocaleSwitcher() {
   const current = useLocale();
+  const dict = useDictionary();
   const pathname = usePathname() ?? "/";
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -42,14 +43,14 @@ export function LocaleSwitcher() {
     <DropdownMenu>
       <DropdownMenuTrigger
         className="flex items-center gap-1.5 h-7 px-2.5 rounded-md text-xs font-medium text-amber-light/80 hover:text-amber-light hover:bg-wood-lighter/30 transition-all"
-        aria-label="Change language"
+        aria-label={dict.header.changeLanguage}
       >
         <Languages className="h-3.5 w-3.5" />
         <span className="hidden sm:inline">{LOCALE_INFO[current].native}</span>
         <span className="sm:hidden font-mono uppercase">{current}</span>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="max-h-80 overflow-y-auto">
-        <DropdownMenuLabel>Language</DropdownMenuLabel>
+        <DropdownMenuLabel>{dict.header.languageLabel}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {LOCALES.map((loc) => {
           const info = LOCALE_INFO[loc];

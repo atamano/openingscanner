@@ -25,7 +25,9 @@
   },
   "header": {
     "newScan": "Neuer Scan",
-    "backToHome": "Zur Startseite"
+    "backToHome": "Zur Startseite",
+    "changeLanguage": "Sprache ändern",
+    "languageLabel": "Sprache"
   },
   "form": {
     "placeholderLichess": "Spielername (z. B. DrNykterstein)",
@@ -106,7 +108,8 @@
     "kpiLoss": "N%",
     "filterLabel": "Gefiltert auf",
     "filterPlySuffix": "· {count} Halbzüge tief",
-    "clearFilter": "Zurücksetzen"
+    "clearFilter": "Zurücksetzen",
+    "colorFilterLabel": "Nach Farbe filtern"
   },
   "continuations": {
     "move": "Zug",
@@ -184,16 +187,5 @@
     "noGamesMatched": "Keine Partien entsprechen den Filtern.",
     "widenTryHint": "Versuche den Zeitraum zu erweitern, „nur gewertet“ zu deaktivieren oder die Plattform zu wechseln."
   },
-  "loading": "Lädt…",
-  "playerDirectory": {
-    "popularOn": "Beliebt auf {platform}",
-    "handlesHint": "{count} Accounts · klicken zum Übernehmen",
-    "searchPlaceholder": "Name oder Nutzername suchen",
-    "clearSearch": "Suche löschen",
-    "allCountries": "Alle Länder",
-    "noMatch": "Kein Spieler entspricht diesen Filtern.",
-    "page": "Seite {current} / {total}",
-    "prevPage": "Vorherige Seite",
-    "nextPage": "Nächste Seite"
-  }
+  "loading": "Lädt…"
 }

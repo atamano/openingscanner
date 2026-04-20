@@ -25,7 +25,9 @@
   },
   "header": {
     "newScan": "Нове сканування",
-    "backToHome": "На головну"
+    "backToHome": "На головну",
+    "changeLanguage": "Змінити мову",
+    "languageLabel": "Мова"
   },
   "form": {
     "placeholderLichess": "Нік гравця (напр. DrNykterstein)",
@@ -106,7 +108,8 @@
     "kpiLoss": "П%",
     "filterLabel": "Фільтр:",
     "filterPlySuffix": "· на {count} півходів углиб",
-    "clearFilter": "Очистити"
+    "clearFilter": "Очистити",
+    "colorFilterLabel": "Фільтр за кольором"
   },
   "continuations": {
     "move": "Хід",
@@ -184,16 +187,5 @@
     "noGamesMatched": "Жодна партія не відповідає фільтрам.",
     "widenTryHint": "Спробуйте розширити період, вимкнути «тільки рейтингові партії» або змінити платформу."
   },
-  "loading": "Завантаження…",
-  "playerDirectory": {
-    "popularOn": "Популярні на {platform}",
-    "handlesHint": "{count} акаунтів · натисніть, щоб підставити",
-    "searchPlaceholder": "Пошук за іменем або ніком",
-    "clearSearch": "Очистити пошук",
-    "allCountries": "Усі країни",
-    "noMatch": "Жоден гравець не відповідає цим фільтрам.",
-    "page": "Сторінка {current} / {total}",
-    "prevPage": "Попередня сторінка",
-    "nextPage": "Наступна сторінка"
-  }
+  "loading": "Завантаження…"
 }

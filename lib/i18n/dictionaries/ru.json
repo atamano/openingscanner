@@ -25,7 +25,9 @@
   },
   "header": {
     "newScan": "Новое сканирование",
-    "backToHome": "На главную"
+    "backToHome": "На главную",
+    "changeLanguage": "Сменить язык",
+    "languageLabel": "Язык"
   },
   "form": {
     "placeholderLichess": "Ник игрока (напр. DrNykterstein)",
@@ -106,7 +108,8 @@
     "kpiLoss": "П%",
     "filterLabel": "Фильтр:",
     "filterPlySuffix": "· на {count} полуходов в глубину",
-    "clearFilter": "Сбросить"
+    "clearFilter": "Сбросить",
+    "colorFilterLabel": "Фильтр по цвету"
   },
   "continuations": {
     "move": "Ход",
@@ -184,16 +187,5 @@
     "noGamesMatched": "Нет партий, соответствующих фильтрам.",
     "widenTryHint": "Попробуйте расширить период, отключить «только рейтинговые» или сменить платформу."
   },
-  "loading": "Загрузка…",
-  "playerDirectory": {
-    "popularOn": "Популярные на {platform}",
-    "handlesHint": "{count} аккаунтов · нажмите, чтобы подставить",
-    "searchPlaceholder": "Поиск по имени или нику",
-    "clearSearch": "Очистить поиск",
-    "allCountries": "Все страны",
-    "noMatch": "Ни один игрок не соответствует этим фильтрам.",
-    "page": "Страница {current} / {total}",
-    "prevPage": "Предыдущая страница",
-    "nextPage": "Следующая страница"
-  }
+  "loading": "Загрузка…"
 }

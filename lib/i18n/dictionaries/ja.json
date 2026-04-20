@@ -25,7 +25,9 @@
   },
   "header": {
     "newScan": "新しいスキャン",
-    "backToHome": "ホームに戻る"
+    "backToHome": "ホームに戻る",
+    "changeLanguage": "言語を変更",
+    "languageLabel": "言語"
   },
   "form": {
     "placeholderLichess": "ユーザー名（例：DrNykterstein）",
@@ -106,7 +108,8 @@
     "kpiLoss": "負%",
     "filterLabel": "フィルタ:",
     "filterPlySuffix": "· {count}半手先",
-    "clearFilter": "クリア"
+    "clearFilter": "クリア",
+    "colorFilterLabel": "色で絞り込む"
   },
   "continuations": {
     "move": "手",
@@ -184,16 +187,5 @@
     "noGamesMatched": "フィルターに一致する対局がありません。",
     "widenTryHint": "期間を広げたり、レート戦のみをオフにしたり、プラットフォームを切り替えてみてください。"
   },
-  "loading": "読み込み中…",
-  "playerDirectory": {
-    "popularOn": "{platform} の人気プレイヤー",
-    "handlesHint": "{count} アカウント · クリックで入力",
-    "searchPlaceholder": "名前またはハンドルで検索",
-    "clearSearch": "検索をクリア",
-    "allCountries": "すべての国",
-    "noMatch": "このフィルタに一致するプレイヤーはいません。",
-    "page": "ページ {current} / {total}",
-    "prevPage": "前のページ",
-    "nextPage": "次のページ"
-  }
+  "loading": "読み込み中…"
 }

@@ -27,7 +27,9 @@
   },
   "header": {
     "newScan": "New scan",
-    "backToHome": "Back to home"
+    "backToHome": "Back to home",
+    "changeLanguage": "Change language",
+    "languageLabel": "Language"
   },
   "form": {
     "placeholderLichess": "Player username (e.g. DrNykterstein)",
@@ -108,7 +110,8 @@
     "kpiLoss": "L%",
     "filterLabel": "Filtered to",
     "filterPlySuffix": "· {count} ply in",
-    "clearFilter": "Clear"
+    "clearFilter": "Clear",
+    "colorFilterLabel": "Filter by color"
   },
   "continuations": {
     "move": "Move",
@@ -186,16 +189,5 @@
     "noGamesMatched": "No games matched the filters.",
     "widenTryHint": "Try widening the time-window, toggling rated-only off, or switching platform."
   },
-  "loading": "Loading…",
-  "playerDirectory": {
-    "popularOn": "Popular on {platform}",
-    "handlesHint": "{count} handles · click to fill",
-    "searchPlaceholder": "Search name or handle",
-    "clearSearch": "Clear search",
-    "allCountries": "All countries",
-    "noMatch": "No player matches these filters.",
-    "page": "Page {current} / {total}",
-    "prevPage": "Previous page",
-    "nextPage": "Next page"
-  }
+  "loading": "Loading…"
 }

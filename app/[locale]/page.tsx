@@ -44,7 +44,7 @@ function HomeInner() {
     parseAsStringLiteral(SCAN_COLORS).withDefault("both"),
   );
   const [times] = useQueryState("tc", parseAsString.withDefault("blitz,rapid"));
-  const [window] = useQueryState(
+  const [datePreset] = useQueryState(
     "d",
     parseAsStringLiteral(DATE_PRESETS).withDefault("1y"),
   );
@@ -97,7 +97,7 @@ function HomeInner() {
               platform={platform}
               color={color}
               timeClasses={timeClasses}
-              window={window}
+              window={datePreset}
               expanded={expanded}
               onToggle={() => setExpanded((v) => !v)}
               onReset={newScan}

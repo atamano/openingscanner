@@ -28,15 +28,18 @@ export function serializeOpeningToPGN(
   const branches = collectBranches(stats.tree);
   if (branches.length === 0) return "";
 
+  const userTag = escapeTag(username);
+  const isWhite = stats.color === "white";
   for (const [idx, branch] of branches.entries()) {
-    lines.push(`[Event "${chapterName} — ${username} repertoire"]`);
+    const line = `Repertoire line #${idx + 1}`;
+    lines.push(`[Event "${escapeTag(chapterName)} — ${userTag} repertoire"]`);
     lines.push(`[Site "repertoire-scanner"]`);
     lines.push(`[Date "${formatDate(Date.now())}"]`);
-    lines.push(`[White "${username}"]`);
-    lines.push(`[Black "Repertoire line #${idx + 1}"]`);
+    lines.push(`[White "${isWhite ? userTag : line}"]`);
+    lines.push(`[Black "${isWhite ? line : userTag}"]`);
     lines.push(`[Result "*"]`);
-    if (entry?.eco) lines.push(`[ECO "${entry.eco}"]`);
-    if (entry) lines.push(`[Opening "${entry.name}"]`);
+    if (entry?.eco) lines.push(`[ECO "${escapeTag(entry.eco)}"]`);
+    if (entry) lines.push(`[Opening "${escapeTag(entry.name)}"]`);
     lines.push("");
     lines.push(`${renderMoves(branch.moves)} *`);
     lines.push("");
@@ -113,15 +116,18 @@ export function serializeOpeningWithVariations(
   const moveText = [basePart, body].filter(Boolean).join(" ").trim();
   if (!moveText) return "";
 
+  const userTag = escapeTag(username);
+  const isWhite = stats.color === "white";
+  const treeLabel = "Repertoire tree";
   const lines: string[] = [];
-  lines.push(`[Event "${chapterName} — ${username} repertoire"]`);
+  lines.push(`[Event "${escapeTag(chapterName)} — ${userTag} repertoire"]`);
   lines.push(`[Site "repertoire-scanner"]`);
   lines.push(`[Date "${formatDate(Date.now())}"]`);
-  lines.push(`[White "${username}"]`);
-  lines.push(`[Black "Repertoire tree"]`);
+  lines.push(`[White "${isWhite ? userTag : treeLabel}"]`);
+  lines.push(`[Black "${isWhite ? treeLabel : userTag}"]`);
   lines.push(`[Result "*"]`);
-  if (entry?.eco) lines.push(`[ECO "${entry.eco}"]`);
-  if (entry) lines.push(`[Opening "${entry.name}"]`);
+  if (entry?.eco) lines.push(`[ECO "${escapeTag(entry.eco)}"]`);
+  if (entry) lines.push(`[Opening "${escapeTag(entry.name)}"]`);
   lines.push("");
   lines.push(`${moveText} *`);
   lines.push("");

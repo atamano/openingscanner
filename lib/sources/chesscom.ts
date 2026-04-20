@@ -44,7 +44,10 @@ export async function* streamChessComGames(
     }
     throw new Error(`Chess.com API error ${archivesRes.status}`);
   }
-  const { archives } = (await archivesRes.json()) as ChessComArchive;
+  const archivesBody = (await archivesRes.json()) as Partial<ChessComArchive>;
+  const archives = Array.isArray(archivesBody.archives)
+    ? archivesBody.archives
+    : [];
 
   // Iterate archives newest-first so maxGames caps the most recent window.
   const ordered = [...archives].reverse();
@@ -53,18 +56,23 @@ export async function* streamChessComGames(
 
   for (const archiveUrl of ordered) {
     if (signal?.aborted) return;
-    if (!archiveInRange(archiveUrl, filters)) continue;
+    const range = archiveBounds(archiveUrl);
+    if (range && filters.until && range.start > filters.until) continue;
+    // Newest-first: once an archive ends before `since`, every later iteration
+    // is older too — stop walking.
+    if (range && filters.since && range.end < filters.since) return;
 
     const label = archiveLabel(archiveUrl);
     onLabel?.(label);
 
     const monthRes = await fetchArchiveWithRetry(archiveUrl, signal);
     if (!monthRes.ok) {
-      throw new Error(
-        `Chess.com archive ${archiveLabel(archiveUrl)} failed: ${monthRes.status}`,
-      );
+      // Don't kill the whole scan on a single archive failure. Skip it so the
+      // accumulator keeps what it has; the UI can show a partial result.
+      continue;
     }
-    const { games } = (await monthRes.json()) as { games: ChessComGame[] };
+    const monthBody = (await monthRes.json()) as { games?: ChessComGame[] };
+    const games = Array.isArray(monthBody.games) ? monthBody.games : [];
 
     // Within a month, newest first too.
     const sorted = [...games].sort((a, b) => b.end_time - a.end_time);
@@ -121,34 +129,48 @@ async function fetchArchiveWithRetry(
   url: string,
   signal?: AbortSignal,
 ): Promise<Response> {
-  const res = await fetch(url, { signal });
-  if (res.ok) return res;
-  if (res.status !== 429 && res.status < 500) return res;
-
-  const retryAfter = Number(res.headers.get("retry-after"));
-  const delayMs = Number.isFinite(retryAfter) && retryAfter > 0
-    ? Math.min(retryAfter * 1000, 5000)
-    : 750;
-  await new Promise<void>((resolve, reject) => {
-    const t = setTimeout(resolve, delayMs);
-    signal?.addEventListener("abort", () => {
-      clearTimeout(t);
-      reject(new DOMException("Aborted", "AbortError"));
-    }, { once: true });
-  });
-  return fetch(url, { signal });
+  // Retry up to 3 times with exponential backoff. 429 or 5xx are retryable.
+  const backoffs = [750, 1500, 3000];
+  let res = await fetch(url, { signal });
+  for (const base of backoffs) {
+    if (res.ok) return res;
+    if (res.status !== 429 && res.status < 500) return res;
+    const retryAfter = Number(res.headers.get("retry-after"));
+    const delayMs =
+      Number.isFinite(retryAfter) && retryAfter > 0
+        ? Math.min(retryAfter * 1000, 15000)
+        : base;
+    await sleepOrAbort(delayMs, signal);
+    res = await fetch(url, { signal });
+  }
+  return res;
 }
 
-function archiveInRange(archiveUrl: string, filters: ScanFilters): boolean {
+function sleepOrAbort(ms: number, signal?: AbortSignal): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const t = setTimeout(resolve, ms);
+    signal?.addEventListener(
+      "abort",
+      () => {
+        clearTimeout(t);
+        reject(new DOMException("Aborted", "AbortError"));
+      },
+      { once: true },
+    );
+  });
+}
+
+function archiveBounds(
+  archiveUrl: string,
+): { start: number; end: number } | null {
   const m = archiveUrl.match(/\/(\d{4})\/(\d{2})$/);
-  if (!m) return true;
+  if (!m) return null;
   const year = Number(m[1]);
   const month = Number(m[2]);
-  const start = Date.UTC(year, month - 1, 1);
-  const end = Date.UTC(year, month, 1) - 1;
-  if (filters.until && start > filters.until) return false;
-  if (filters.since && end < filters.since) return false;
-  return true;
+  return {
+    start: Date.UTC(year, month - 1, 1),
+    end: Date.UTC(year, month, 1) - 1,
+  };
 }
 
 function archiveLabel(archiveUrl: string): string {

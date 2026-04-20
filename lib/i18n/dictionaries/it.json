@@ -25,7 +25,9 @@
   },
   "header": {
     "newScan": "Nuova scansione",
-    "backToHome": "Torna alla home"
+    "backToHome": "Torna alla home",
+    "changeLanguage": "Cambia lingua",
+    "languageLabel": "Lingua"
   },
   "form": {
     "placeholderLichess": "Nome utente del giocatore (es. DrNykterstein)",
@@ -106,7 +108,8 @@
     "kpiLoss": "S%",
     "filterLabel": "Filtrato su",
     "filterPlySuffix": "· {count} mezze mosse dentro",
-    "clearFilter": "Rimuovi"
+    "clearFilter": "Rimuovi",
+    "colorFilterLabel": "Filtra per colore"
   },
   "continuations": {
     "move": "Mossa",
@@ -184,16 +187,5 @@
     "noGamesMatched": "Nessuna partita corrisponde ai filtri.",
     "widenTryHint": "Prova ad ampliare il periodo, disattivare «solo con rating» o cambiare piattaforma."
   },
-  "loading": "Caricamento…",
-  "playerDirectory": {
-    "popularOn": "Popolari su {platform}",
-    "handlesHint": "{count} account · clicca per compilare",
-    "searchPlaceholder": "Cerca nome o username",
-    "clearSearch": "Cancella la ricerca",
-    "allCountries": "Tutti i paesi",
-    "noMatch": "Nessun giocatore corrisponde a questi filtri.",
-    "page": "Pagina {current} / {total}",
-    "prevPage": "Pagina precedente",
-    "nextPage": "Pagina successiva"
-  }
+  "loading": "Caricamento…"
 }

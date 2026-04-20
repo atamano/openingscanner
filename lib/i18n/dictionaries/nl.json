@@ -25,7 +25,9 @@
   },
   "header": {
     "newScan": "Nieuwe scan",
-    "backToHome": "Terug naar start"
+    "backToHome": "Terug naar start",
+    "changeLanguage": "Taal wijzigen",
+    "languageLabel": "Taal"
   },
   "form": {
     "placeholderLichess": "Gebruikersnaam (bijv. DrNykterstein)",
@@ -106,7 +108,8 @@
     "kpiLoss": "V%",
     "filterLabel": "Gefilterd op",
     "filterPlySuffix": "· {count} halve zetten erin",
-    "clearFilter": "Wissen"
+    "clearFilter": "Wissen",
+    "colorFilterLabel": "Filter op kleur"
   },
   "continuations": {
     "move": "Zet",
@@ -184,16 +187,5 @@
     "noGamesMatched": "Geen partijen passen bij de filters.",
     "widenTryHint": "Probeer de periode te verruimen, \"alleen met rating\" uit te zetten of van platform te wisselen."
   },
-  "loading": "Laden…",
-  "playerDirectory": {
-    "popularOn": "Populair op {platform}",
-    "handlesHint": "{count} accounts · klik om in te vullen",
-    "searchPlaceholder": "Zoek naam of gebruikersnaam",
-    "clearSearch": "Zoekopdracht wissen",
-    "allCountries": "Alle landen",
-    "noMatch": "Geen speler komt overeen met deze filters.",
-    "page": "Pagina {current} / {total}",
-    "prevPage": "Vorige pagina",
-    "nextPage": "Volgende pagina"
-  }
+  "loading": "Laden…"
 }

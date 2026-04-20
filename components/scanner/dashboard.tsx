@@ -47,7 +47,7 @@ export function Dashboard({ stats }: DashboardProps) {
     setPreviewMoves,
     jumpToVariation,
     skipNextPathResetRef,
-    reset: resetFilters,
+    clearOpening,
   } = useDashboardFilters();
 
   const rowsForColor = useMemo(
@@ -58,10 +58,10 @@ export function Dashboard({ stats }: DashboardProps) {
     [stats, color],
   );
 
-  // Reset drill state when color/stats change, but don't auto-select:
-  // the user should see a clean starting position until they pick an opening.
+  // Reset the *variation* drill when color/stats change, but keep the family
+  // filter — it's orthogonal to the color toggle.
   useEffect(() => {
-    resetFilters();
+    clearOpening();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [color, stats]);
 
@@ -137,7 +137,9 @@ export function Dashboard({ stats }: DashboardProps) {
         return;
       }
 
-      if (e.key === "ArrowRight" || e.key === "Enter") {
+      // Enter used to live here too, but `preventDefault()` broke native
+      // button/link activation elsewhere on the page. Arrow keys only.
+      if (e.key === "ArrowRight") {
         const san = currentChildren[focusIndex]?.san;
         if (!san) return;
         e.preventDefault();
@@ -174,21 +176,21 @@ export function Dashboard({ stats }: DashboardProps) {
                 type="single"
                 value={color}
                 onValueChange={(v) => v && setColor(v as PlayerColor)}
-                aria-label="Filter by color"
+                aria-label={dict.dashboard.colorFilterLabel}
               >
                 <ToggleGroupItem
                   value="white"
-                  title={`White (${formatNumber(stats.colorBreakdown.white)} games)`}
+                  title={`${dict.form.colorWhite} (${formatNumber(stats.colorBreakdown.white)} ${dict.weakSpots.gameSuffixMany})`}
                   className="px-2.5 text-xs"
                 >
-                  White
+                  {dict.form.colorWhite}
                 </ToggleGroupItem>
                 <ToggleGroupItem
                   value="black"
-                  title={`Black (${formatNumber(stats.colorBreakdown.black)} games)`}
+                  title={`${dict.form.colorBlack} (${formatNumber(stats.colorBreakdown.black)} ${dict.weakSpots.gameSuffixMany})`}
                   className="px-2.5 text-xs"
                 >
-                  Black
+                  {dict.form.colorBlack}
                 </ToggleGroupItem>
               </ToggleGroup>
             ) : null

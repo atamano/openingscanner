@@ -34,8 +34,10 @@ export default function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // Run on any path except static assets, _next internals, route-handler
-    // metadata files, and anything with a file extension.
-    "/((?!_next|api|.*\\..*|sitemap\\.xml|robots\\.txt|opengraph-image|twitter-image|icon\\.svg).*)",
+    // Run on any path except static assets, _next internals, and route-handler
+    // metadata files. All metadata routes (sitemap.xml, robots.txt,
+    // opengraph-image, twitter-image, icons) produce URLs with a file
+    // extension, so the `.*\\..*` exclusion catches them.
+    "/((?!_next|api|.*\\..*).*)",
   ],
 };

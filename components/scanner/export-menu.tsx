@@ -125,9 +125,9 @@ export function ExportMenu({
     toast.success(dict.export.toastRepertoireDownloaded);
   };
 
-  const selectedGameCount = selected
-    ? filterGamesByPath(selected, path).length
-    : 0;
+  const gamesRetained = stats.gamesRetained !== false;
+  const selectedGameCount =
+    selected && gamesRetained ? filterGamesByPath(selected, path).length : 0;
   const scopeLabel = selected
     ? path.length
       ? dict.export.scopeVariation
@@ -164,7 +164,9 @@ export function ExportMenu({
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onSelect={exportGames}
-          disabled={selected ? selectedGameCount === 0 : false}
+          disabled={
+            !gamesRetained || (selected ? selectedGameCount === 0 : false)
+          }
         >
           <Layers className="size-4" />
           <div className="flex flex-col">

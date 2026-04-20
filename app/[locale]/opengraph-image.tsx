@@ -1,19 +1,11 @@
 import { ImageResponse } from "next/og";
-import { isLocale, LOCALES, type Locale } from "@/lib/i18n/config";
+import { isLocale, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionary";
 
 export const runtime = "nodejs";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-
-export function generateImageMetadata() {
-  return LOCALES.map((locale) => ({
-    id: locale,
-    alt: `Opening Scanner — ${locale}`,
-    contentType: "image/png",
-    size,
-  }));
-}
+export const alt = "Opening Scanner";
 
 export default async function OpengraphImage({
   params,

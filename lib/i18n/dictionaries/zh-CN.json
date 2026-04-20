@@ -25,7 +25,9 @@
   },
   "header": {
     "newScan": "新扫描",
-    "backToHome": "返回首页"
+    "backToHome": "返回首页",
+    "changeLanguage": "切换语言",
+    "languageLabel": "语言"
   },
   "form": {
     "placeholderLichess": "棋手用户名(如 DrNykterstein)",
@@ -106,7 +108,8 @@
     "kpiLoss": "负%",
     "filterLabel": "已筛选:",
     "filterPlySuffix": "· 深入 {count} 个半回合",
-    "clearFilter": "清除"
+    "clearFilter": "清除",
+    "colorFilterLabel": "按颜色筛选"
   },
   "continuations": {
     "move": "着法",
@@ -184,16 +187,5 @@
     "noGamesMatched": "没有对局匹配筛选条件。",
     "widenTryHint": "尝试放宽时段、关闭“仅限有等级分的对局”或切换平台。"
   },
-  "loading": "加载中…",
-  "playerDirectory": {
-    "popularOn": "{platform} 热门",
-    "handlesHint": "{count} 个账号 · 点击填入",
-    "searchPlaceholder": "搜索名称或账号",
-    "clearSearch": "清除搜索",
-    "allCountries": "所有国家",
-    "noMatch": "没有玩家匹配这些筛选条件。",
-    "page": "第 {current} / {total} 页",
-    "prevPage": "上一页",
-    "nextPage": "下一页"
-  }
+  "loading": "加载中…"
 }

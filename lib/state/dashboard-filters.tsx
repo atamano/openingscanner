@@ -30,7 +30,7 @@ interface DashboardFilters {
    */
   jumpToVariation: (openingId: string, path: string[]) => void;
   /** Set just after a selection change to skip the next path-reset effect. */
-  readonly skipNextPathResetRef: React.MutableRefObject<boolean>;
+  readonly skipNextPathResetRef: React.RefObject<boolean>;
   /** Clear the variation (selectedId + path + preview), keep the family. */
   clearOpening: () => void;
   /** Clear everything — family, variation, path, preview. */
@@ -70,8 +70,13 @@ export function DashboardFiltersProvider({
 
   const jumpToVariation = useCallback(
     (openingId: string, nextPath: string[]) => {
-      skipNextPathResetRef.current = true;
-      setSelectedIdState(openingId);
+      // Only arm the skip when selectedId actually changes — otherwise the
+      // [selectedId] effect doesn't fire and the flag would latch onto the
+      // next, unrelated selection and eat its path reset.
+      setSelectedIdState((prev) => {
+        if (prev !== openingId) skipNextPathResetRef.current = true;
+        return openingId;
+      });
       setPath(nextPath);
       setPreviewMoves(null);
     },

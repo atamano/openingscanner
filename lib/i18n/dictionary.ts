@@ -18,17 +18,8 @@ export interface Dictionary {
   header: {
     newScan: string;
     backToHome: string;
-  };
-  playerDirectory: {
-    popularOn: string;
-    handlesHint: string;
-    searchPlaceholder: string;
-    clearSearch: string;
-    allCountries: string;
-    noMatch: string;
-    page: string;
-    prevPage: string;
-    nextPage: string;
+    changeLanguage: string;
+    languageLabel: string;
   };
   form: {
     placeholderLichess: string;
@@ -110,6 +101,7 @@ export interface Dictionary {
     filterLabel: string;
     filterPlySuffix: string;
     clearFilter: string;
+    colorFilterLabel: string;
   };
   continuations: {
     move: string;

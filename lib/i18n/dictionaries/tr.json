@@ -25,7 +25,9 @@
   },
   "header": {
     "newScan": "Yeni tarama",
-    "backToHome": "Ana sayfaya dön"
+    "backToHome": "Ana sayfaya dön",
+    "changeLanguage": "Dili değiştir",
+    "languageLabel": "Dil"
   },
   "form": {
     "placeholderLichess": "Oyuncu kullanıcı adı (örn. DrNykterstein)",
@@ -106,7 +108,8 @@
     "kpiLoss": "K%",
     "filterLabel": "Filtre:",
     "filterPlySuffix": "· {count} yarı-hamle içinde",
-    "clearFilter": "Temizle"
+    "clearFilter": "Temizle",
+    "colorFilterLabel": "Renge göre filtrele"
   },
   "continuations": {
     "move": "Hamle",
@@ -184,16 +187,5 @@
     "noGamesMatched": "Filtrelerle eşleşen oyun yok.",
     "widenTryHint": "Aralığı genişletmeyi, \"yalnızca dereceli\" seçeneğini kapatmayı veya platformu değiştirmeyi deneyin."
   },
-  "loading": "Yükleniyor…",
-  "playerDirectory": {
-    "popularOn": "{platform} üzerinde popüler",
-    "handlesHint": "{count} hesap · doldurmak için tıklayın",
-    "searchPlaceholder": "İsim veya kullanıcı adı ara",
-    "clearSearch": "Aramayı temizle",
-    "allCountries": "Tüm ülkeler",
-    "noMatch": "Bu filtrelere uyan oyuncu yok.",
-    "page": "Sayfa {current} / {total}",
-    "prevPage": "Önceki sayfa",
-    "nextPage": "Sonraki sayfa"
-  }
+  "loading": "Yükleniyor…"
 }

@@ -25,7 +25,9 @@
   },
   "header": {
     "newScan": "Nuevo escaneo",
-    "backToHome": "Volver al inicio"
+    "backToHome": "Volver al inicio",
+    "changeLanguage": "Cambiar idioma",
+    "languageLabel": "Idioma"
   },
   "form": {
     "placeholderLichess": "Usuario del jugador (ej. DrNykterstein)",
@@ -106,7 +108,8 @@
     "kpiLoss": "D%",
     "filterLabel": "Filtrado a",
     "filterPlySuffix": "· {count} medio-jugadas dentro",
-    "clearFilter": "Limpiar"
+    "clearFilter": "Limpiar",
+    "colorFilterLabel": "Filtrar por color"
   },
   "continuations": {
     "move": "Jugada",
@@ -184,16 +187,5 @@
     "noGamesMatched": "Ninguna partida coincide con los filtros.",
     "widenTryHint": "Prueba ampliando el periodo, desactivando «solo con rating» o cambiando de plataforma."
   },
-  "loading": "Cargando…",
-  "playerDirectory": {
-    "popularOn": "Populares en {platform}",
-    "handlesHint": "{count} cuentas · haz clic para rellenar",
-    "searchPlaceholder": "Buscar nombre o usuario",
-    "clearSearch": "Borrar búsqueda",
-    "allCountries": "Todos los países",
-    "noMatch": "Ningún jugador coincide con estos filtros.",
-    "page": "Página {current} / {total}",
-    "prevPage": "Página anterior",
-    "nextPage": "Página siguiente"
-  }
+  "loading": "Cargando…"
 }

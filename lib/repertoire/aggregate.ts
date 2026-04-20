@@ -50,6 +50,10 @@ export interface RepertoireStats {
   username: string;
   colorBreakdown: { white: number; black: number };
   byOpening: Record<string, OpeningStats>;
+  /** Move tree from the initial position, per color. Precomputed in finalize. */
+  globalTreeByColor: { white: MoveNode; black: MoveNode };
+  /** False when raw games were stripped (e.g. on IDB rehydrate) — exports disabled. */
+  gamesRetained: boolean;
 }
 
 export function createRepertoireAccumulator(
@@ -137,12 +141,24 @@ export class RepertoireAccumulator {
   }
 
   finalize(): RepertoireStats {
+    const globalTreeByColor = {
+      white: emptyNode(""),
+      black: emptyNode(""),
+    };
+    for (const opening of Object.values(this.byOpening)) {
+      const root = globalTreeByColor[opening.color];
+      for (const rec of opening.games) {
+        addGameToTree(root, rec.game.moves, rec.playerColor, rec.game.result);
+      }
+    }
     return {
       totalGames: this.totalGames,
       totalClassified: this.totalClassified,
       username: this.username,
       colorBreakdown: this.colorBreakdown,
       byOpening: this.byOpening,
+      globalTreeByColor,
+      gamesRetained: true,
     };
   }
 
@@ -173,23 +189,16 @@ export class RepertoireAccumulator {
 }
 
 /**
- * Build a move tree rooted at the initial position from every game in the
- * repertoire matching `color`. Unlike `OpeningStats.tree`, this is computed
- * across all openings so the Continuations panel can show "first moves
- * actually played" when no opening is yet selected.
+ * Return the precomputed "first moves actually played" tree for a given color.
+ * Kept as a helper so callers don't need to know it's just a property lookup,
+ * and so rehydrated stats (where the field may be missing on old payloads)
+ * degrade gracefully.
  */
 export function buildGlobalTree(
   stats: RepertoireStats,
   color: PlayerColor,
 ): MoveNode {
-  const root = emptyNode("");
-  for (const opening of Object.values(stats.byOpening)) {
-    for (const rec of opening.games) {
-      if (rec.playerColor !== color) continue;
-      addGameToTree(root, rec.game.moves, rec.playerColor, rec.game.result);
-    }
-  }
-  return root;
+  return stats.globalTreeByColor?.[color] ?? emptyNode("");
 }
 
 function ecoToEntry(
