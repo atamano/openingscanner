@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "Repertoire Scanner — Çevrimiçi oyuncuların açılış repertuarını çıkarın",
-    "titleTemplate": "%s · Repertoire Scanner",
+    "title": "Opening Scanner — Çevrimiçi oyuncuların açılış repertuarını çıkarın",
+    "titleTemplate": "%s · Opening Scanner",
     "description": "Herhangi bir Lichess veya Chess.com oyuncusunu tarayın ve açılış repertuarını çıkarın — tüm ECO kataloğuna göre sınıflandırılmış, kazanma oranları, eksik analizi ve PGN dışa aktarımıyla. Ücretsiz, local-first, tarayıcınızdan hiçbir şey dışarı çıkmaz.",
     "tagline": "Bir oyuncu gerçekten hangi açılışları oynar?",
     "keywords": [
@@ -18,10 +18,10 @@
   },
   "landing": {
     "badge": "Çevrimiçi oyunları tarayıp ECO kataloğuna göre sınıflandırın",
-    "h1": "Repertoire Scanner",
+    "h1": "Opening Scanner",
     "subtitle": "Bir oyuncu gerçekten hangi açılışları oynar?",
-    "footer": "Ücretsiz. Local-first. Tarayıcınızdan hiçbir şey çıkmaz.",
-    "sisterSitesPrefix": "Bizden diğerleri"
+    "footer": "Ücretsiz. Her şey tarayıcınızda çalışır. Hiçbir şey dışarı çıkmaz.",
+    "sisterSitesPrefix": "Diğer projelerimiz"
   },
   "header": {
     "newScan": "Yeni tarama",

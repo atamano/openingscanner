@@ -24,7 +24,7 @@ export function Header({ onNewScan, subtitle }: HeaderProps) {
             style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
             aria-label={dict.header.backToHome}
           >
-            Repertoire Scanner
+            Opening Scanner
           </button>
         ) : (
           <Link
@@ -33,7 +33,7 @@ export function Header({ onNewScan, subtitle }: HeaderProps) {
             style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
             aria-label={dict.header.backToHome}
           >
-            Repertoire Scanner
+            Opening Scanner
           </Link>
         )}
 

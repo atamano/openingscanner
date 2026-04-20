@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "Repertoire Scanner — オンライン対局からチェスのオープニングレパートリーを抽出",
-    "titleTemplate": "%s · Repertoire Scanner",
+    "title": "Opening Scanner — オンライン対局からチェスのオープニングレパートリーを抽出",
+    "titleTemplate": "%s · Opening Scanner",
     "description": "LichessまたはChess.comの任意のプレイヤーをスキャンし、オープニングレパートリーを抽出します。完全なECOカタログで分類し、勝率、ギャップ分析、PGNエクスポートまで。無料、ローカルファースト、ブラウザから何も送信されません。",
     "tagline": "そのプレイヤーは実際にどのオープニングを指すのか？",
     "keywords": [
@@ -18,7 +18,7 @@
   },
   "landing": {
     "badge": "オンライン対局をECOカタログで分類",
-    "h1": "Repertoire Scanner",
+    "h1": "Opening Scanner",
     "subtitle": "そのプレイヤーは実際にどのオープニングを指すのか？",
     "footer": "無料。ローカルファースト。ブラウザから何も送信されません。",
     "sisterSitesPrefix": "姉妹サイト"

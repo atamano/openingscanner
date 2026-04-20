@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "Repertoire Scanner — Extrae el repertorio de aperturas de un jugador online",
-    "titleTemplate": "%s · Repertoire Scanner",
+    "title": "Opening Scanner — Extrae el repertorio de aperturas de un jugador online",
+    "titleTemplate": "%s · Opening Scanner",
     "description": "Escanea cualquier jugador de Lichess o Chess.com y extrae su repertorio de aperturas — clasificado contra el catálogo ECO completo, con porcentajes de victoria, análisis de carencias y exportación a PGN. Gratis, local-first, nada sale de tu navegador.",
     "tagline": "¿Qué aperturas juega realmente cualquier jugador?",
     "keywords": [
@@ -18,10 +18,10 @@
   },
   "landing": {
     "badge": "Escanea y clasifica partidas en línea contra el catálogo ECO",
-    "h1": "Repertoire Scanner",
+    "h1": "Opening Scanner",
     "subtitle": "¿Qué aperturas juega realmente cualquier jugador?",
     "footer": "Gratis. Local-first. Nada sale de tu navegador.",
-    "sisterSitesPrefix": "También de nosotros"
+    "sisterSitesPrefix": "Nuestros otros proyectos"
   },
   "header": {
     "newScan": "Nuevo escaneo",
@@ -39,13 +39,13 @@
     "stop": "Detener",
     "timeControls": "Ritmos",
     "window": "Periodo",
-    "ratedOnly": "Solo partidas clasificatorias",
+    "ratedOnly": "Solo partidas con rating",
     "timeBullet": "Bullet",
     "timeBlitz": "Blitz",
     "timeRapid": "Rápido",
     "timeClassical": "Clásico",
     "window30d": "30 d",
-    "window6m": "6 mes",
+    "window6m": "6 meses",
     "window1y": "1 año",
     "windowAll": "Todo"
   },
@@ -77,7 +77,7 @@
   "dashboard": {
     "openings": "Aperturas",
     "families": "familias",
-    "hits": "resultados",
+    "hits": "coincidencias",
     "variantsOne": "variante",
     "variantsMany": "variantes",
     "allOpenings": "Todas las aperturas",

@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "Repertoire Scanner — Extraia o repertório de aberturas de qualquer jogador online",
-    "titleTemplate": "%s · Repertoire Scanner",
+    "title": "Opening Scanner — Extraia o repertório de aberturas de qualquer jogador online",
+    "titleTemplate": "%s · Opening Scanner",
     "description": "Escaneie qualquer jogador do Lichess ou Chess.com e extraia seu repertório de aberturas — classificado no catálogo ECO completo, com taxas de vitória, análise de lacunas e exportação PGN. Grátis, local-first, nada sai do seu navegador.",
     "tagline": "Quais aberturas um jogador realmente joga?",
     "keywords": [
@@ -18,10 +18,10 @@
   },
   "landing": {
     "badge": "Escaneie e classifique partidas online no catálogo ECO",
-    "h1": "Repertoire Scanner",
+    "h1": "Opening Scanner",
     "subtitle": "Quais aberturas um jogador realmente joga?",
-    "footer": "Grátis. Local-first. Nada sai do seu navegador.",
-    "sisterSitesPrefix": "Também da gente"
+    "footer": "Grátis. Tudo roda no seu navegador. Nada sai dele.",
+    "sisterSitesPrefix": "Nossos outros projetos"
   },
   "header": {
     "newScan": "Novo escaneamento",
@@ -45,7 +45,7 @@
     "timeRapid": "Rápido",
     "timeClassical": "Clássico",
     "window30d": "30 d",
-    "window6m": "6 mes",
+    "window6m": "6 meses",
     "window1y": "1 ano",
     "windowAll": "Tudo"
   },
@@ -90,7 +90,7 @@
     "pickOpeningHint": "Escolha uma abertura ou pressione → para começar",
     "tipLegend": "Dica · ↑ ↓ escolher · → jogar · ← voltar",
     "uncategorized": "Não categorizado",
-    "avgOpponentRating": "Rating médio do oponente",
+    "avgOpponentRating": "Rating médio dos adversários",
     "previewNotice": "Prévia de uma linha recomendada — ainda não nas partidas do jogador.",
     "closePreview": "Fechar prévia",
     "continuations": "Continuações",

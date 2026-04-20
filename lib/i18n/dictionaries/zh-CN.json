@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "Repertoire Scanner — 从在线对局中提取棋手的开局曲目",
-    "titleTemplate": "%s · Repertoire Scanner",
+    "title": "Opening Scanner — 从在线对局中提取棋手的开局曲目",
+    "titleTemplate": "%s · Opening Scanner",
     "description": "扫描任意 Lichess 或 Chess.com 棋手，提取其开局曲目 — 按完整 ECO 目录分类,含胜率、差距分析和 PGN 导出。免费,本地优先,数据不离开你的浏览器。",
     "tagline": "任何棋手到底在下哪些开局?",
     "keywords": [
@@ -18,7 +18,7 @@
   },
   "landing": {
     "badge": "扫描并按 ECO 目录对在线对局分类",
-    "h1": "Repertoire Scanner",
+    "h1": "Opening Scanner",
     "subtitle": "任何棋手到底在下哪些开局?",
     "footer": "免费。本地优先。数据不离开你的浏览器。",
     "sisterSitesPrefix": "姊妹站点"

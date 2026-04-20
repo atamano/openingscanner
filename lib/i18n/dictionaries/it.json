@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "Repertoire Scanner — Estrai il repertorio di aperture di un giocatore online",
-    "titleTemplate": "%s · Repertoire Scanner",
+    "title": "Opening Scanner — Estrai il repertorio di aperture di un giocatore online",
+    "titleTemplate": "%s · Opening Scanner",
     "description": "Scansiona qualsiasi giocatore di Lichess o Chess.com ed estrai il suo repertorio di aperture — classificato sull'intero catalogo ECO, con percentuali di vittoria, analisi delle lacune ed esportazione PGN. Gratuito, local-first, nulla lascia il tuo browser.",
     "tagline": "Che aperture gioca davvero un giocatore?",
     "keywords": [
@@ -18,18 +18,18 @@
   },
   "landing": {
     "badge": "Scansiona e classifica partite online sul catalogo ECO",
-    "h1": "Repertoire Scanner",
+    "h1": "Opening Scanner",
     "subtitle": "Che aperture gioca davvero un giocatore?",
     "footer": "Gratuito. Local-first. Nulla lascia il tuo browser.",
-    "sisterSitesPrefix": "Anche da noi"
+    "sisterSitesPrefix": "Altri nostri progetti"
   },
   "header": {
     "newScan": "Nuova scansione",
     "backToHome": "Torna alla home"
   },
   "form": {
-    "placeholderLichess": "Nome giocatore (es. DrNykterstein)",
-    "placeholderChesscom": "Nome giocatore (es. Hikaru)",
+    "placeholderLichess": "Nome utente del giocatore (es. DrNykterstein)",
+    "placeholderChesscom": "Nome utente del giocatore (es. Hikaru)",
     "popular": "Popolari",
     "colorWhite": "Con il bianco",
     "colorBlack": "Con il nero",
@@ -39,13 +39,13 @@
     "stop": "Ferma",
     "timeControls": "Cadenze",
     "window": "Periodo",
-    "ratedOnly": "Solo partite valutate",
+    "ratedOnly": "Solo partite con rating",
     "timeBullet": "Bullet",
     "timeBlitz": "Blitz",
     "timeRapid": "Rapido",
     "timeClassical": "Classico",
     "window30d": "30 g",
-    "window6m": "6 mes",
+    "window6m": "6 mesi",
     "window1y": "1 anno",
     "windowAll": "Tutto"
   },

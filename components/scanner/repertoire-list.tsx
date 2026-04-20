@@ -6,6 +6,7 @@ import { isUncategorizedId } from "@/lib/catalog/openings";
 import { useDictionary } from "@/lib/i18n/context";
 import type { OpeningStats, RepertoireStats } from "@/lib/repertoire/aggregate";
 import type { PlayerColor } from "@/lib/sources/types";
+import { useDashboardFilters } from "@/lib/state/dashboard-filters";
 import { cn, formatPct } from "@/lib/utils";
 
 interface RepertoireListProps {
@@ -28,7 +29,8 @@ export function RepertoireList({
   const dict = useDictionary();
   const UNCATEGORIZED_LABEL = dict.dashboard.uncategorized;
   const [query, setQuery] = useState("");
-  const [drilledFamily, setDrilledFamily] = useState<string | null>(null);
+  const { selectedFamily, setSelectedFamily, clearFamily } =
+    useDashboardFilters();
 
   const colorEntries = useMemo(
     () => Object.values(stats.byOpening).filter((s) => s.color === color),
@@ -63,25 +65,25 @@ export function RepertoireList({
       .sort(sortByCount);
   }, [colorEntries, isSearching, normalized]);
 
-  // When the user's selection lives in a different family than what's drilled,
-  // follow the selection automatically — feels like navigation.
+  // Keep the list in sync with an externally-updated selection:
+  // if the selection lands in a different family than the one currently
+  // drilled, follow it — but don't auto-drill when the user is browsing root.
   useEffect(() => {
-    if (!selectedId || isSearching) return;
+    if (isSearching) return;
+    if (!selectedId) return;
     const s = stats.byOpening[selectedId];
     const fam =
       s && isUncategorizedId(s.openingId)
         ? OTHER_FAMILY
         : s?.entry?.family ?? OTHER_FAMILY;
-    setDrilledFamily((prev) =>
-      prev === null || prev === fam
-        ? prev // stay on root, or already matches
-        : fam,
+    setSelectedFamily(
+      selectedFamily === null || selectedFamily === fam ? selectedFamily : fam,
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedId]);
 
-  const drilledGroup = drilledFamily
-    ? groups.find((g) => g.family === drilledFamily) ?? null
+  const drilledGroup = selectedFamily
+    ? groups.find((g) => g.family === selectedFamily) ?? null
     : null;
 
   const showingVariants = !isSearching && drilledGroup !== null;
@@ -92,7 +94,7 @@ export function RepertoireList({
         {showingVariants ? (
           <button
             type="button"
-            onClick={() => setDrilledFamily(null)}
+            onClick={clearFamily}
             className="flex w-full items-center gap-1.5 rounded-md px-1 py-0.5 text-left text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
             <ChevronLeft className="size-3.5" />
@@ -203,11 +205,7 @@ export function RepertoireList({
                     containsSelection={group.entries.some(
                       (s) => s.openingId === selectedId,
                     )}
-                    onOpen={() => {
-                      setDrilledFamily(group.family);
-                      const top = group.entries[0];
-                      if (top) onSelect(top.openingId);
-                    }}
+                    onOpen={() => setSelectedFamily(group.family)}
                   />
                 )}
               </li>

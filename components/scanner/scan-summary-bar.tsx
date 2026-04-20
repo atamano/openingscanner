@@ -43,10 +43,13 @@ export function ScanSummaryBar({
 }: ScanSummaryBarProps) {
   const dict = useDictionary();
   const {
+    selectedFamily,
     selectedId,
     path,
     previewMoves,
+    setSelectedFamily,
     clearOpening,
+    clearFamily,
     clearPath,
     clearPreview,
   } = useDashboardFilters();
@@ -65,16 +68,27 @@ export function ScanSummaryBar({
   };
 
   const selectedStats = selectedId ? stats?.byOpening[selectedId] : null;
-  const openingLabel = selectedStats
-    ? selectedStats.entry?.name ?? dict.dashboard.uncategorized
+  const derivedFamily = selectedStats?.entry?.family ?? null;
+  const familyLabel = selectedFamily ?? derivedFamily;
+  const variationLabel = selectedStats
+    ? stripFamilyPrefix(
+        selectedStats.entry?.name ?? dict.dashboard.uncategorized,
+        selectedStats.entry?.family,
+      )
     : null;
   const hasFilters = Boolean(
-    selectedId || path.length > 0 || previewMoves,
+    selectedFamily || selectedId || path.length > 0 || previewMoves,
   );
+  const handleRemoveFamily = () => clearFamily();
+  const handleRemoveVariation = () => {
+    if (!selectedFamily && derivedFamily) {
+      setSelectedFamily(derivedFamily);
+    }
+    clearOpening();
+  };
   const clearAll = () => {
     if (previewMoves) clearPreview();
-    if (selectedId) clearOpening();
-    else if (path.length > 0) clearPath();
+    clearFamily();
   };
 
   return (
@@ -171,8 +185,14 @@ export function ScanSummaryBar({
           <span className="text-[11px] font-medium uppercase tracking-wider text-ink-light">
             {dict.dashboard.filterLabel}
           </span>
-          {openingLabel ? (
-            <FilterChip label={openingLabel} onRemove={clearOpening} />
+          {familyLabel ? (
+            <FilterChip label={familyLabel} onRemove={handleRemoveFamily} />
+          ) : null}
+          {variationLabel ? (
+            <FilterChip
+              label={variationLabel}
+              onRemove={handleRemoveVariation}
+            />
           ) : null}
           {path.length > 0 ? (
             <FilterChip
@@ -201,6 +221,13 @@ export function ScanSummaryBar({
       ) : null}
     </div>
   );
+}
+
+function stripFamilyPrefix(name: string, family: string | undefined): string {
+  if (!family) return name;
+  const colon = name.indexOf(":");
+  if (colon < 0) return name;
+  return name.slice(colon + 1).trim();
 }
 
 function FilterChip({

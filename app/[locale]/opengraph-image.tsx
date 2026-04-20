@@ -9,7 +9,7 @@ export const contentType = "image/png";
 export function generateImageMetadata() {
   return LOCALES.map((locale) => ({
     id: locale,
-    alt: `Repertoire Scanner — ${locale}`,
+    alt: `Opening Scanner — ${locale}`,
     contentType: "image/png",
     size,
   }));
@@ -66,7 +66,7 @@ export default async function OpengraphImage({
               background: AMBER,
             }}
           />
-          Repertoire Scanner
+          Opening Scanner
         </div>
 
         <div

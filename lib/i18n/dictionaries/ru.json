@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "Repertoire Scanner — извлеките шахматный репертуар дебютов онлайн-игрока",
-    "titleTemplate": "%s · Repertoire Scanner",
+    "title": "Opening Scanner — извлеките шахматный репертуар дебютов онлайн-игрока",
+    "titleTemplate": "%s · Opening Scanner",
     "description": "Сканируйте любого игрока Lichess или Chess.com и извлекайте его репертуар дебютов — классифицированный по полному каталогу ECO, с процентом побед, анализом пробелов и экспортом PGN. Бесплатно, local-first, ничего не покидает ваш браузер.",
     "tagline": "Какие дебюты на самом деле играет игрок?",
     "keywords": [
@@ -18,7 +18,7 @@
   },
   "landing": {
     "badge": "Сканируйте и классифицируйте партии по каталогу ECO",
-    "h1": "Repertoire Scanner",
+    "h1": "Opening Scanner",
     "subtitle": "Какие дебюты на самом деле играет игрок?",
     "footer": "Бесплатно. Local-first. Ничего не покидает ваш браузер.",
     "sisterSitesPrefix": "Также от нас"

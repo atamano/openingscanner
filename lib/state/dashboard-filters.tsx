@@ -11,9 +11,16 @@ import {
 } from "react";
 
 interface DashboardFilters {
+  /**
+   * Family filter (e.g. "Sicilian Defense"). Set when the user drills into a
+   * family from the list. Independent from `selectedId` so the family chip
+   * can survive clearing a specific variation.
+   */
+  selectedFamily: string | null;
   selectedId: string | null;
   path: string[];
   previewMoves: string[] | null;
+  setSelectedFamily: (family: string | null) => void;
   setSelectedId: (id: string | null) => void;
   setPath: React.Dispatch<React.SetStateAction<string[]>>;
   setPreviewMoves: (moves: string[] | null) => void;
@@ -24,7 +31,10 @@ interface DashboardFilters {
   jumpToVariation: (openingId: string, path: string[]) => void;
   /** Set just after a selection change to skip the next path-reset effect. */
   readonly skipNextPathResetRef: React.MutableRefObject<boolean>;
+  /** Clear the variation (selectedId + path + preview), keep the family. */
   clearOpening: () => void;
+  /** Clear everything — family, variation, path, preview. */
+  clearFamily: () => void;
   clearPath: () => void;
   clearPreview: () => void;
   reset: () => void;
@@ -45,6 +55,7 @@ export function DashboardFiltersProvider({
    */
   resetKey?: unknown;
 }) {
+  const [selectedFamily, setSelectedFamily] = useState<string | null>(null);
   const [selectedId, setSelectedIdState] = useState<string | null>(null);
   const [path, setPath] = useState<string[]>([]);
   const [previewMoves, setPreviewMoves] = useState<string[] | null>(null);
@@ -72,9 +83,16 @@ export function DashboardFiltersProvider({
     setPath([]);
     setPreviewMoves(null);
   }, []);
+  const clearFamily = useCallback(() => {
+    setSelectedFamily(null);
+    setSelectedIdState(null);
+    setPath([]);
+    setPreviewMoves(null);
+  }, []);
   const clearPath = useCallback(() => setPath([]), []);
   const clearPreview = useCallback(() => setPreviewMoves(null), []);
   const reset = useCallback(() => {
+    setSelectedFamily(null);
     setSelectedIdState(null);
     setPath([]);
     setPreviewMoves(null);
@@ -91,26 +109,31 @@ export function DashboardFiltersProvider({
 
   const value = useMemo<DashboardFilters>(
     () => ({
+      selectedFamily,
       selectedId,
       path,
       previewMoves,
+      setSelectedFamily,
       setSelectedId,
       setPath,
       setPreviewMoves,
       jumpToVariation,
       skipNextPathResetRef,
       clearOpening,
+      clearFamily,
       clearPath,
       clearPreview,
       reset,
     }),
     [
+      selectedFamily,
       selectedId,
       path,
       previewMoves,
       setSelectedId,
       jumpToVariation,
       clearOpening,
+      clearFamily,
       clearPath,
       clearPreview,
       reset,

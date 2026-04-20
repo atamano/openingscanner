@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "Repertoire Scanner — Schach-Eröffnungsrepertoires aus Online-Partien extrahieren",
-    "titleTemplate": "%s · Repertoire Scanner",
+    "title": "Opening Scanner — Schach-Eröffnungsrepertoires aus Online-Partien extrahieren",
+    "titleTemplate": "%s · Opening Scanner",
     "description": "Scanne jeden Lichess- oder Chess.com-Spieler und extrahiere sein Eröffnungsrepertoire — klassifiziert gegen den vollständigen ECO-Katalog, mit Gewinnraten, Lückenanalyse und PGN-Export. Kostenlos, local-first, nichts verlässt deinen Browser.",
     "tagline": "Welche Eröffnungen spielt ein Spieler wirklich?",
     "keywords": [
@@ -18,10 +18,10 @@
   },
   "landing": {
     "badge": "Online-Partien scannen und gegen den ECO-Katalog klassifizieren",
-    "h1": "Repertoire Scanner",
+    "h1": "Opening Scanner",
     "subtitle": "Welche Eröffnungen spielt ein Spieler wirklich?",
-    "footer": "Kostenlos. Local-first. Nichts verlässt deinen Browser.",
-    "sisterSitesPrefix": "Auch von uns"
+    "footer": "Kostenlos. Läuft komplett im Browser. Nichts verlässt deinen Browser.",
+    "sisterSitesPrefix": "Weitere Projekte von uns"
   },
   "header": {
     "newScan": "Neuer Scan",
@@ -42,7 +42,7 @@
     "ratedOnly": "Nur gewertete Partien",
     "timeBullet": "Bullet",
     "timeBlitz": "Blitz",
-    "timeRapid": "Schnell",
+    "timeRapid": "Rapid",
     "timeClassical": "Klassisch",
     "window30d": "30 T",
     "window6m": "6 Mo",
@@ -170,7 +170,7 @@
     "exportGamesDescPosition": "diese Stellung",
     "exportGamesDescRepertoire": "dein {color}-Repertoire",
     "exportRepertoire": "Repertoire exportieren (PGN)",
-    "exportRepertoireDesc": "Bereit fürs Studium: Hauptvariante + jede Fortsetzung als verschachtelte Variante",
+    "exportRepertoireDesc": "Bereit zum Studieren: Hauptvariante + jede Fortsetzung als verschachtelte Variante",
     "toastNoGamesMatch": "Keine Partien passen zu dieser Variante.",
     "toastNoGamesYet": "Noch keine Partien zum Exportieren.",
     "toastGamesDownloaded": "{count} Partie heruntergeladen",

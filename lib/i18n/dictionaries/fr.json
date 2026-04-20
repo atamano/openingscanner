@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "Repertoire Scanner — Extraire le répertoire d'ouvertures d'un joueur en ligne",
-    "titleTemplate": "%s · Repertoire Scanner",
+    "title": "Opening Scanner — Extraire le répertoire d'ouvertures d'un joueur en ligne",
+    "titleTemplate": "%s · Opening Scanner",
     "description": "Scannez n'importe quel joueur Lichess ou Chess.com et extrayez son répertoire d'ouvertures — classé contre le catalogue ECO complet, avec taux de victoire, analyse des lacunes et export PGN. Gratuit, local-first, rien ne quitte votre navigateur.",
     "tagline": "Quelles ouvertures un joueur joue-t-il vraiment ?",
     "keywords": [
@@ -18,9 +18,9 @@
   },
   "landing": {
     "badge": "Scannez et classez des parties en ligne contre le catalogue ECO",
-    "h1": "Repertoire Scanner",
+    "h1": "Opening Scanner",
     "subtitle": "Quelles ouvertures un joueur joue-t-il vraiment ?",
-    "footer": "Gratuit. Local-first. Rien ne quitte votre navigateur.",
+    "footer": "Gratuit. En local. Rien ne quitte votre navigateur.",
     "sisterSitesPrefix": "Nos autres projets"
   },
   "header": {
@@ -28,8 +28,8 @@
     "backToHome": "Retour à l’accueil"
   },
   "form": {
-    "placeholderLichess": "Nom du joueur (ex : DrNykterstein)",
-    "placeholderChesscom": "Nom du joueur (ex : Hikaru)",
+    "placeholderLichess": "Pseudo du joueur (ex. DrNykterstein)",
+    "placeholderChesscom": "Pseudo du joueur (ex. Hikaru)",
     "popular": "Populaire",
     "colorWhite": "Avec les blancs",
     "colorBlack": "Avec les noirs",
@@ -90,7 +90,7 @@
     "pickOpeningHint": "Choisissez une ouverture ou appuyez sur → pour commencer",
     "tipLegend": "Astuce · ↑ ↓ choisir · → jouer · ← retour",
     "uncategorized": "Non classé",
-    "avgOpponentRating": "Classement moyen adversaire",
+    "avgOpponentRating": "Elo moyen des adversaires",
     "previewNotice": "Aperçu d'une ligne recommandée — pas encore dans les parties du joueur.",
     "closePreview": "Fermer l'aperçu",
     "continuations": "Suites",
@@ -187,7 +187,7 @@
   "loading": "Chargement…",
   "playerDirectory": {
     "popularOn": "Populaires sur {platform}",
-    "handlesHint": "{count} comptes · cliquer pour remplir",
+    "handlesHint": "{count} pseudos · cliquez pour préremplir",
     "searchPlaceholder": "Rechercher un nom ou un pseudo",
     "clearSearch": "Effacer la recherche",
     "allCountries": "Tous les pays",

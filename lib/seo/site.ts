@@ -15,19 +15,19 @@ export function getSiteUrl(): string {
 }
 
 export const SITE = {
-  name: "Repertoire Scanner",
-  shortName: "Repertoire Scanner",
+  name: "Opening Scanner",
+  shortName: "Opening Scanner",
   description:
-    "Scan any Lichess or Chess.com player and extract their opening repertoire — classified against the full ECO catalog, with win rates, gap analysis and Lichess study export. Free, local-first, nothing leaves your browser.",
+    "Opening Scanner is a free chess opening scanner: enter any Lichess or Chess.com username and instantly see their real opening repertoire — classified against the full ECO catalog, with win rates, weak spots, gap analysis and PGN export. Local-first, nothing leaves your browser.",
   tagline: "What openings does any player actually play?",
   locale: "en_US",
-  twitter: "@lichess",
   keywords: [
+    "opening scanner",
     "chess opening scanner",
+    "chess repertoire scanner",
+    "lichess opening scanner",
+    "chess.com opening scanner",
     "chess repertoire analyzer",
-    "lichess opening tracker",
-    "chess.com opening tracker",
-    "chess repertoire builder",
     "ECO classification",
     "opening explorer",
     "chess openings by player",

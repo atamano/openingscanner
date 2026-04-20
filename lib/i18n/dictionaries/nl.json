@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "Repertoire Scanner — Haal het openingsrepertoire van online spelers tevoorschijn",
-    "titleTemplate": "%s · Repertoire Scanner",
+    "title": "Opening Scanner — Haal openingsrepertoires uit online partijen",
+    "titleTemplate": "%s · Opening Scanner",
     "description": "Scan elke Lichess- of Chess.com-speler en haal zijn openingsrepertoire eruit — geclassificeerd tegen de volledige ECO-catalogus, met winstpercentages, lacuneanalyse en PGN-export. Gratis, local-first, niets verlaat je browser.",
     "tagline": "Welke openingen speelt een speler echt?",
     "keywords": [
@@ -18,10 +18,10 @@
   },
   "landing": {
     "badge": "Scan & classificeer online partijen tegen de ECO-catalogus",
-    "h1": "Repertoire Scanner",
+    "h1": "Opening Scanner",
     "subtitle": "Welke openingen speelt een speler echt?",
     "footer": "Gratis. Local-first. Niets verlaat je browser.",
-    "sisterSitesPrefix": "Ook van ons"
+    "sisterSitesPrefix": "Onze andere projecten"
   },
   "header": {
     "newScan": "Nieuwe scan",
@@ -39,10 +39,10 @@
     "stop": "Stop",
     "timeControls": "Tempo",
     "window": "Periode",
-    "ratedOnly": "Alleen gewaardeerde partijen",
+    "ratedOnly": "Alleen partijen met rating",
     "timeBullet": "Bullet",
     "timeBlitz": "Blitz",
-    "timeRapid": "Snel",
+    "timeRapid": "Rapid",
     "timeClassical": "Klassiek",
     "window30d": "30 d",
     "window6m": "6 mnd",

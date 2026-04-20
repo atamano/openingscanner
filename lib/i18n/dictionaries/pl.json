@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "Repertoire Scanner — Wyciągnij repertuar otwarć dowolnego gracza online",
-    "titleTemplate": "%s · Repertoire Scanner",
+    "title": "Opening Scanner — Wyciągnij repertuar otwarć dowolnego gracza online",
+    "titleTemplate": "%s · Opening Scanner",
     "description": "Przeskanuj dowolnego gracza Lichess lub Chess.com i wyciągnij jego repertuar otwarć — sklasyfikowany w pełnym katalogu ECO, z wynikami, analizą luk i eksportem PGN. Darmowy, local-first, nic nie opuszcza twojej przeglądarki.",
     "tagline": "Jakie otwarcia naprawdę gra dany gracz?",
     "keywords": [
@@ -18,18 +18,18 @@
   },
   "landing": {
     "badge": "Skanuj i klasyfikuj partie online w katalogu ECO",
-    "h1": "Repertoire Scanner",
+    "h1": "Opening Scanner",
     "subtitle": "Jakie otwarcia naprawdę gra dany gracz?",
-    "footer": "Darmowy. Local-first. Nic nie opuszcza twojej przeglądarki.",
-    "sisterSitesPrefix": "Również od nas"
+    "footer": "Darmowy. Wszystko działa lokalnie. Nic nie opuszcza twojej przeglądarki.",
+    "sisterSitesPrefix": "Nasze inne projekty"
   },
   "header": {
     "newScan": "Nowy skan",
     "backToHome": "Powrót na stronę główną"
   },
   "form": {
-    "placeholderLichess": "Nazwa gracza (np. DrNykterstein)",
-    "placeholderChesscom": "Nazwa gracza (np. Hikaru)",
+    "placeholderLichess": "Nick gracza (np. DrNykterstein)",
+    "placeholderChesscom": "Nick gracza (np. Hikaru)",
     "popular": "Popularne",
     "colorWhite": "Białymi",
     "colorBlack": "Czarnymi",
@@ -90,7 +90,7 @@
     "pickOpeningHint": "Wybierz otwarcie lub naciśnij →, by zacząć",
     "tipLegend": "Podpowiedź · ↑ ↓ wybór · → zagraj · ← cofnij",
     "uncategorized": "Niesklasyfikowane",
-    "avgOpponentRating": "Śr. ranking przeciwnika",
+    "avgOpponentRating": "Śr. ranking przeciwników",
     "previewNotice": "Podgląd proponowanej linii — jeszcze nie w partiach gracza.",
     "closePreview": "Zamknij podgląd",
     "continuations": "Kontynuacje",

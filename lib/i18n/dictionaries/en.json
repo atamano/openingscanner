@@ -1,15 +1,17 @@
 {
   "meta": {
-    "title": "Repertoire Scanner — Extract chess opening repertoires from online games",
-    "titleTemplate": "%s · Repertoire Scanner",
-    "description": "Scan any Lichess or Chess.com player and extract their opening repertoire — classified against the full ECO catalog, with win rates, gap analysis and PGN export. Free, local-first, nothing leaves your browser.",
+    "title": "Opening Scanner — Free chess opening scanner for Lichess & Chess.com",
+    "titleTemplate": "%s · Opening Scanner",
+    "description": "Free chess opening scanner: enter any Lichess or Chess.com username and instantly see their real opening repertoire — classified against the full ECO catalog, with win rates, weak spots, gap analysis and PGN export. Local-first, nothing leaves your browser.",
     "tagline": "What openings does any player actually play?",
     "keywords": [
+      "opening scanner",
       "chess opening scanner",
+      "chess repertoire scanner",
+      "lichess opening scanner",
+      "chess.com opening scanner",
+      "chess opening analyzer",
       "chess repertoire analyzer",
-      "lichess opening tracker",
-      "chess.com opening tracker",
-      "chess repertoire builder",
       "ECO classification",
       "opening explorer",
       "chess openings by player",
@@ -18,7 +20,7 @@
   },
   "landing": {
     "badge": "Scan & classify online games against the ECO catalog",
-    "h1": "Repertoire Scanner",
+    "h1": "Opening Scanner",
     "subtitle": "What openings does any player actually play?",
     "footer": "Free. Local-first. Nothing leaves your browser.",
     "sisterSitesPrefix": "Also from us"
