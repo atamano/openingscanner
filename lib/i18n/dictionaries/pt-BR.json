@@ -20,7 +20,8 @@
     "badge": "Escaneie e classifique partidas online no catálogo ECO",
     "h1": "Repertoire Scanner",
     "subtitle": "Quais aberturas um jogador realmente joga?",
-    "footer": "Grátis. Local-first. Nada sai do seu navegador."
+    "footer": "Grátis. Local-first. Nada sai do seu navegador.",
+    "sisterSitesPrefix": "Também da gente"
   },
   "header": {
     "newScan": "Novo escaneamento",
@@ -53,6 +54,10 @@
     "complete": "Concluído",
     "fetched": "obtidas",
     "classified": "classificadas"
+  },
+  "livePreview": {
+    "title": "Top de aberturas detectadas",
+    "subtitle": "O repertório se monta ao vivo conforme as partidas chegam."
   },
   "summary": {
     "asWhite": "com as brancas",

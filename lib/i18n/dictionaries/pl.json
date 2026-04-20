@@ -20,7 +20,8 @@
     "badge": "Skanuj i klasyfikuj partie online w katalogu ECO",
     "h1": "Repertoire Scanner",
     "subtitle": "Jakie otwarcia naprawdę gra dany gracz?",
-    "footer": "Darmowy. Local-first. Nic nie opuszcza twojej przeglądarki."
+    "footer": "Darmowy. Local-first. Nic nie opuszcza twojej przeglądarki.",
+    "sisterSitesPrefix": "Również od nas"
   },
   "header": {
     "newScan": "Nowy skan",
@@ -53,6 +54,10 @@
     "complete": "Zakończono",
     "fetched": "pobrano",
     "classified": "sklasyfikowano"
+  },
+  "livePreview": {
+    "title": "Najczęstsze wykryte otwarcia",
+    "subtitle": "Repertuar buduje się na żywo, gdy spływają partie."
   },
   "summary": {
     "asWhite": "białymi",

@@ -20,7 +20,8 @@
     "badge": "扫描并按 ECO 目录对在线对局分类",
     "h1": "Repertoire Scanner",
     "subtitle": "任何棋手到底在下哪些开局?",
-    "footer": "免费。本地优先。数据不离开你的浏览器。"
+    "footer": "免费。本地优先。数据不离开你的浏览器。",
+    "sisterSitesPrefix": "姊妹站点"
   },
   "header": {
     "newScan": "新扫描",
@@ -53,6 +54,10 @@
     "complete": "完成",
     "fetched": "已获取",
     "classified": "已分类"
+  },
+  "livePreview": {
+    "title": "目前检测到的热门开局",
+    "subtitle": "随着对局陆续到达，曲目正在实时构建。"
   },
   "summary": {
     "asWhite": "执白",

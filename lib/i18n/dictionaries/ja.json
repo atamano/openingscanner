@@ -20,7 +20,8 @@
     "badge": "オンライン対局をECOカタログで分類",
     "h1": "Repertoire Scanner",
     "subtitle": "そのプレイヤーは実際にどのオープニングを指すのか？",
-    "footer": "無料。ローカルファースト。ブラウザから何も送信されません。"
+    "footer": "無料。ローカルファースト。ブラウザから何も送信されません。",
+    "sisterSitesPrefix": "姉妹サイト"
   },
   "header": {
     "newScan": "新しいスキャン",
@@ -53,6 +54,10 @@
     "complete": "完了",
     "fetched": "取得済み",
     "classified": "分類済み"
+  },
+  "livePreview": {
+    "title": "これまでに検出された主なオープニング",
+    "subtitle": "対局を取得しながらレパートリーがリアルタイムで構築されます。"
   },
   "summary": {
     "asWhite": "白番",

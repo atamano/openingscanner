@@ -20,7 +20,8 @@
     "badge": "Scan & classificeer online partijen tegen de ECO-catalogus",
     "h1": "Repertoire Scanner",
     "subtitle": "Welke openingen speelt een speler echt?",
-    "footer": "Gratis. Local-first. Niets verlaat je browser."
+    "footer": "Gratis. Local-first. Niets verlaat je browser.",
+    "sisterSitesPrefix": "Ook van ons"
   },
   "header": {
     "newScan": "Nieuwe scan",
@@ -53,6 +54,10 @@
     "complete": "Voltooid",
     "fetched": "opgehaald",
     "classified": "geclassificeerd"
+  },
+  "livePreview": {
+    "title": "Top openingen tot nu toe",
+    "subtitle": "Het repertoire bouwt zich live op terwijl de partijen binnenkomen."
   },
   "summary": {
     "asWhite": "met wit",

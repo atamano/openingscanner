@@ -13,6 +13,7 @@ export interface Dictionary {
     h1: string;
     subtitle: string;
     footer: string;
+    sisterSitesPrefix: string;
   };
   header: {
     newScan: string;
@@ -56,6 +57,10 @@ export interface Dictionary {
     complete: string;
     fetched: string;
     classified: string;
+  };
+  livePreview: {
+    title: string;
+    subtitle: string;
   };
   summary: {
     asWhite: string;

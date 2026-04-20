@@ -20,7 +20,8 @@
     "badge": "Scan & classify online games against the ECO catalog",
     "h1": "Repertoire Scanner",
     "subtitle": "What openings does any player actually play?",
-    "footer": "Free. Local-first. Nothing leaves your browser."
+    "footer": "Free. Local-first. Nothing leaves your browser.",
+    "sisterSitesPrefix": "Also from us"
   },
   "header": {
     "newScan": "New scan",
@@ -53,6 +54,10 @@
     "complete": "Complete",
     "fetched": "fetched",
     "classified": "classified"
+  },
+  "livePreview": {
+    "title": "Top openings detected so far",
+    "subtitle": "The repertoire builds itself live as games stream in."
   },
   "summary": {
     "asWhite": "as White",

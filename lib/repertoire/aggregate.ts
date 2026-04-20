@@ -4,7 +4,11 @@ import {
   type CatalogEntry,
 } from "@/lib/catalog/openings";
 import { resolvePlayerColor } from "@/lib/catalog/classify";
-import type { GameSummary, PlayerColor } from "@/lib/sources/types";
+import type {
+  GameSummary,
+  PartialOpeningSnapshot,
+  PlayerColor,
+} from "@/lib/sources/types";
 
 export interface MoveNode {
   san: string;
@@ -140,6 +144,31 @@ export class RepertoireAccumulator {
       colorBreakdown: this.colorBreakdown,
       byOpening: this.byOpening,
     };
+  }
+
+  /**
+   * Returns a small, plain-data snapshot of the current top-N openings so the
+   * UI can preview the repertoire as it streams in. Skips uncategorized so the
+   * preview stays meaningful — the long tail joins after the scan completes.
+   */
+  topOpenings(limit: number): PartialOpeningSnapshot[] {
+    const entries: PartialOpeningSnapshot[] = [];
+    for (const stats of Object.values(this.byOpening)) {
+      if (!stats.entry) continue;
+      entries.push({
+        id: stats.openingId,
+        name: stats.entry.name,
+        family: stats.entry.family ?? null,
+        eco: stats.entry.eco ?? null,
+        color: stats.color,
+        gameCount: stats.gameCount,
+        wins: stats.playerWins,
+        draws: stats.draws,
+        losses: stats.playerLosses,
+      });
+    }
+    entries.sort((a, b) => b.gameCount - a.gameCount);
+    return entries.slice(0, limit);
   }
 }
 

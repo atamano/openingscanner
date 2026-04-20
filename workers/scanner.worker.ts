@@ -33,6 +33,7 @@ const api = {
           classified: acc.totalClassified,
           elapsedMs: Date.now() - start,
           currentLabel,
+          topOpenings: acc.topOpenings(8),
         });
       } catch {
         // proxy may close; ignore

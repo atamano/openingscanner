@@ -20,7 +20,8 @@
     "badge": "Çevrimiçi oyunları tarayıp ECO kataloğuna göre sınıflandırın",
     "h1": "Repertoire Scanner",
     "subtitle": "Bir oyuncu gerçekten hangi açılışları oynar?",
-    "footer": "Ücretsiz. Local-first. Tarayıcınızdan hiçbir şey çıkmaz."
+    "footer": "Ücretsiz. Local-first. Tarayıcınızdan hiçbir şey çıkmaz.",
+    "sisterSitesPrefix": "Bizden diğerleri"
   },
   "header": {
     "newScan": "Yeni tarama",
@@ -53,6 +54,10 @@
     "complete": "Tamamlandı",
     "fetched": "alındı",
     "classified": "sınıflandırıldı"
+  },
+  "livePreview": {
+    "title": "Şimdiye kadar bulunan en sık açılışlar",
+    "subtitle": "Repertuar, oyunlar geldikçe canlı olarak oluşuyor."
   },
   "summary": {
     "asWhite": "beyazla",

@@ -6,6 +6,7 @@ import { Suspense, useEffect, useRef, useState } from "react";
 import { Header } from "@/components/layout/header";
 import { Dashboard } from "@/components/scanner/dashboard";
 import { ScanForm } from "@/components/scanner/scan-form";
+import { ScanLivePreview } from "@/components/scanner/scan-live-preview";
 import { ScanProgress } from "@/components/scanner/scan-progress";
 import { ScanSummaryBar } from "@/components/scanner/scan-summary-bar";
 import { useScanner } from "@/hooks/use-scanner";
@@ -114,11 +115,14 @@ function HomeInner() {
             ) : null}
 
             {status === "running" ? (
-              <ScanProgress
-                progress={progress}
-                running
-                expected={maxGames}
-              />
+              <>
+                <ScanProgress
+                  progress={progress}
+                  running
+                  expected={maxGames}
+                />
+                <ScanLivePreview progress={progress} />
+              </>
             ) : null}
 
             {error ? (
@@ -187,6 +191,26 @@ function LandingHero({
 
           <p className="text-center text-xs text-ink-light/60 mt-10">
             {dict.landing.footer}
+          </p>
+          <p className="text-center text-xs text-ink-light/60 mt-2">
+            {dict.landing.sisterSitesPrefix}:{" "}
+            <a
+              href="https://darksquares.net"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-ink-light"
+            >
+              darksquares.net
+            </a>{" "}
+            ·{" "}
+            <a
+              href="https://chessatlas.net"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-ink-light"
+            >
+              chessatlas.net
+            </a>
           </p>
         </div>
       </div>

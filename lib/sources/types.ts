@@ -46,9 +46,30 @@ export interface ScanParams {
   filters: ScanFilters;
 }
 
+/**
+ * Lightweight snapshot of one of the most-played openings, emitted alongside
+ * progress updates so the UI can show a live preview while the scan runs.
+ * Kept minimal because Comlink serializes this on every emit.
+ */
+export interface PartialOpeningSnapshot {
+  /** Stable unique id (matches OpeningStats.openingId) — distinct EPDs may
+   * share the same display name, so the id is what callers should key on. */
+  id: string;
+  name: string;
+  family: string | null;
+  eco: string | null;
+  color: PlayerColor;
+  gameCount: number;
+  wins: number;
+  draws: number;
+  losses: number;
+}
+
 export interface ScanProgressEvent {
   fetched: number;
   classified: number;
   elapsedMs: number;
   currentLabel?: string;
+  /** Top openings detected so far, sorted by gameCount desc. */
+  topOpenings?: PartialOpeningSnapshot[];
 }

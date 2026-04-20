@@ -20,7 +20,8 @@
     "badge": "Scannez et classez des parties en ligne contre le catalogue ECO",
     "h1": "Repertoire Scanner",
     "subtitle": "Quelles ouvertures un joueur joue-t-il vraiment ?",
-    "footer": "Gratuit. Local-first. Rien ne quitte votre navigateur."
+    "footer": "Gratuit. Local-first. Rien ne quitte votre navigateur.",
+    "sisterSitesPrefix": "Nos autres projets"
   },
   "header": {
     "newScan": "Nouveau scan",
@@ -53,6 +54,10 @@
     "complete": "Terminé",
     "fetched": "récupérées",
     "classified": "classées"
+  },
+  "livePreview": {
+    "title": "Top des ouvertures détectées",
+    "subtitle": "Le répertoire se construit en direct, à mesure que les parties arrivent."
   },
   "summary": {
     "asWhite": "avec les blancs",

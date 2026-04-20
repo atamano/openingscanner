@@ -20,7 +20,8 @@
     "badge": "Scansiona e classifica partite online sul catalogo ECO",
     "h1": "Repertoire Scanner",
     "subtitle": "Che aperture gioca davvero un giocatore?",
-    "footer": "Gratuito. Local-first. Nulla lascia il tuo browser."
+    "footer": "Gratuito. Local-first. Nulla lascia il tuo browser.",
+    "sisterSitesPrefix": "Anche da noi"
   },
   "header": {
     "newScan": "Nuova scansione",
@@ -53,6 +54,10 @@
     "complete": "Completato",
     "fetched": "scaricate",
     "classified": "classificate"
+  },
+  "livePreview": {
+    "title": "Top aperture rilevate finora",
+    "subtitle": "Il repertorio si costruisce in diretta mentre le partite arrivano."
   },
   "summary": {
     "asWhite": "con il bianco",

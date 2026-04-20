@@ -20,7 +20,8 @@
     "badge": "Online-Partien scannen und gegen den ECO-Katalog klassifizieren",
     "h1": "Repertoire Scanner",
     "subtitle": "Welche Eröffnungen spielt ein Spieler wirklich?",
-    "footer": "Kostenlos. Local-first. Nichts verlässt deinen Browser."
+    "footer": "Kostenlos. Local-first. Nichts verlässt deinen Browser.",
+    "sisterSitesPrefix": "Auch von uns"
   },
   "header": {
     "newScan": "Neuer Scan",
@@ -53,6 +54,10 @@
     "complete": "Fertig",
     "fetched": "geladen",
     "classified": "klassifiziert"
+  },
+  "livePreview": {
+    "title": "Bisher erkannte Top-Eröffnungen",
+    "subtitle": "Das Repertoire baut sich live auf, während die Partien eintreffen."
   },
   "summary": {
     "asWhite": "mit Weiß",
