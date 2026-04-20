@@ -56,7 +56,7 @@
     "react-chessboard": "^5.2.0",
     "react-dom": "^19.0.0",
     "sonner": "^1.7.1",
-    "tailwind-merge": "^2.6.0",
+    "tailwind-merge": "^3.5.0",
     "zustand": "^5.0.2"
   },
   "devDependencies": {
