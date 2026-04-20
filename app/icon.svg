@@ -1,20 +1,30 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <rect width="64" height="64" rx="12" fill="#1a1612"/>
-  <g fill="none" stroke="#f5f0e6" stroke-linecap="round">
-    <path d="M32 12 L32 24" stroke-width="2.8"/>
-    <path d="M32 24 L18 36" stroke-width="2.2"/>
-    <path d="M32 24 L46 36" stroke-width="2.2"/>
-    <path d="M18 36 L12 50" stroke-width="1.8"/>
-    <path d="M18 36 L24 50" stroke-width="1.8"/>
-    <path d="M46 36 L40 50" stroke-width="1.8"/>
-    <path d="M46 36 L52 50" stroke-width="1.8"/>
+
+  <!-- Radar rings -->
+  <circle cx="32" cy="32" r="26" fill="none" stroke="#e8a664" stroke-width="1" stroke-opacity="0.25"/>
+  <circle cx="32" cy="32" r="18" fill="none" stroke="#e8a664" stroke-width="1" stroke-opacity="0.35"/>
+
+  <!-- Radar sweep quadrant -->
+  <path d="M 32 32 L 32 6 A 26 26 0 0 1 58 32 Z" fill="#e8a664" fill-opacity="0.18"/>
+
+  <!-- Scan crosshairs -->
+  <g stroke="#e8a664" stroke-width="1" stroke-opacity="0.4" stroke-linecap="round">
+    <line x1="32" y1="4" x2="32" y2="8"/>
+    <line x1="32" y1="56" x2="32" y2="60"/>
+    <line x1="4" y1="32" x2="8" y2="32"/>
+    <line x1="56" y1="32" x2="60" y2="32"/>
   </g>
-  <circle cx="32" cy="12" r="4" fill="#f5f0e6"/>
-  <circle cx="32" cy="24" r="2.8" fill="#f5f0e6"/>
-  <circle cx="18" cy="36" r="2.8" fill="#f5f0e6"/>
-  <circle cx="46" cy="36" r="2.8" fill="#f5f0e6"/>
-  <circle cx="12" cy="50" r="3.4" fill="#5aa874"/>
-  <circle cx="24" cy="50" r="3.4" fill="#e8a664"/>
-  <circle cx="40" cy="50" r="3.4" fill="#c87563"/>
-  <circle cx="52" cy="50" r="3.4" fill="#5aa874"/>
+
+  <!-- Ping dot -->
+  <circle cx="47" cy="20" r="2" fill="#e8a664"/>
+
+  <!-- Pawn silhouette -->
+  <g fill="#f5f0e6">
+    <circle cx="32" cy="20" r="5"/>
+    <rect x="28.5" y="25" width="7" height="2" rx="0.8"/>
+    <path d="M 28 28 L 36 28 L 38.5 40 L 25.5 40 Z"/>
+    <rect x="23" y="40" width="18" height="2.8" rx="0.8"/>
+    <rect x="21" y="43.5" width="22" height="3.2" rx="1"/>
+  </g>
 </svg>
