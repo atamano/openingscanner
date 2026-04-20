@@ -14,6 +14,14 @@ updates:
           - "@types/*"
       dev:
         dependency-type: development
+    ignore:
+      # eslint 10.x breaks eslint-plugin-react (used by eslint-config-next).
+      # Re-enable once the plugin supports the v10 rule API.
+      - dependency-name: "eslint"
+        update-types: ["version-update:semver-major"]
+      # typescript 6.0 is fresh — hold until the major-version ecosystem settles.
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: github-actions
     directory: /
