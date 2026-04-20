@@ -1,5 +1,9 @@
 # OpeningScanner
 
+[![CI](https://github.com/atamano/openingscanner/actions/workflows/ci.yml/badge.svg)](https://github.com/atamano/openingscanner/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](./CONTRIBUTING.md)
+
 > Scan any Lichess or Chess.com player's online games and see their actual opening repertoire — frequency, win rate, weak spots, and gaps vs. curated theory.
 
 Everything runs **client-side in your browser**. No account, no server, no database. Games stream straight from the platform APIs, classification happens in a Web Worker, and the most recent scan is cached locally via IndexedDB so a refresh doesn't lose your work.
