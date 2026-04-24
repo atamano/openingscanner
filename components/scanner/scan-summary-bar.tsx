@@ -102,8 +102,8 @@ export function ScanSummaryBar({
 
   return (
     <div className="rounded-xl border border-border bg-paper paper-inset">
-      <div className="flex flex-wrap items-center gap-3 px-4 py-3">
-        <div className="flex min-w-0 items-center gap-2.5">
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-2 px-3 py-3 sm:px-4">
+        <div className="flex min-w-0 flex-1 items-center gap-2.5">
           <div className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-amber/10 text-amber-dark">
             <UserCircle className="h-4 w-4" />
           </div>
@@ -123,7 +123,7 @@ export function ScanSummaryBar({
           </div>
         </div>
 
-        <div className="ml-auto flex items-center gap-2">
+        <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
           <div
             className={cn(
               "hidden items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs sm:flex",
@@ -190,7 +190,7 @@ export function ScanSummaryBar({
       </div>
 
       {hasFilters ? (
-        <div className="flex flex-wrap items-center gap-1.5 border-t border-border/60 px-4 py-2">
+        <div className="flex flex-wrap items-center gap-1.5 border-t border-border/60 px-3 py-2 sm:px-4">
           <span className="text-[11px] font-medium uppercase tracking-wider text-ink-light">
             {dict.dashboard.filterLabel}
           </span>
@@ -257,7 +257,7 @@ function FilterChip({
           : "border-amber/40 bg-amber/10 text-foreground",
       )}
     >
-      <span className="truncate max-w-[16rem]">{label}</span>
+      <span className="truncate max-w-[10rem] sm:max-w-[16rem]">{label}</span>
       <button
         type="button"
         onClick={onRemove}

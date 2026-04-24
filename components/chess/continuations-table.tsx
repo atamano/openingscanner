@@ -41,7 +41,7 @@ export function ContinuationsTable({
 
   return (
     <div className="flex h-full min-h-0 flex-col">
-      <div className="grid grid-cols-[auto_minmax(4rem,1fr)_minmax(5rem,56%)] items-center gap-3 border-b px-4 py-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+      <div className="grid grid-cols-[auto_minmax(3rem,1fr)_minmax(5rem,56%)] items-center gap-2 border-b px-3 py-2 sm:gap-3 sm:px-4 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
         <span>{dict.continuations.move}</span>
         <span>{dict.continuations.games}</span>
         <span>{dict.continuations.results}</span>
@@ -155,7 +155,7 @@ function ContinuationRow({
         onClick={onClick}
         onMouseEnter={onHover}
         className={cn(
-          "group relative grid w-full grid-cols-[auto_minmax(4rem,1fr)_minmax(5rem,56%)] items-center gap-3 px-4 py-2.5 text-left text-sm transition-colors",
+          "group relative grid w-full grid-cols-[auto_minmax(3rem,1fr)_minmax(5rem,56%)] items-center gap-2 px-3 py-2.5 text-left text-sm transition-colors sm:gap-3 sm:px-4",
           "hover:bg-accent/40 focus-visible:bg-accent/60 focus-visible:outline-none",
           focused && "bg-primary/10",
         )}
