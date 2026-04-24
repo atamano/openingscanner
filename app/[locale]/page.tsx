@@ -87,7 +87,7 @@ function HomeInner() {
         <Header onNewScan={newScan} />
 
         <div className="paper-texture animate-workspace-enter">
-          <div className="mx-auto max-w-7xl px-4 py-6 space-y-5">
+          <div className="mx-auto max-w-7xl px-3 py-4 space-y-4 sm:px-4 sm:py-6 sm:space-y-5">
             <ScanSummaryBar
               running={status === "running"}
               progress={progress}
@@ -104,7 +104,7 @@ function HomeInner() {
             />
 
             {expanded ? (
-              <section className="rounded-xl border border-border bg-paper p-5 paper-inset animate-fade-up">
+              <section className="rounded-xl border border-border bg-paper p-4 sm:p-5 paper-inset animate-fade-up">
                 <ScanForm
                   onSubmit={submit}
                   running={status === "running"}
@@ -166,29 +166,29 @@ function LandingHero({
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <div className="hero-bg paper-texture flex-1 flex flex-col items-center justify-center px-4 py-14">
+      <div className="hero-bg paper-texture flex-1 flex flex-col items-center justify-center px-4 py-8 sm:py-14">
         <div className="w-full max-w-3xl relative z-10">
-          <div className="text-center mb-10 stagger-children">
+          <div className="text-center mb-8 sm:mb-10 stagger-children">
             <div className="inline-flex items-center gap-2 rounded-full border border-border bg-paper/80 px-3 py-1 text-xs text-ink-light">
               <Radar className="h-3.5 w-3.5 text-amber" />
               {dict.landing.badge}
             </div>
             <h1
-              className="mt-4 text-5xl font-bold text-wood tracking-tight"
+              className="mt-4 text-[2.25rem] sm:text-5xl font-bold text-wood tracking-tight leading-[1.1]"
               style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
             >
               {dict.landing.h1}
             </h1>
-            <p className="text-lg text-ink-light mt-3 leading-relaxed">
+            <p className="text-base sm:text-lg text-ink-light mt-3 leading-relaxed">
               {dict.landing.subtitle}
             </p>
           </div>
 
-          <div className="bg-paper rounded-xl border border-border shadow-lg p-6 animate-scale-in paper-inset">
+          <div className="bg-paper rounded-xl border border-border shadow-lg p-4 sm:p-6 animate-scale-in paper-inset">
             <ScanForm onSubmit={onSubmit} running={false} onAbort={() => {}} />
           </div>
 
-          <p className="text-center text-xs text-ink-light/60 mt-10">
+          <p className="text-center text-xs text-ink-light/60 mt-8 sm:mt-10">
             {dict.landing.footer}
           </p>
           <p className="text-center text-xs text-ink-light/60 mt-2">

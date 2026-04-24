@@ -170,41 +170,43 @@ export function Dashboard({ stats }: DashboardProps) {
 
   return (
     <section className="space-y-3">
-      {/* Main 3-col grid — board gets first-screen prominence. */}
+      {/* Board takes first-screen prominence on mobile; 3-col desktop layout kicks in at xl. */}
       <div className="grid items-stretch gap-3 xl:h-[calc(min(460px,100dvh-20rem)+7rem)] xl:grid-cols-[minmax(0,1fr)_minmax(0,460px)_minmax(300px,360px)]">
-        <RepertoireList
-          stats={stats}
-          color={color}
-          selectedId={selectedId}
-          onSelect={setSelectedId}
-          headerAction={
-            availableColors.length > 1 ? (
-              <ToggleGroup
-                type="single"
-                value={color}
-                onValueChange={(v) => v && setColor(v as PlayerColor)}
-                aria-label={dict.dashboard.colorFilterLabel}
-              >
-                <ToggleGroupItem
-                  value="white"
-                  title={`${dict.form.colorWhite} (${formatNumber(stats.colorBreakdown.white)} ${dict.weakSpots.gameSuffixMany})`}
-                  className="px-2.5 text-xs"
+        <div className="order-2 min-h-[22rem] xl:order-1 xl:min-h-0">
+          <RepertoireList
+            stats={stats}
+            color={color}
+            selectedId={selectedId}
+            onSelect={setSelectedId}
+            headerAction={
+              availableColors.length > 1 ? (
+                <ToggleGroup
+                  type="single"
+                  value={color}
+                  onValueChange={(v) => v && setColor(v as PlayerColor)}
+                  aria-label={dict.dashboard.colorFilterLabel}
                 >
-                  {dict.form.colorWhite}
-                </ToggleGroupItem>
-                <ToggleGroupItem
-                  value="black"
-                  title={`${dict.form.colorBlack} (${formatNumber(stats.colorBreakdown.black)} ${dict.weakSpots.gameSuffixMany})`}
-                  className="px-2.5 text-xs"
-                >
-                  {dict.form.colorBlack}
-                </ToggleGroupItem>
-              </ToggleGroup>
-            ) : null
-          }
-        />
+                  <ToggleGroupItem
+                    value="white"
+                    title={`${dict.form.colorWhite} (${formatNumber(stats.colorBreakdown.white)} ${dict.weakSpots.gameSuffixMany})`}
+                    className="px-2.5 text-xs"
+                  >
+                    {dict.form.colorWhite}
+                  </ToggleGroupItem>
+                  <ToggleGroupItem
+                    value="black"
+                    title={`${dict.form.colorBlack} (${formatNumber(stats.colorBreakdown.black)} ${dict.weakSpots.gameSuffixMany})`}
+                    className="px-2.5 text-xs"
+                  >
+                    {dict.form.colorBlack}
+                  </ToggleGroupItem>
+                </ToggleGroup>
+              ) : null
+            }
+          />
+        </div>
 
-        <div className="flex min-w-0 min-h-0 flex-col overflow-y-auto rounded-xl border bg-card p-3 xl:h-full">
+        <div className="order-1 flex min-w-0 min-h-0 flex-col overflow-y-auto rounded-xl border bg-card p-3 xl:order-2 xl:h-full">
           {previewMoves ? (
             <div className="flex flex-col gap-3">
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -250,32 +252,34 @@ export function Dashboard({ stats }: DashboardProps) {
           )}
         </div>
 
-        {previewMoves ? (
-          <EmptyContinuationsPanel previewing />
-        ) : (
-          <ContinuationsPanel
-            root={continuationsRoot}
-            path={path}
-            baseDepth={baseMoves.length}
-            onPush={push}
-            onPop={pop}
-            onReset={resetPath}
-            focusedSan={focusedSan}
-            onFocus={(san) =>
-              setFocusIndex(
-                Math.max(
-                  0,
-                  currentChildren.findIndex((c) => c.san === san),
-                ),
-              )
-            }
-            title={
-              selected
-                ? dict.dashboard.continuations
-                : dict.dashboard.firstMoves
-            }
-          />
-        )}
+        <div className="order-3 min-h-[20rem] xl:min-h-0">
+          {previewMoves ? (
+            <EmptyContinuationsPanel previewing />
+          ) : (
+            <ContinuationsPanel
+              root={continuationsRoot}
+              path={path}
+              baseDepth={baseMoves.length}
+              onPush={push}
+              onPop={pop}
+              onReset={resetPath}
+              focusedSan={focusedSan}
+              onFocus={(san) =>
+                setFocusIndex(
+                  Math.max(
+                    0,
+                    currentChildren.findIndex((c) => c.san === san),
+                  ),
+                )
+              }
+              title={
+                selected
+                  ? dict.dashboard.continuations
+                  : dict.dashboard.firstMoves
+              }
+            />
+          )}
+        </div>
       </div>
 
       <GapAnalysis
@@ -308,7 +312,7 @@ export function Dashboard({ stats }: DashboardProps) {
 function EmptyContinuationsPanel({ previewing }: { previewing: boolean }) {
   const dict = useDictionary();
   return (
-    <div className="hidden h-full min-h-0 flex-col overflow-hidden rounded-xl border bg-card xl:flex">
+    <div className="flex h-full min-h-0 flex-col overflow-hidden rounded-xl border bg-card">
       <div className="flex items-center justify-between px-4 py-3">
         <span className="text-sm font-medium">
           {dict.dashboard.continuations}

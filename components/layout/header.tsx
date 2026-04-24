@@ -15,7 +15,7 @@ export function Header({ onNewScan, subtitle }: HeaderProps) {
   const locale = useLocale();
   return (
     <header className="wood-panel border-b-2 border-amber-dark/30 shrink-0">
-      <div className="flex h-11 items-center gap-4 px-5">
+      <div className="flex h-11 items-center gap-2 px-3 sm:gap-4 sm:px-5">
         {onNewScan ? (
           <button
             type="button"
@@ -49,10 +49,11 @@ export function Header({ onNewScan, subtitle }: HeaderProps) {
         {onNewScan ? (
           <button
             onClick={onNewScan}
-            className="flex items-center gap-1.5 h-7 px-3 rounded-md text-xs font-medium text-amber-light/80 hover:text-amber-light hover:bg-wood-lighter/30 transition-all"
+            aria-label={dict.header.newScan}
+            className="flex h-8 items-center gap-1.5 rounded-md px-2 text-xs font-medium text-amber-light/80 transition-all hover:bg-wood-lighter/30 hover:text-amber-light sm:h-7 sm:px-3"
           >
             <Plus className="h-3.5 w-3.5" />
-            {dict.header.newScan}
+            <span className="hidden sm:inline">{dict.header.newScan}</span>
           </button>
         ) : null}
 
@@ -61,7 +62,7 @@ export function Header({ onNewScan, subtitle }: HeaderProps) {
           target="_blank"
           rel="noopener"
           aria-label="GitHub"
-          className="flex items-center justify-center h-7 w-7 rounded-md text-amber-light/80 hover:text-amber-light hover:bg-wood-lighter/30 transition-all"
+          className="flex h-8 w-8 items-center justify-center rounded-md text-amber-light/80 transition-all hover:bg-wood-lighter/30 hover:text-amber-light sm:h-7 sm:w-7"
         >
           <svg
             viewBox="0 0 24 24"

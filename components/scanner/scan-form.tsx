@@ -140,7 +140,7 @@ export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
       }}
     >
       {/* Platform selector */}
-      <div className="grid grid-cols-2 gap-1.5">
+      <div className="grid grid-cols-2 gap-2">
         {(
           [
             { value: "chesscom" as const, label: "Chess.com", icon: "\u2658" },
@@ -205,16 +205,16 @@ export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
         </div>
       </div>
 
-      {/* Color selector */}
-      <div className="flex items-center gap-2">
-        <div className="flex rounded-lg border border-border overflow-hidden">
+      {/* Color selector + submit. Stacks on mobile, single row from sm+. */}
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+        <div className="flex w-full rounded-lg border border-border overflow-hidden sm:w-auto">
           {(["white", "black", "both"] as const).map((c) => (
             <ChipButton
               key={c}
               active={color === c}
               onClick={() => setColor(c)}
               disabled={running}
-              className="h-10 px-4 text-sm font-medium"
+              className="h-10 flex-1 px-3 text-sm font-medium sm:flex-none sm:px-4"
               activeClassName="text-amber-dark"
               inactiveClassName="text-ink-light hover:text-foreground hover:bg-paper-dark"
             >
@@ -223,12 +223,12 @@ export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
             </ChipButton>
           ))}
         </div>
-        <div className="flex-1" />
+        <div className="hidden flex-1 sm:block" />
         {!running ? (
           <button
             type="submit"
             disabled={!canSubmit}
-            className="h-10 px-6 rounded-lg bg-wood text-paper text-sm font-semibold hover:bg-wood-light disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-md hover:shadow-lg active:scale-[0.98]"
+            className="h-11 w-full rounded-lg bg-wood px-6 text-sm font-semibold text-paper transition-all shadow-md hover:bg-wood-light hover:shadow-lg active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40 sm:h-10 sm:w-auto"
           >
             {dict.form.submit}
           </button>
@@ -236,7 +236,7 @@ export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
           <button
             type="button"
             onClick={onAbort}
-            className="h-10 px-5 rounded-lg bg-destructive text-destructive-foreground text-sm font-semibold hover:bg-destructive/90 transition-colors flex items-center gap-2"
+            className="flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-destructive px-5 text-sm font-semibold text-destructive-foreground transition-colors hover:bg-destructive/90 sm:h-10 sm:w-auto"
           >
             <Loader2 className="h-4 w-4 animate-spin" />
             {dict.form.stop}
