@@ -51,7 +51,9 @@
     "window30d": "30 d",
     "window6m": "6 mo",
     "window1y": "1 yr",
-    "windowAll": "All"
+    "windowAll": "All",
+    "limit": "Max games",
+    "limitAll": "All"
   },
   "progress": {
     "streaming": "Streaming games…",

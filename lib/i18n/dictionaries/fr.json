@@ -49,7 +49,9 @@
     "window30d": "30 j",
     "window6m": "6 mois",
     "window1y": "1 an",
-    "windowAll": "Tout"
+    "windowAll": "Tout",
+    "limit": "Nb max de parties",
+    "limitAll": "Tout"
   },
   "progress": {
     "streaming": "Réception des parties…",

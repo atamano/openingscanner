@@ -42,6 +42,8 @@ export interface Dictionary {
     window6m: string;
     window1y: string;
     windowAll: string;
+    limit: string;
+    limitAll: string;
   };
   progress: {
     streaming: string;

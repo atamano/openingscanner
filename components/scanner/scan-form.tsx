@@ -11,16 +11,20 @@ import {
 import { useDictionary } from "@/lib/i18n/context";
 import {
   DATE_PRESETS,
+  LIMIT_PRESETS,
   PLATFORMS,
   SCAN_COLORS,
   TIME_CLASSES,
+  limitPresetToCount,
   type DatePreset,
+  type LimitPreset,
 } from "@/lib/scan/params";
 import type { Platform, ScanParams, TimeClass } from "@/lib/sources/types";
 import { ChipButton } from "./chip-button";
 
 const TIME_VALUES = ["bullet", "blitz", "rapid", "classical"] as const;
 const DATE_VALUES = DATE_PRESETS;
+const LIMIT_VALUES = LIMIT_PRESETS;
 
 // Curated list of handles that actually post games regularly (super-GMs and
 // active streamers). Lichess in particular — avoid accounts that are mostly
@@ -75,6 +79,10 @@ export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
     "d",
     parseAsStringLiteral(DATE_PRESETS).withDefault("1y"),
   );
+  const [limitPreset, setLimitPreset] = useQueryState(
+    "l",
+    parseAsStringLiteral(LIMIT_PRESETS).withDefault("2k"),
+  );
 
   const selectedTimes = useMemo<TimeClass[]>(
     () =>
@@ -102,6 +110,14 @@ export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
     all: dict.form.windowAll,
   };
 
+  const limitLabels: Record<LimitPreset, string> = {
+    "500": "500",
+    "2k": "2k",
+    "5k": "5k",
+    "10k": "10k",
+    all: dict.form.limitAll,
+  };
+
   const colorLabel = (c: "white" | "black" | "both") => {
     if (c === "both") return dict.form.colorBoth;
     if (c === "white") return dict.form.colorWhite;
@@ -119,7 +135,7 @@ export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
         ratedOnly: rated,
         timeClasses: selectedTimes,
         since,
-        maxGames: 2000,
+        maxGames: limitPresetToCount(limitPreset),
       },
     });
   };
@@ -284,6 +300,28 @@ export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
                   className="h-8 px-3 rounded-md text-xs font-medium border"
                 >
                   {dateLabels[value]}
+                </ChipButton>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="space-y-1.5 sm:col-span-2">
+          <span className="text-[11px] uppercase tracking-widest text-ink-light font-semibold">
+            {dict.form.limit}
+          </span>
+          <div className="flex flex-wrap gap-1.5">
+            {LIMIT_VALUES.map((value) => {
+              const active = limitPreset === value;
+              return (
+                <ChipButton
+                  key={value}
+                  active={active}
+                  onClick={() => setLimitPreset(value)}
+                  disabled={running}
+                  className="h-8 px-3 rounded-md text-xs font-medium border"
+                >
+                  {limitLabels[value]}
                 </ChipButton>
               );
             })}

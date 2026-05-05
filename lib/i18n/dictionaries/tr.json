@@ -49,7 +49,9 @@
     "window30d": "30 g",
     "window6m": "6 ay",
     "window1y": "1 yıl",
-    "windowAll": "Hepsi"
+    "windowAll": "Hepsi",
+    "limit": "Maks. oyun",
+    "limitAll": "Hepsi"
   },
   "progress": {
     "streaming": "Oyunlar alınıyor…",

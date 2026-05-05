@@ -49,7 +49,9 @@
     "window30d": "30日",
     "window6m": "6ヶ月",
     "window1y": "1年",
-    "windowAll": "全期間"
+    "windowAll": "全期間",
+    "limit": "最大対局数",
+    "limitAll": "上限なし"
   },
   "progress": {
     "streaming": "対局を受信中…",

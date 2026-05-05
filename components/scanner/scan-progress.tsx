@@ -14,13 +14,14 @@ interface ScanProgressProps {
 export function ScanProgress({
   progress,
   running,
-  expected = 2000,
+  expected,
 }: ScanProgressProps) {
   const dict = useDictionary();
   if (!progress && !running) return null;
   const fetched = progress?.fetched ?? 0;
   const classified = progress?.classified ?? 0;
-  const pct = Math.min((fetched / expected) * 100, 95);
+  const indeterminate = expected === undefined && running;
+  const pct = expected ? Math.min((fetched / expected) * 100, 95) : 100;
 
   return (
     <div className="rounded-xl border border-amber/20 bg-amber/5 p-4 animate-fade-up">
@@ -39,10 +40,14 @@ export function ScanProgress({
         </span>
       </div>
       <div className="mt-3 h-1.5 rounded-full bg-amber/10 overflow-hidden">
-        <div
-          className="h-full bg-amber/60 rounded-full transition-all"
-          style={{ width: `${running ? pct : 100}%` }}
-        />
+        {indeterminate ? (
+          <div className="h-full w-1/3 bg-amber/60 rounded-full animate-progress-indeterminate" />
+        ) : (
+          <div
+            className="h-full bg-amber/60 rounded-full transition-all"
+            style={{ width: `${running ? pct : 100}%` }}
+          />
+        )}
       </div>
     </div>
   );

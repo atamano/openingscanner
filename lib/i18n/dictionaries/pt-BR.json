@@ -49,7 +49,9 @@
     "window30d": "30 d",
     "window6m": "6 meses",
     "window1y": "1 ano",
-    "windowAll": "Tudo"
+    "windowAll": "Tudo",
+    "limit": "Máx. partidas",
+    "limitAll": "Todas"
   },
   "progress": {
     "streaming": "Recebendo partidas…",

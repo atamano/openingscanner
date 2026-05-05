@@ -49,7 +49,9 @@
     "window30d": "30 д",
     "window6m": "6 міс",
     "window1y": "1 рік",
-    "windowAll": "Все"
+    "windowAll": "Все",
+    "limit": "Макс. партій",
+    "limitAll": "Усі"
   },
   "progress": {
     "streaming": "Отримання партій…",

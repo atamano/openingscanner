@@ -49,7 +49,9 @@
     "window30d": "30 d",
     "window6m": "6 mnd",
     "window1y": "1 jr",
-    "windowAll": "Alles"
+    "windowAll": "Alles",
+    "limit": "Max partijen",
+    "limitAll": "Alle"
   },
   "progress": {
     "streaming": "Partijen ontvangen…",

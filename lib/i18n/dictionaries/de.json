@@ -49,7 +49,9 @@
     "window30d": "30 T",
     "window6m": "6 Mo",
     "window1y": "1 J",
-    "windowAll": "Alle"
+    "windowAll": "Alle",
+    "limit": "Max. Partien",
+    "limitAll": "Alle"
   },
   "progress": {
     "streaming": "Partien werden geladen…",

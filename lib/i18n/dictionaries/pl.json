@@ -49,7 +49,9 @@
     "window30d": "30 d",
     "window6m": "6 mies",
     "window1y": "1 rok",
-    "windowAll": "Wszystko"
+    "windowAll": "Wszystko",
+    "limit": "Maks. partii",
+    "limitAll": "Wszystkie"
   },
   "progress": {
     "streaming": "Pobieranie partii…",
