@@ -211,17 +211,17 @@ function ResultsBar({
       <Segment
         pct={winPct}
         label={wins}
-        className="bg-foreground/95 text-background"
+        className="bg-emerald-500/85 text-white"
       />
       <Segment
         pct={drawPct}
         label={draws}
-        className="bg-muted-foreground/60 text-background"
+        className="bg-amber-400/80 text-amber-950"
       />
       <Segment
         pct={lossPct}
         label={losses}
-        className="bg-foreground/20 text-foreground"
+        className="bg-rose-500/80 text-white"
       />
     </div>
   );
