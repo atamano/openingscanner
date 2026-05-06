@@ -282,14 +282,6 @@ export function Dashboard({ stats }: DashboardProps) {
         </div>
       </div>
 
-      <GapAnalysis
-        stats={stats}
-        color={color}
-        onSelect={(moves) => setPreviewMoves(moves)}
-        scopePrefix={selected?.entry?.moves}
-        scopeLabel={selected?.entry?.name ?? null}
-      />
-
       <StrongSpots
         stats={stats}
         color={color}
@@ -304,6 +296,14 @@ export function Dashboard({ stats }: DashboardProps) {
         selected={selected}
         onSelectOpening={(openingId) => jumpToVariation(openingId, [])}
         onSelectVariation={jumpToVariation}
+      />
+
+      <GapAnalysis
+        stats={stats}
+        color={color}
+        onSelect={(moves) => setPreviewMoves(moves)}
+        scopePrefix={selected?.entry?.moves}
+        scopeLabel={selected?.entry?.name ?? null}
       />
     </section>
   );
