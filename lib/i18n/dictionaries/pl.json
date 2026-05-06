@@ -135,7 +135,7 @@
     "descScoped": "Linie pod {opening}, które grasz rzadko.",
     "reasonPlayed": "Zagrane {count} raz",
     "reasonPlayedPlural": "Zagrane {count} razy",
-    "reasonRare": "Rzadko grasz {family}",
+    "reasonRare": "Wariant w {family}, którego nie grałeś",
     "showingOf": "Pokazano {shown} z {total}",
     "showMore": "Pokaż {count} więcej",
     "collapse": "Zwiń"

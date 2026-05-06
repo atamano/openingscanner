@@ -135,7 +135,7 @@
     "descScoped": "{opening} 下你很少下的路线。",
     "reasonPlayed": "已下 {count} 次",
     "reasonPlayedPlural": "已下 {count} 次",
-    "reasonRare": "很少下 {family}",
+    "reasonRare": "{family} 中你没下过的变化",
     "showingOf": "显示 {shown} / {total}",
     "showMore": "再显示 {count} 项",
     "collapse": "折叠"

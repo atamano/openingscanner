@@ -135,7 +135,7 @@
     "descScoped": "Linhas sob {opening} que você jogou pouco.",
     "reasonPlayed": "Jogada {count} vez",
     "reasonPlayedPlural": "Jogada {count} vezes",
-    "reasonRare": "Você raramente explora {family}",
+    "reasonRare": "Variação em {family} que você não jogou",
     "showingOf": "Mostrando {shown} de {total}",
     "showMore": "Mostrar mais {count}",
     "collapse": "Recolher"

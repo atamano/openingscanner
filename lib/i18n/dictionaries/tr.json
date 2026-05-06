@@ -135,7 +135,7 @@
     "descScoped": "{opening} altında az oynadığın hatlar.",
     "reasonPlayed": "{count} kez oynandı",
     "reasonPlayedPlural": "{count} kez oynandı",
-    "reasonRare": "{family} açılışını nadiren keşfediyorsun",
+    "reasonRare": "{family} içinde oynamadığın bir varyant",
     "showingOf": "{total} içinden {shown} gösteriliyor",
     "showMore": "{count} tane daha göster",
     "collapse": "Daralt"

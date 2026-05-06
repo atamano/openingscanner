@@ -135,7 +135,7 @@
     "descScoped": "Лінії під {opening}, які ви граєте мало.",
     "reasonPlayed": "Зіграно {count} раз",
     "reasonPlayedPlural": "Зіграно {count} разів",
-    "reasonRare": "Ви рідко граєте {family}",
+    "reasonRare": "Варіант у {family}, який ви не грали",
     "showingOf": "Показано {shown} із {total}",
     "showMore": "Показати ще {count}",
     "collapse": "Згорнути"

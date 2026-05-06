@@ -135,7 +135,7 @@
     "descScoped": "Линии под {opening}, которые вы играете мало.",
     "reasonPlayed": "Сыграно {count} раз",
     "reasonPlayedPlural": "Сыграно {count} раз",
-    "reasonRare": "Вы редко играете {family}",
+    "reasonRare": "Вариант в {family}, который вы не играли",
     "showingOf": "Показано {shown} из {total}",
     "showMore": "Показать ещё {count}",
     "collapse": "Свернуть"

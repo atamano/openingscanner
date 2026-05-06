@@ -135,7 +135,7 @@
     "descScoped": "Lijnen onder {opening} die je weinig speelt.",
     "reasonPlayed": "{count} keer gespeeld",
     "reasonPlayedPlural": "{count} keer gespeeld",
-    "reasonRare": "Je verkent {family} zelden",
+    "reasonRare": "Variant in {family} die je niet hebt gespeeld",
     "showingOf": "{shown} van {total} getoond",
     "showMore": "{count} meer tonen",
     "collapse": "Inklappen"

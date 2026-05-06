@@ -135,7 +135,7 @@
     "descScoped": "{opening}配下であまり指していないライン。",
     "reasonPlayed": "{count}回指しました",
     "reasonPlayedPlural": "{count}回指しました",
-    "reasonRare": "{family}はあまり指していません",
+    "reasonRare": "{family}の未プレイの変化",
     "showingOf": "{total}件中{shown}件を表示",
     "showMore": "さらに{count}件表示",
     "collapse": "折りたたむ"

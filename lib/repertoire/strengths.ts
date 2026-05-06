@@ -21,7 +21,9 @@ export interface StrongVariation {
 /**
  * Rank the player's own openings by best expected score on a given side.
  * Mirror of computeWeakOpenings — kept parallel so the two widgets evolve
- * together.
+ * together. Openings with expected score ≤ 0.5 are excluded so they only
+ * show up in the weak-spots panel: strong/weak split on break-even, and a
+ * given opening can't appear in both lists.
  */
 export function computeStrongOpenings(
   stats: RepertoireStats,
@@ -36,12 +38,14 @@ export function computeStrongOpenings(
       s.gameCount >= minGames,
   );
 
-  const scored = rows.map((s) => ({
-    stats: s,
-    winPct: s.playerWins / s.gameCount,
-    lossPct: s.playerLosses / s.gameCount,
-    drawPct: s.draws / s.gameCount,
-  }));
+  const scored = rows
+    .map((s) => ({
+      stats: s,
+      winPct: s.playerWins / s.gameCount,
+      lossPct: s.playerLosses / s.gameCount,
+      drawPct: s.draws / s.gameCount,
+    }))
+    .filter((s) => s.winPct + 0.5 * s.drawPct > 0.5);
 
   // Highest expected score first (wins + 0.5·draws). Break ties with sample
   // size (more games = more reliable signal) and then higher win-rate.

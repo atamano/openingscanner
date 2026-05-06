@@ -20,7 +20,9 @@ export interface WeakVariation {
 
 /**
  * Rank the player's own openings by poorest score on a given side.
- * Only openings with enough games to be meaningful are considered.
+ * Only openings with enough games to be meaningful are considered. Openings
+ * with expected score ≥ 0.5 are excluded so a given opening can only show up
+ * in one of the two panels (strong vs weak split on break-even).
  */
 export function computeWeakOpenings(
   stats: RepertoireStats,
@@ -35,12 +37,14 @@ export function computeWeakOpenings(
       s.gameCount >= minGames,
   );
 
-  const scored = rows.map((s) => ({
-    stats: s,
-    winPct: s.playerWins / s.gameCount,
-    lossPct: s.playerLosses / s.gameCount,
-    drawPct: s.draws / s.gameCount,
-  }));
+  const scored = rows
+    .map((s) => ({
+      stats: s,
+      winPct: s.playerWins / s.gameCount,
+      lossPct: s.playerLosses / s.gameCount,
+      drawPct: s.draws / s.gameCount,
+    }))
+    .filter((s) => s.winPct + 0.5 * s.drawPct < 0.5);
 
   // Lowest expected score first (wins + 0.5·draws). Break ties with sample
   // size (more games = more reliable signal) and then higher loss-rate.
@@ -100,9 +104,6 @@ export function computeWeakVariations(
   // Keep the deepest branch per move-prefix: if a parent AND its child both
   // qualify, the child better isolates where the player actually falls apart.
   // (Parent's win-rate is a weighted average that includes the child.)
-  const byPrefix = new Map<string, WeakVariation>();
-  const key = (p: string[]) => p.join(" ");
-  for (const v of out) byPrefix.set(key(v.path), v);
   const kept: WeakVariation[] = [];
   for (const v of out) {
     let dominated = false;

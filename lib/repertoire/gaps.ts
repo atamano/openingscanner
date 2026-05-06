@@ -23,14 +23,19 @@ export interface GapOptions {
 const FAMILIAR_THRESHOLD = 5;
 
 /**
- * Recommend curated openings the player barely explores on the given side.
+ * Recommend curated openings that fit what the player already plays.
  *
- * The curated catalog and the ECO catalog have incompatible taxonomies
- * (curated family "vs 1.e4" vs ECO family "Italian Game"/"Ruy Lopez"/…), so
- * we can't compare by name or family. The only vocabulary both sides share
- * is the move sequence: every classified opening's `entry.moves` starts from
- * move 1, and every curated entry is defined as a move prefix. So: a curated
- * entry is "covered" iff any played opening's moves start with its prefix.
+ * The previous version surfaced popular openings the player had never touched
+ * — which produced suggestions from totally different repertoires (e.g.
+ * recommending the London System to a 1.e4 player). The fix: require move
+ * overlap with games the player has actually played. As White that means the
+ * recommendation must share at least the first move; as Black it must share
+ * white's first move *and* the player's response, since "the player faced
+ * 1.e4" alone isn't a repertoire choice — picking 1…c5 vs 1…e5 is.
+ *
+ * Among entries that pass the overlap gate we rank by a blend of curated
+ * popularity and how deep the overlap goes — deeper matches are stronger
+ * signals that the recommendation extends a line the player commits to.
  */
 export function computeGaps(
   stats: RepertoireStats,
@@ -54,6 +59,10 @@ export function computeGaps(
 
   const scope = options.scopePrefix;
   const scopeLen = scope?.length ?? 0;
+  // Black entries are anchored at white's first move, so a 1-ply match means
+  // only "the player has faced this opening" — not "the player chose this
+  // defence". Require both halves of the first exchange to overlap.
+  const minMatch = color === "white" ? 1 : 2;
 
   const scored = CATALOG.filter((e) => {
     if (e.color !== color) return false;
@@ -62,14 +71,19 @@ export function computeGaps(
     return true;
   })
     .map((entry) => {
+      const match = longestPrefixMatch(entry.moves, prefixCount);
       const familiar = prefixCount.get(entry.moves.join(" ")) ?? 0;
-      return { entry, familiar };
+      return { entry, match, familiar };
     })
-    .filter(({ familiar }) => familiar < FAMILIAR_THRESHOLD)
-    .map(({ entry, familiar }) => {
-      const penalty = familiar > 0 ? familiar * 2 : -15;
-      return { entry, familiar, score: entry.popularity - penalty };
+    .filter(({ match, familiar }) => {
+      if (match < minMatch) return false;
+      if (familiar >= FAMILIAR_THRESHOLD) return false;
+      return true;
     })
+    .map((row) => ({
+      ...row,
+      score: row.entry.popularity + row.match * 5 - row.familiar * 3,
+    }))
     .sort((a, b) => b.score - a.score)
     .slice(0, limit);
 
@@ -80,6 +94,19 @@ export function computeGaps(
         ? ({ kind: "played", count: familiar } as const)
         : ({ kind: "rare", family: entry.family } as const),
   }));
+}
+
+function longestPrefixMatch(
+  moves: readonly string[],
+  prefixCount: Map<string, number>,
+): number {
+  let depth = 0;
+  for (let i = 1; i <= moves.length; i++) {
+    const key = moves.slice(0, i).join(" ");
+    if ((prefixCount.get(key) ?? 0) > 0) depth = i;
+    else break;
+  }
+  return depth;
 }
 
 function startsWith(moves: readonly string[], prefix: readonly string[]): boolean {

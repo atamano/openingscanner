@@ -137,7 +137,7 @@
     "descScoped": "Lines under {opening} you haven't played much.",
     "reasonPlayed": "You've played this {count} time",
     "reasonPlayedPlural": "You've played this {count} times",
-    "reasonRare": "You rarely explore {family}",
+    "reasonRare": "Variation in {family} you haven't played",
     "showingOf": "Showing {shown} of {total}",
     "showMore": "Show {count} more",
     "collapse": "Collapse"
