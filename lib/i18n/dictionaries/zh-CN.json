@@ -189,5 +189,9 @@
     "noGamesMatched": "没有对局匹配筛选条件。",
     "widenTryHint": "尝试放宽时段、关闭“仅限有等级分的对局”或切换平台。"
   },
+  "heatmap": {
+    "label": "热力图",
+    "tooltip": "在每个方格上显示下一步着法的出现频率"
+  },
   "loading": "加载中…"
 }

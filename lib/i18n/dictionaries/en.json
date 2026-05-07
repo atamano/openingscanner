@@ -191,5 +191,9 @@
     "noGamesMatched": "No games matched the filters.",
     "widenTryHint": "Try widening the time-window, toggling rated-only off, or switching platform."
   },
+  "heatmap": {
+    "label": "Heatmap",
+    "tooltip": "Overlay next-move frequency on each square"
+  },
   "loading": "Loading…"
 }

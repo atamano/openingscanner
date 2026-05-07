@@ -189,5 +189,9 @@
     "noGamesMatched": "Geen partijen passen bij de filters.",
     "widenTryHint": "Probeer de periode te verruimen, \"alleen met rating\" uit te zetten of van platform te wisselen."
   },
+  "heatmap": {
+    "label": "Heatmap",
+    "tooltip": "Toon de frequentie van de volgende zet per veld"
+  },
   "loading": "Laden…"
 }

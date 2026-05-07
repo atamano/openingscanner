@@ -189,5 +189,9 @@
     "noGamesMatched": "Keine Partien entsprechen den Filtern.",
     "widenTryHint": "Versuche den Zeitraum zu erweitern, „nur gewertet“ zu deaktivieren oder die Plattform zu wechseln."
   },
+  "heatmap": {
+    "label": "Heatmap",
+    "tooltip": "Häufigkeit des nächsten Zugs auf jedem Feld einblenden"
+  },
   "loading": "Lädt…"
 }
