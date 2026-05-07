@@ -4,6 +4,7 @@ import Script from "next/script";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { notFound } from "next/navigation";
 import { Toaster } from "sonner";
+import { ThemeProvider } from "@/components/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { I18nProvider } from "@/lib/i18n/context";
 import {
@@ -42,7 +43,10 @@ export function generateStaticParams() {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#f5f0e6",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f5f0e6" },
+    { media: "(prefers-color-scheme: dark)", color: "#110b07" },
+  ],
 };
 
 export async function generateMetadata({
@@ -152,6 +156,7 @@ export default async function LocaleLayout({
       dir={info.dir}
       data-scroll-behavior="smooth"
       className={`${dmSans.variable} ${ibmPlexMono.variable} ${fraunces.variable}`}
+      suppressHydrationWarning
     >
       <body className="antialiased bg-background text-foreground">
         {/* beforeInteractive renders the tag in the SSR HTML so crawlers that
@@ -163,12 +168,14 @@ export default async function LocaleLayout({
         >
           {jsonLdString}
         </Script>
-        <I18nProvider locale={locale} dict={dict}>
-          <TooltipProvider delayDuration={200}>
-            <NuqsAdapter>{children}</NuqsAdapter>
-          </TooltipProvider>
-          <Toaster richColors closeButton position="bottom-right" />
-        </I18nProvider>
+        <ThemeProvider>
+          <I18nProvider locale={locale} dict={dict}>
+            <TooltipProvider delayDuration={200}>
+              <NuqsAdapter>{children}</NuqsAdapter>
+            </TooltipProvider>
+            <Toaster richColors closeButton position="bottom-right" />
+          </I18nProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -3,6 +3,7 @@
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { LocaleSwitcher } from "@/components/layout/locale-switcher";
+import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { useDictionary, useLocale } from "@/lib/i18n/context";
 
 interface HeaderProps {
@@ -74,6 +75,7 @@ export function Header({ onNewScan, subtitle }: HeaderProps) {
           </svg>
         </a>
 
+        <ThemeToggle />
         <LocaleSwitcher />
       </div>
     </header>

@@ -101,14 +101,27 @@ export function SpotsPanel({
   const [visible, setVisible] = useState(PAGE_SIZE);
   useEffect(() => setVisible(PAGE_SIZE), [selected, color, stats]);
 
+  // Coverage = how many of the player's games-on-this-color are accounted for
+  // by the ranked openings. Anything filtered out (low sample, neutral score,
+  // uncategorized) is invisible to the user otherwise — this reassures them
+  // the panel hasn't dropped half their games silently.
+  const coveredGames = useMemo(
+    () =>
+      selected
+        ? 0
+        : openings.reduce((acc, o) => acc + o.stats.gameCount, 0),
+    [selected, openings],
+  );
+  const colorTotal = stats.colorBreakdown[color] ?? 0;
+
   if (rowCount === 0) return null;
 
   const shown = selected
     ? variations.slice(0, visible)
     : openings.slice(0, visible);
   const remaining = rowCount - shown.length;
-  const colorLabel =
-    color === "white" ? dict.form.colorWhite : dict.form.colorBlack;
+  const descGlobal =
+    color === "white" ? copy.descGlobalWhite : copy.descGlobalBlack;
 
   return (
     <Card>
@@ -116,16 +129,22 @@ export function SpotsPanel({
         <Icon className={`size-4 ${iconClassName}`} />
         <div>
           <CardTitle>
-            {selected ? copy.titleScoped : copy.titleGlobal}
+            {selected && selected.entry
+              ? copy.titleScoped.replace("{opening}", selected.entry.name)
+              : copy.titleGlobal}
           </CardTitle>
           <CardDescription>
             {selected && selected.entry
               ? copy.descScoped.replace("{opening}", selected.entry.name)
-              : copy.descGlobal.replace(
-                  "{color}",
-                  colorLabel.toLowerCase(),
-                )}
+              : descGlobal}
           </CardDescription>
+          {!selected && colorTotal > 0 ? (
+            <div className="mt-1 text-[11px] text-muted-foreground/80">
+              {copy.coverageHint
+                .replace("{covered}", String(coveredGames))
+                .replace("{total}", String(colorTotal))}
+            </div>
+          ) : null}
         </div>
       </CardHeader>
       <CardContent className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -144,7 +163,7 @@ export function SpotsPanel({
                     {v.count}g
                   </Badge>
                   <span className={`text-xs tabular-nums ${statClassName}`}>
-                    {formatPct(v.winPct, 0)}W · {formatPct(v.lossPct, 0)}L
+                    {formatPct(v.winPct, 1)}W · {formatPct(v.lossPct, 1)}L
                   </span>
                 </div>
                 <div className="font-medium">
@@ -171,7 +190,7 @@ export function SpotsPanel({
                     </Badge>
                   ) : null}
                   <span className={`text-xs tabular-nums ${statClassName}`}>
-                    {formatPct(w.winPct, 0)}W · {formatPct(w.lossPct, 0)}L
+                    {formatPct(w.winPct, 1)}W · {formatPct(w.lossPct, 1)}L
                   </span>
                 </div>
                 <div className="line-clamp-1 font-medium">

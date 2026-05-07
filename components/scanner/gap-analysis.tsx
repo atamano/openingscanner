@@ -44,7 +44,8 @@ export function GapAnalysis({
   const shown = gaps.slice(0, visible);
   const remaining = gaps.length - shown.length;
   const scoped = Boolean(scopePrefix && scopePrefix.length > 0);
-  const colorLabel = color === "white" ? dict.form.colorWhite : dict.form.colorBlack;
+  const descGlobal =
+    color === "white" ? dict.gaps.descGlobalWhite : dict.gaps.descGlobalBlack;
 
   return (
     <Card>
@@ -52,12 +53,14 @@ export function GapAnalysis({
         <Lightbulb className="size-4 text-primary" />
         <div>
           <CardTitle>
-            {scoped ? dict.gaps.titleScoped : dict.gaps.titleGlobal}
+            {scoped && scopeLabel
+              ? dict.gaps.titleScoped.replace("{opening}", scopeLabel)
+              : dict.gaps.titleGlobal}
           </CardTitle>
           <CardDescription>
             {scoped && scopeLabel
               ? dict.gaps.descScoped.replace("{opening}", scopeLabel)
-              : dict.gaps.descGlobal.replace("{color}", colorLabel.toLowerCase())}
+              : descGlobal}
           </CardDescription>
         </div>
       </CardHeader>
