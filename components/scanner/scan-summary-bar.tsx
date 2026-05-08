@@ -3,7 +3,7 @@
 import { ChevronDown, Pencil, RotateCcw, UserCircle, X } from "lucide-react";
 import { useDictionary } from "@/lib/i18n/context";
 import type { RepertoireStats } from "@/lib/repertoire/aggregate";
-import type { ScanProgressEvent } from "@/lib/sources/types";
+import type { ScanProgressEvent, ScanSource } from "@/lib/sources/types";
 import { useDashboardFilters } from "@/lib/state/dashboard-filters";
 import { cn, formatNumber } from "@/lib/utils";
 
@@ -11,8 +11,7 @@ interface ScanSummaryBarProps {
   running: boolean;
   progress: ScanProgressEvent | null;
   stats: RepertoireStats | null;
-  username: string;
-  platform: string;
+  sources: ScanSource[];
   color: string;
   timeClasses: string[];
   window: string;
@@ -31,8 +30,7 @@ export function ScanSummaryBar({
   running,
   progress,
   stats,
-  username,
-  platform,
+  sources,
   color,
   timeClasses,
   window,
@@ -108,11 +106,25 @@ export function ScanSummaryBar({
             <UserCircle className="h-4 w-4" />
           </div>
           <div className="min-w-0">
-            <div className="flex items-center gap-2 truncate text-sm font-semibold leading-tight">
-              <span className="truncate font-mono">{username || "—"}</span>
-              <span className="hidden sm:inline-flex shrink-0 rounded-full border border-border px-2 py-0.5 text-[10px] font-medium uppercase tracking-widest text-ink-light">
-                {PLATFORM_LABEL[platform] ?? platform}
-              </span>
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm font-semibold leading-tight">
+              {sources.length === 0 ? (
+                <span className="truncate font-mono">—</span>
+              ) : (
+                sources.map((src, i) => (
+                  <span
+                    key={`${src.platform}:${src.username}`}
+                    className="inline-flex items-center gap-1.5"
+                  >
+                    {i > 0 ? (
+                      <span className="text-ink-light/60">+</span>
+                    ) : null}
+                    <span className="truncate font-mono">{src.username}</span>
+                    <span className="hidden sm:inline-flex shrink-0 rounded-full border border-border px-2 py-0.5 text-[10px] font-medium uppercase tracking-widest text-ink-light">
+                      {PLATFORM_LABEL[src.platform] ?? src.platform}
+                    </span>
+                  </span>
+                ))
+              )}
             </div>
             <div className="truncate text-xs text-ink-light">
               {colorLabelMap[color] ?? color}

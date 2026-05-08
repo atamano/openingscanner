@@ -30,8 +30,10 @@
     "languageLabel": "言語"
   },
   "form": {
-    "placeholderLichess": "ユーザー名（例：DrNykterstein）",
-    "placeholderChesscom": "ユーザー名（例：Hikaru）",
+    "placeholderLichess": "Lichess のユーザー名",
+    "placeholderChesscom": "Chess.com のユーザー名",
+    "sourcesTitle": "プレイヤー",
+    "sourcesHint": "片方または両方を入力してください。両アカウントが1つのレパートリーに統合されます。",
     "popular": "人気",
     "colorWhite": "白番",
     "colorBlack": "黒番",

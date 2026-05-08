@@ -24,6 +24,8 @@ export interface Dictionary {
   form: {
     placeholderLichess: string;
     placeholderChesscom: string;
+    sourcesTitle: string;
+    sourcesHint: string;
     popular: string;
     colorWhite: string;
     colorBlack: string;

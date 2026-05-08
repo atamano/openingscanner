@@ -30,8 +30,10 @@
     "languageLabel": "Langue"
   },
   "form": {
-    "placeholderLichess": "Pseudo du joueur (ex. DrNykterstein)",
-    "placeholderChesscom": "Pseudo du joueur (ex. Hikaru)",
+    "placeholderLichess": "Pseudo Lichess",
+    "placeholderChesscom": "Pseudo Chess.com",
+    "sourcesTitle": "Joueurs",
+    "sourcesHint": "Renseigne un ou les deux. Les comptes seront fusionnés en un seul répertoire.",
     "popular": "Populaire",
     "colorWhite": "Avec les blancs",
     "colorBlack": "Avec les noirs",

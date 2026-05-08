@@ -40,9 +40,14 @@ export interface ScanFilters {
   maxGames?: number;
 }
 
-export interface ScanParams {
+export interface ScanSource {
   platform: Platform;
   username: string;
+}
+
+export interface ScanParams {
+  /** One source per platform. Empty array is invalid. */
+  sources: ScanSource[];
   filters: ScanFilters;
 }
 

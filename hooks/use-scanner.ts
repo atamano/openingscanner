@@ -3,7 +3,11 @@
 import * as Comlink from "comlink";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { RepertoireStats } from "@/lib/repertoire/aggregate";
-import type { ScanParams, ScanProgressEvent } from "@/lib/sources/types";
+import type {
+  ScanParams,
+  ScanProgressEvent,
+  ScanSource,
+} from "@/lib/sources/types";
 import {
   clearLastScan,
   loadLastScan,
@@ -19,6 +23,10 @@ export function useScanner() {
   const [stats, setStats] = useState<RepertoireStats | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [maxGames, setMaxGames] = useState<number | undefined>(undefined);
+  /** Sources actually submitted to the worker — separate from the live form
+   *  state so the summary bar reflects what was scanned, not what the URL
+   *  query string currently holds (the user can edit it post-scan). */
+  const [submittedSources, setSubmittedSources] = useState<ScanSource[]>([]);
   const [restored, setRestored] = useState(false);
   const workerRef = useRef<Worker | null>(null);
   const apiRef = useRef<Comlink.Remote<ScannerAPI> | null>(null);
@@ -57,6 +65,7 @@ export function useScanner() {
       if (saved && statusRef.current === "idle") {
         setStats(saved.stats);
         setMaxGames(saved.params.filters.maxGames);
+        setSubmittedSources(saved.params.sources);
         setStatus("done");
       }
       setRestored(true);
@@ -74,6 +83,7 @@ export function useScanner() {
     setStats(null);
     setError(null);
     setMaxGames(params.filters.maxGames);
+    setSubmittedSources(params.sources);
 
     const progressProxy = Comlink.proxy((p: ScanProgressEvent) => {
       if (scanIdRef.current !== myId) return;
@@ -123,6 +133,7 @@ export function useScanner() {
     setProgress(null);
     setStats(null);
     setError(null);
+    setSubmittedSources([]);
     void clearLastScan();
   }, []);
 
@@ -132,6 +143,7 @@ export function useScanner() {
     stats,
     error,
     maxGames,
+    submittedSources,
     restored,
     scan,
     abort,

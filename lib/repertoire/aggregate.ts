@@ -7,7 +7,9 @@ import { resolvePlayerColor } from "@/lib/catalog/classify";
 import type {
   GameSummary,
   PartialOpeningSnapshot,
+  Platform,
   PlayerColor,
+  ScanSource,
 } from "@/lib/sources/types";
 
 export interface MoveNode {
@@ -47,6 +49,7 @@ export interface OpeningStats {
 export interface RepertoireStats {
   totalGames: number;
   totalClassified: number;
+  /** Display label for the player(s) — single source uses the bare handle, multi-source joins them with "+". */
   username: string;
   colorBreakdown: { white: number; black: number };
   byOpening: Record<string, OpeningStats>;
@@ -57,9 +60,9 @@ export interface RepertoireStats {
 }
 
 export function createRepertoireAccumulator(
-  username: string,
+  sources: ScanSource[],
 ): RepertoireAccumulator {
-  return new RepertoireAccumulator(username);
+  return new RepertoireAccumulator(sources);
 }
 
 type StatsWithRatedCount = OpeningStats & { _ratedCount?: number };
@@ -69,18 +72,28 @@ export class RepertoireAccumulator {
   public totalClassified = 0;
   public byOpening: Record<string, OpeningStats> = {};
   public colorBreakdown = { white: 0, black: 0 };
+  public readonly username: string;
   private globalTreeByColor = {
     white: emptyNode(""),
     black: emptyNode(""),
   };
+  private usernameByPlatform: Partial<Record<Platform, string>>;
 
-  constructor(public readonly username: string) {}
+  constructor(sources: ScanSource[]) {
+    this.usernameByPlatform = {};
+    for (const src of sources) {
+      this.usernameByPlatform[src.platform] = src.username;
+    }
+    this.username = sources.map((s) => s.username).join("+");
+  }
 
   add(game: GameSummary): void {
+    const playerName = this.usernameByPlatform[game.platform];
+    if (!playerName) return;
     const playerColor = resolvePlayerColor(
       game.white.name,
       game.black.name,
-      this.username,
+      playerName,
     );
     if (!playerColor) return;
 

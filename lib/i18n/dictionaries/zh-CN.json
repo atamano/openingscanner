@@ -30,8 +30,10 @@
     "languageLabel": "语言"
   },
   "form": {
-    "placeholderLichess": "棋手用户名(如 DrNykterstein)",
-    "placeholderChesscom": "棋手用户名(如 Hikaru)",
+    "placeholderLichess": "Lichess 用户名",
+    "placeholderChesscom": "Chess.com 用户名",
+    "sourcesTitle": "玩家",
+    "sourcesHint": "填写其中一个或两个。两个账号会合并为一份开局库。",
     "popular": "热门",
     "colorWhite": "执白",
     "colorBlack": "执黑",

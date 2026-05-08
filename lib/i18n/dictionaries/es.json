@@ -30,8 +30,10 @@
     "languageLabel": "Idioma"
   },
   "form": {
-    "placeholderLichess": "Usuario del jugador (ej. DrNykterstein)",
-    "placeholderChesscom": "Usuario del jugador (ej. Hikaru)",
+    "placeholderLichess": "Usuario de Lichess",
+    "placeholderChesscom": "Usuario de Chess.com",
+    "sourcesTitle": "Jugadores",
+    "sourcesHint": "Rellena uno o los dos. Las cuentas se combinarán en un único repertorio.",
     "popular": "Populares",
     "colorWhite": "Con blancas",
     "colorBlack": "Con negras",

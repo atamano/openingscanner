@@ -30,8 +30,10 @@
     "languageLabel": "Taal"
   },
   "form": {
-    "placeholderLichess": "Gebruikersnaam (bijv. DrNykterstein)",
-    "placeholderChesscom": "Gebruikersnaam (bijv. Hikaru)",
+    "placeholderLichess": "Lichess-gebruikersnaam",
+    "placeholderChesscom": "Chess.com-gebruikersnaam",
+    "sourcesTitle": "Spelers",
+    "sourcesHint": "Vul één of beide in. Accounts worden samengevoegd tot één repertoire.",
     "popular": "Populair",
     "colorWhite": "Met wit",
     "colorBlack": "Met zwart",

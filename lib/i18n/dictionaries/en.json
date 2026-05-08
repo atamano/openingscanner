@@ -32,8 +32,10 @@
     "languageLabel": "Language"
   },
   "form": {
-    "placeholderLichess": "Player username (e.g. DrNykterstein)",
-    "placeholderChesscom": "Player username (e.g. Hikaru)",
+    "placeholderLichess": "Lichess username",
+    "placeholderChesscom": "Chess.com username",
+    "sourcesTitle": "Players",
+    "sourcesHint": "Fill one or both. Accounts will be merged into a single repertoire.",
     "popular": "Popular",
     "colorWhite": "As white",
     "colorBlack": "As black",

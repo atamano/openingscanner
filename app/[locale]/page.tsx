@@ -14,7 +14,6 @@ import { useDictionary } from "@/lib/i18n/context";
 import { DashboardFiltersProvider } from "@/lib/state/dashboard-filters";
 import {
   DATE_PRESETS,
-  PLATFORMS,
   SCAN_COLORS,
   TIME_CLASSES,
 } from "@/lib/scan/params";
@@ -30,14 +29,18 @@ export default function HomePage() {
 
 function HomeInner() {
   const dict = useDictionary();
-  const { status, progress, stats, error, maxGames, scan, abort, reset } =
-    useScanner();
+  const {
+    status,
+    progress,
+    stats,
+    error,
+    maxGames,
+    submittedSources,
+    scan,
+    abort,
+    reset,
+  } = useScanner();
 
-  const [username] = useQueryState("u", parseAsString.withDefault(""));
-  const [platform] = useQueryState(
-    "p",
-    parseAsStringLiteral(PLATFORMS).withDefault("chesscom"),
-  );
   const [color] = useQueryState(
     "c",
     parseAsStringLiteral(SCAN_COLORS).withDefault("both"),
@@ -92,8 +95,7 @@ function HomeInner() {
               running={status === "running"}
               progress={progress}
               stats={stats}
-              username={username}
-              platform={platform}
+              sources={submittedSources}
               color={color}
               timeClasses={timeClasses}
               window={datePreset}

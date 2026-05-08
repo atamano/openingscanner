@@ -30,8 +30,10 @@
     "languageLabel": "Dil"
   },
   "form": {
-    "placeholderLichess": "Oyuncu kullanıcı adı (örn. DrNykterstein)",
-    "placeholderChesscom": "Oyuncu kullanıcı adı (örn. Hikaru)",
+    "placeholderLichess": "Lichess kullanıcı adı",
+    "placeholderChesscom": "Chess.com kullanıcı adı",
+    "sourcesTitle": "Oyuncular",
+    "sourcesHint": "Birini veya ikisini de doldur. Hesaplar tek bir repertuarda birleştirilecek.",
     "popular": "Popüler",
     "colorWhite": "Beyazlarla",
     "colorBlack": "Siyahlarla",

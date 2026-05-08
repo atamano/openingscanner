@@ -30,8 +30,10 @@
     "languageLabel": "Язык"
   },
   "form": {
-    "placeholderLichess": "Ник игрока (напр. DrNykterstein)",
-    "placeholderChesscom": "Ник игрока (напр. Hikaru)",
+    "placeholderLichess": "Имя пользователя Lichess",
+    "placeholderChesscom": "Имя пользователя Chess.com",
+    "sourcesTitle": "Игроки",
+    "sourcesHint": "Заполните один или оба. Аккаунты будут объединены в один репертуар.",
     "popular": "Популярные",
     "colorWhite": "За белых",
     "colorBlack": "За чёрных",

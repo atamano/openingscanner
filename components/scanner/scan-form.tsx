@@ -12,39 +12,42 @@ import { useDictionary } from "@/lib/i18n/context";
 import {
   DATE_PRESETS,
   LIMIT_PRESETS,
-  PLATFORMS,
   SCAN_COLORS,
   TIME_CLASSES,
   limitPresetToCount,
   type DatePreset,
   type LimitPreset,
 } from "@/lib/scan/params";
-import type { Platform, ScanParams, TimeClass } from "@/lib/sources/types";
+import type {
+  ScanParams,
+  ScanSource,
+  TimeClass,
+} from "@/lib/sources/types";
 import { ChipButton } from "./chip-button";
 
 const TIME_VALUES = ["bullet", "blitz", "rapid", "classical"] as const;
 const DATE_VALUES = DATE_PRESETS;
 const LIMIT_VALUES = LIMIT_PRESETS;
 
-// Curated list of handles that actually post games regularly (super-GMs and
-// active streamers). Lichess in particular — avoid accounts that are mostly
-// dormant (e.g. alireza2003 plays very few games there).
-const POPULAR_PLAYERS: Record<Platform, { handle: string; label: string }[]> = {
-  lichess: [
-    { handle: "DrNykterstein", label: "Magnus" },
-    { handle: "penguingm1", label: "Hikaru" },
-    { handle: "Zhigalko_Sergei", label: "Zhigalko" },
-    { handle: "Konevlad", label: "Kovalev" },
-    { handle: "EricRosen", label: "Eric Rosen" },
-  ],
-  chesscom: [
-    { handle: "Hikaru", label: "Hikaru" },
-    { handle: "MagnusCarlsen", label: "Magnus" },
-    { handle: "FabianoCaruana", label: "Caruana" },
-    { handle: "GothamChess", label: "Levy" },
-    { handle: "AnnaCramling", label: "Anna" },
-  ],
-};
+// One pill per player, mapping to whichever handles exist on each platform.
+// Clicking the pill sets both inputs at once (and clears the platform that
+// the player doesn't use, so switching pills isn't sticky). Curated for
+// players who actually post games regularly.
+interface PopularPlayer {
+  label: string;
+  chesscom?: string;
+  lichess?: string;
+}
+const POPULAR_PLAYERS: PopularPlayer[] = [
+  { label: "Hikaru", chesscom: "Hikaru" },
+  { label: "Magnus", chesscom: "MagnusCarlsen", lichess: "DrNykterstein" },
+  { label: "Caruana", chesscom: "FabianoCaruana" },
+  { label: "Levy", chesscom: "GothamChess" },
+  { label: "Anna", chesscom: "AnnaCramling" },
+  { label: "Eric Rosen", lichess: "EricRosen" },
+  { label: "Zhigalko", lichess: "Zhigalko_Sergei" },
+  { label: "Kovalev", lichess: "Konevlad" },
+];
 
 interface ScanFormProps {
   onSubmit: (params: ScanParams) => void;
@@ -55,13 +58,13 @@ interface ScanFormProps {
 export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
   const dict = useDictionary();
 
-  const [username, setUsername] = useQueryState(
-    "u",
+  const [chesscomUser, setChesscomUser] = useQueryState(
+    "u_cc",
     parseAsString.withDefault(""),
   );
-  const [platform, setPlatform] = useQueryState(
-    "p",
-    parseAsStringLiteral(PLATFORMS).withDefault("chesscom"),
+  const [lichessUser, setLichessUser] = useQueryState(
+    "u_li",
+    parseAsString.withDefault(""),
   );
   const [color, setColor] = useQueryState(
     "c",
@@ -94,7 +97,15 @@ export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
     [times],
   );
 
-  const canSubmit = username.trim().length > 0 && !running;
+  const sources: ScanSource[] = [];
+  if (chesscomUser.trim().length > 0) {
+    sources.push({ platform: "chesscom", username: chesscomUser.trim() });
+  }
+  if (lichessUser.trim().length > 0) {
+    sources.push({ platform: "lichess", username: lichessUser.trim() });
+  }
+
+  const canSubmit = sources.length > 0 && !running;
 
   const timeLabels: Record<(typeof TIME_VALUES)[number], string> = {
     bullet: dict.form.timeBullet,
@@ -128,8 +139,7 @@ export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
     if (!canSubmit) return;
     const since = datePresetToSince(datePreset);
     onSubmit({
-      platform,
-      username: username.trim(),
+      sources,
       filters: {
         color,
         ratedOnly: rated,
@@ -155,63 +165,55 @@ export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
         submit();
       }}
     >
-      {/* Platform selector */}
-      <div className="grid grid-cols-2 gap-2">
-        {(
-          [
-            { value: "chesscom" as const, label: "Chess.com", icon: "\u2658" },
-            { value: "lichess" as const, label: "Lichess", icon: "\u265E" },
-          ]
-        ).map(({ value, label, icon }) => (
-          <ChipButton
-            key={value}
-            active={platform === value}
-            onClick={() => {
-              setPlatform(value);
-              if (value !== platform) setUsername("");
-            }}
-            disabled={running}
-            className="h-10 rounded-lg text-sm font-medium border"
-            activeClassName="bg-amber/12 border-amber/40 text-amber-dark shadow-sm"
-          >
-            <span className="mr-1.5">{icon}</span>
-            {label}
-          </ChipButton>
-        ))}
-      </div>
-
-      {/* Username input */}
+      {/* Players: one row per platform. Both optional, at least one required. */}
       <div className="space-y-2">
-        <div className="relative">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-ink-light/40" />
-          <input
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder={
-              platform === "lichess"
-                ? dict.form.placeholderLichess
-                : dict.form.placeholderChesscom
-            }
-            autoComplete="off"
-            spellCheck={false}
-            disabled={running}
-            className="w-full h-12 pl-10 pr-4 rounded-lg border border-border bg-paper-dark text-base font-mono text-foreground placeholder:text-ink-light/40 focus:border-amber focus:ring-2 focus:ring-amber/20 outline-none transition-all"
-          />
-        </div>
-        <div className="flex flex-wrap items-center gap-1.5">
+        <div className="flex items-baseline justify-between gap-2">
           <span className="text-[11px] uppercase tracking-widest text-ink-light font-semibold">
+            {dict.form.sourcesTitle}
+          </span>
+          <span className="text-[11px] text-ink-light/70">
+            {dict.form.sourcesHint}
+          </span>
+        </div>
+        <SourceRow
+          label="Chess.com"
+          icon="♘"
+          value={chesscomUser}
+          onChange={setChesscomUser}
+          placeholder={dict.form.placeholderChesscom}
+          disabled={running}
+        />
+        <SourceRow
+          label="Lichess"
+          icon="♞"
+          value={lichessUser}
+          onChange={setLichessUser}
+          placeholder={dict.form.placeholderLichess}
+          disabled={running}
+        />
+        <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+          <span className="text-[10px] uppercase tracking-widest text-ink-light/70 font-semibold">
             {dict.form.popular}
           </span>
-          {POPULAR_PLAYERS[platform].map((p) => {
+          {POPULAR_PLAYERS.map((p) => {
+            const ccMatch = (p.chesscom ?? "").toLowerCase();
+            const liMatch = (p.lichess ?? "").toLowerCase();
+            const ccCurrent = chesscomUser.trim().toLowerCase();
+            const liCurrent = lichessUser.trim().toLowerCase();
             const active =
-              username.trim().toLowerCase() === p.handle.toLowerCase();
+              ccCurrent === ccMatch && liCurrent === liMatch;
             return (
               <ChipButton
-                key={p.handle}
+                key={p.label}
                 active={active}
-                onClick={() => setUsername(p.handle)}
+                onClick={() => {
+                  setChesscomUser(p.chesscom ?? "");
+                  setLichessUser(p.lichess ?? "");
+                }}
                 disabled={running}
-                title={p.handle}
+                title={[p.chesscom && `${p.chesscom} on Chess.com`, p.lichess && `${p.lichess} on Lichess`]
+                  .filter(Boolean)
+                  .join(" · ")}
                 className="h-7 px-2.5 rounded-full text-xs font-medium border"
               >
                 {p.label}
@@ -234,7 +236,7 @@ export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
               activeClassName="text-amber-dark"
               inactiveClassName="text-ink-light hover:text-foreground hover:bg-paper-dark"
             >
-              {c === "white" ? "\u25CB " : c === "black" ? "\u25CF " : ""}
+              {c === "white" ? "○ " : c === "black" ? "● " : ""}
               {colorLabel(c)}
             </ChipButton>
           ))}
@@ -340,6 +342,45 @@ export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
         {dict.form.ratedOnly}
       </label>
     </form>
+  );
+}
+
+interface SourceRowProps {
+  label: string;
+  icon: string;
+  value: string;
+  onChange: (next: string) => void;
+  placeholder: string;
+  disabled: boolean;
+}
+
+function SourceRow({
+  label,
+  icon,
+  value,
+  onChange,
+  placeholder,
+  disabled,
+}: SourceRowProps) {
+  return (
+    <div className="flex items-stretch gap-2">
+      <span className="inline-flex h-12 w-24 shrink-0 items-center justify-center gap-1.5 rounded-lg border border-border bg-paper-dark px-2.5 text-xs font-semibold text-ink-light">
+        <span>{icon}</span>
+        <span>{label}</span>
+      </span>
+      <div className="relative flex-1">
+        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-ink-light/40" />
+        <input
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={placeholder}
+          autoComplete="off"
+          spellCheck={false}
+          disabled={disabled}
+          className="w-full h-12 pl-10 pr-4 rounded-lg border border-border bg-paper-dark text-base font-mono text-foreground placeholder:text-ink-light/40 focus:border-amber focus:ring-2 focus:ring-amber/20 outline-none transition-all"
+        />
+      </div>
+    </div>
   );
 }
 

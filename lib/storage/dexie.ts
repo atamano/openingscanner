@@ -6,7 +6,7 @@ import type { ScanParams } from "@/lib/sources/types";
  * Bump when the persisted shape of `SavedScan.stats` (or `params`) changes in
  * a non-backward-compatible way. `loadLastScan` clears rows that don't match.
  */
-const SCHEMA_VERSION = 2;
+const SCHEMA_VERSION = 3;
 
 export interface SavedScan {
   /** Fixed slot — we only keep the most recent scan. */
@@ -31,6 +31,11 @@ class ScannerDB extends Dexie {
     // Rather than trying to migrate stale rows, drop them so the next scan
     // writes the new shape.
     this.version(2)
+      .stores({ scans: "id" })
+      .upgrade((tx) => tx.table("scans").clear());
+    // v3 reshaped ScanParams from { platform, username } to { sources[] }.
+    // Drop stale rows so rehydrate doesn't read fields that no longer exist.
+    this.version(3)
       .stores({ scans: "id" })
       .upgrade((tx) => tx.table("scans").clear());
   }
