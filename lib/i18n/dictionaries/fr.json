@@ -196,5 +196,9 @@
     "noGamesMatched": "Aucune partie ne correspond aux filtres.",
     "widenTryHint": "Essayez d'élargir la période, de désactiver « parties classées uniquement » ou de changer de plateforme."
   },
+  "heatmap": {
+    "label": "Carte de chaleur",
+    "tooltip": "Afficher la fréquence du prochain coup sur chaque case"
+  },
   "loading": "Chargement…"
 }

@@ -3,6 +3,7 @@
 import { GitBranch, Info, MousePointerClick } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ChessBoard } from "@/components/chess/chess-board";
+import { HeatmapToggle } from "@/components/chess/heatmap-toggle";
 import { ContinuationsPanel } from "@/components/scanner/continuations-panel";
 import { ExportMenu } from "@/components/scanner/export-menu";
 import { GapAnalysis } from "@/components/scanner/gap-analysis";
@@ -13,6 +14,8 @@ import {
   ToggleGroup,
   ToggleGroupItem,
 } from "@/components/ui/toggle-group";
+import { useEcoLookup } from "@/hooks/use-eco-lookup";
+import { buildHeatmap, type HeatmapCell } from "@/lib/heatmap/heatmap";
 import {
   buildGlobalTree,
   type MoveNode,
@@ -38,6 +41,8 @@ export function Dashboard({ stats }: DashboardProps) {
   }, [stats.colorBreakdown]);
 
   const [color, setColor] = useState<PlayerColor>(availableColors[0] ?? "white");
+  const [heatmapEnabled, setHeatmapEnabled] = useState(false);
+  const ecoLookup = useEcoLookup(heatmapEnabled);
   const {
     selectedId,
     path,
@@ -66,8 +71,15 @@ export function Dashboard({ stats }: DashboardProps) {
   }, [color, clearOpening]);
 
   const selected = selectedId ? stats.byOpening[selectedId] : null;
-  const baseMoves = selected?.entry?.moves ?? [];
-  const boardMoves = previewMoves ?? [...baseMoves, ...path];
+  const selectedMoves = selected?.entry?.moves;
+  const baseMoves = useMemo<readonly string[]>(
+    () => selectedMoves ?? [],
+    [selectedMoves],
+  );
+  const boardMoves = useMemo(
+    () => previewMoves ?? [...baseMoves, ...path],
+    [previewMoves, baseMoves, path],
+  );
 
   // When a new opening is picked we normally reset the drill path. The
   // "jump to variation" flow (ref provided by the filters context) skips it
@@ -115,6 +127,22 @@ export function Dashboard({ stats }: DashboardProps) {
   useEffect(() => setFocusIndex(0), [selectedId, path]);
 
   const focusedSan = currentChildren[focusIndex]?.san ?? null;
+
+  const heatmapCells = useMemo<HeatmapCell[] | null>(() => {
+    if (!heatmapEnabled) return null;
+    return buildHeatmap(
+      boardMoves,
+      currentChildren,
+      ecoLookup,
+      selected?.entry?.name ?? null,
+    );
+  }, [
+    heatmapEnabled,
+    boardMoves,
+    currentChildren,
+    ecoLookup,
+    selected?.entry?.name,
+  ]);
 
   // Arrow-key navigation through the continuation tree.
   //  ←   pop one ply
@@ -226,26 +254,35 @@ export function Dashboard({ stats }: DashboardProps) {
             </div>
           ) : (
             (() => {
-              const exportAction = (
-                <ExportMenu
-                  stats={stats}
-                  color={color}
-                  selectedOpeningId={selectedId}
-                  path={path}
-                />
+              const boardActions = (
+                <div className="flex shrink-0 items-center gap-2">
+                  <HeatmapToggle
+                    checked={heatmapEnabled}
+                    onCheckedChange={setHeatmapEnabled}
+                    disabled={currentChildren.length === 0}
+                  />
+                  <ExportMenu
+                    stats={stats}
+                    color={color}
+                    selectedOpeningId={selectedId}
+                    path={path}
+                  />
+                </div>
               );
               return selected ? (
                 <CenterPanel
                   stats={selected}
                   color={color}
                   boardMoves={boardMoves}
-                  actions={exportAction}
+                  actions={boardActions}
+                  heatmap={heatmapCells}
                 />
               ) : (
                 <EmptyCenterPanel
                   color={color}
                   boardMoves={boardMoves}
-                  actions={exportAction}
+                  actions={boardActions}
+                  heatmap={heatmapCells}
                 />
               );
             })()
@@ -355,10 +392,12 @@ function EmptyCenterPanel({
   color,
   boardMoves,
   actions,
+  heatmap,
 }: {
   color: PlayerColor;
   boardMoves: string[];
   actions?: React.ReactNode;
+  heatmap?: HeatmapCell[] | null;
 }) {
   const dict = useDictionary();
   const hasMoves = boardMoves.length > 0;
@@ -378,7 +417,7 @@ function EmptyCenterPanel({
         {actions ? <div className="shrink-0">{actions}</div> : null}
       </div>
       <div className="mx-auto w-full max-w-[min(100%,calc(100dvh-20rem))]">
-        <ChessBoard moves={boardMoves} orientation={color} />
+        <ChessBoard moves={boardMoves} orientation={color} heatmap={heatmap} />
       </div>
       <p className="text-center text-[11px] text-muted-foreground">
         {dict.dashboard.tipLegend}
@@ -392,11 +431,13 @@ function CenterPanel({
   color,
   boardMoves,
   actions,
+  heatmap,
 }: {
   stats: OpeningStats;
   color: PlayerColor;
   boardMoves: string[];
   actions?: React.ReactNode;
+  heatmap?: HeatmapCell[] | null;
 }) {
   const dict = useDictionary();
   const winPct = stats.gameCount ? stats.playerWins / stats.gameCount : 0;
@@ -426,7 +467,7 @@ function CenterPanel({
       </div>
 
       <div className="mx-auto w-full max-w-[min(100%,calc(100dvh-20rem))]">
-        <ChessBoard moves={boardMoves} orientation={color} />
+        <ChessBoard moves={boardMoves} orientation={color} heatmap={heatmap} />
       </div>
 
       <div className="grid grid-cols-4 gap-2 text-xs">

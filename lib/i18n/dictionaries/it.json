@@ -196,5 +196,9 @@
     "noGamesMatched": "Nessuna partita corrisponde ai filtri.",
     "widenTryHint": "Prova ad ampliare il periodo, disattivare «solo con rating» o cambiare piattaforma."
   },
+  "heatmap": {
+    "label": "Mappa di calore",
+    "tooltip": "Mostra la frequenza della mossa successiva su ogni casella"
+  },
   "loading": "Caricamento…"
 }

@@ -196,5 +196,9 @@
     "noGamesMatched": "Nenhuma partida corresponde aos filtros.",
     "widenTryHint": "Tente ampliar o período, desativar \"apenas valendo rating\" ou trocar de plataforma."
   },
+  "heatmap": {
+    "label": "Mapa de calor",
+    "tooltip": "Mostrar a frequência do próximo lance em cada casa"
+  },
   "loading": "Carregando…"
 }

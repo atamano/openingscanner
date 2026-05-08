@@ -196,5 +196,9 @@
     "noGamesMatched": "Filtrelerle eşleşen oyun yok.",
     "widenTryHint": "Aralığı genişletmeyi, \"yalnızca dereceli\" seçeneğini kapatmayı veya platformu değiştirmeyi deneyin."
   },
+  "heatmap": {
+    "label": "Isı haritası",
+    "tooltip": "Her karede sonraki hamlenin sıklığını göster"
+  },
   "loading": "Yükleniyor…"
 }

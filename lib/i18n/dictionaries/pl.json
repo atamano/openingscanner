@@ -196,5 +196,9 @@
     "noGamesMatched": "Żadne partie nie pasują do filtrów.",
     "widenTryHint": "Spróbuj rozszerzyć okres, wyłączyć „tylko rankingowe” lub zmienić platformę."
   },
+  "heatmap": {
+    "label": "Mapa cieplna",
+    "tooltip": "Pokaż częstość następnego ruchu na każdym polu"
+  },
   "loading": "Ładowanie…"
 }
