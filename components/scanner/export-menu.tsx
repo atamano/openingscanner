@@ -36,8 +36,6 @@ export function ExportMenu({
   path = [],
 }: ExportMenuProps) {
   const dict = useDictionary();
-  const colorLabel =
-    color === "white" ? dict.form.colorWhite : dict.form.colorBlack;
 
   const selected = selectedOpeningId
     ? stats.byOpening[selectedOpeningId] ?? null
@@ -134,17 +132,15 @@ export function ExportMenu({
           .replace("{count}", String(selectedGameCount))
           .replace("{suffix}", gamesSuffix(selectedGameCount))
       : (openingLabel ?? dict.export.scopeSelectedOpening)
-    : dict.export.scopeAllColorGames.replace(
-        "{color}",
-        colorLabel.toLowerCase(),
-      );
+    : color === "white"
+      ? dict.export.scopeAllColorGamesWhite
+      : dict.export.scopeAllColorGamesBlack;
 
   const gamesDescScope = selected
     ? dict.export.exportGamesDescPosition
-    : dict.export.exportGamesDescRepertoire.replace(
-        "{color}",
-        colorLabel.toLowerCase(),
-      );
+    : color === "white"
+      ? dict.export.exportGamesDescRepertoireWhite
+      : dict.export.exportGamesDescRepertoireBlack;
 
   return (
     <DropdownMenu>

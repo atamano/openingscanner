@@ -25,17 +25,23 @@ const FAMILIAR_THRESHOLD = 5;
 /**
  * Recommend curated openings that fit what the player already plays.
  *
- * The previous version surfaced popular openings the player had never touched
- * — which produced suggestions from totally different repertoires (e.g.
- * recommending the London System to a 1.e4 player). The fix: require move
- * overlap with games the player has actually played. As White that means the
- * recommendation must share at least the first move; as Black it must share
- * white's first move *and* the player's response, since "the player faced
- * 1.e4" alone isn't a repertoire choice — picking 1…c5 vs 1…e5 is.
+ * Two gates protect against off-repertoire suggestions like "you should learn
+ * the Ruy Lopez" recommended to a French Defence player who happened to play
+ * 1…e5 once by accident:
  *
- * Among entries that pass the overlap gate we rank by a blend of curated
- * popularity and how deep the overlap goes — deeper matches are stronger
- * signals that the recommendation extends a line the player commits to.
+ * 1. `match >= minMatch` ensures the recommendation extends a line the player
+ *    has actually walked into. As White a 1-ply match is enough; as Black we
+ *    need at least 2 plies (white's first move *and* the player's response,
+ *    since picking 1…c5 vs 1…e5 is the actual repertoire choice).
+ *
+ * 2. `anchorCount >= anchorThreshold` is the volume gate on the *decision
+ *    prefix*. A one-off `e4 e5` in a sea of `e4 e6` games has match=2 but
+ *    anchorCount=1 — which the old code passed through. We now require the
+ *    decision prefix to be backed by a meaningful chunk of the player's games:
+ *    `max(3, ceil(2% of color-side games))`. Hard floor protects small samples;
+ *    the percentage scales with volume so heavy players don't get noise.
+ *
+ * Ranking among survivors blends curated popularity with overlap depth.
  */
 export function computeGaps(
   stats: RepertoireStats,
@@ -59,10 +65,17 @@ export function computeGaps(
 
   const scope = options.scopePrefix;
   const scopeLen = scope?.length ?? 0;
-  // Black entries are anchored at white's first move, so a 1-ply match means
-  // only "the player has faced this opening" — not "the player chose this
-  // defence". Require both halves of the first exchange to overlap.
   const minMatch = color === "white" ? 1 : 2;
+  const colorGames = stats.colorBreakdown[color] ?? 0;
+  const anchorThreshold = Math.max(3, Math.ceil(colorGames * 0.02));
+
+  // Scoped panel: don't recommend variations under an opening the player has
+  // barely touched. Without this the global anchor gate passes (1.e4 alone is
+  // fat) while the scope itself might be a one-game accident.
+  if (scope) {
+    const scopePlayed = prefixCount.get(scope.join(" ")) ?? 0;
+    if (scopePlayed < 3) return [];
+  }
 
   const scored = CATALOG.filter((e) => {
     if (e.color !== color) return false;
@@ -73,10 +86,16 @@ export function computeGaps(
     .map((entry) => {
       const match = longestPrefixMatch(entry.moves, prefixCount);
       const familiar = prefixCount.get(entry.moves.join(" ")) ?? 0;
-      return { entry, match, familiar };
+      // Volume on the decision prefix — for Black this is "how many games
+      // started with the player's actual response to white's first move".
+      const anchorPlies = Math.min(minMatch, entry.moves.length);
+      const anchorKey = entry.moves.slice(0, anchorPlies).join(" ");
+      const anchorCount = prefixCount.get(anchorKey) ?? 0;
+      return { entry, match, familiar, anchorCount };
     })
-    .filter(({ match, familiar }) => {
+    .filter(({ match, familiar, anchorCount }) => {
       if (match < minMatch) return false;
+      if (anchorCount < anchorThreshold) return false;
       if (familiar >= FAMILIAR_THRESHOLD) return false;
       return true;
     })

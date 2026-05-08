@@ -1,7 +1,13 @@
 @import "tailwindcss";
 
-@theme inline {
-  /* Warm paper/wood palette */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Theme palette — values live in :root/.dark so dark-mode overrides cascade
+   through every Tailwind utility. The `@theme inline` block below references
+   these via var() so Tailwind generates utilities like `bg-paper {
+   background-color: var(--color-paper); }` rather than inlining the literal
+   value at build time (which would defeat the override). */
+:root {
   --color-background: #f5f0e6;
   --color-foreground: #1a1410;
   --color-card: #fffdf7;
@@ -22,18 +28,6 @@
   --color-input: #d4c8b0;
   --color-ring: #b07a2e;
 
-  --radius: 0.5rem;
-  --radius-xs: 0.2rem;
-  --radius-sm: 0.3rem;
-  --radius-md: 0.4rem;
-  --radius-lg: 0.5rem;
-  --radius-xl: 0.75rem;
-
-  --font-sans: var(--font-dm-sans), system-ui, sans-serif;
-  --font-mono: var(--font-ibm-plex-mono), ui-monospace, monospace;
-  --font-serif: var(--font-fraunces), Georgia, serif;
-
-  /* Custom tokens */
   --color-wood: #2c1e12;
   --color-wood-light: #3d2e1e;
   --color-wood-lighter: #5a4433;
@@ -45,10 +39,100 @@
   --color-ink: #1a1410;
   --color-ink-light: #7a6b58;
 
-  /* Board accents — kept for chess board to render on the paper palette */
   --color-board-light: #ece4d4;
   --color-board-dark: #8a5e1c;
   --color-board-highlight: #d4a24e;
+
+  --color-chip-active: rgba(176, 122, 46, 0.12);
+}
+
+.dark {
+  --color-background: #110b07;
+  --color-foreground: #ede5d4;
+  --color-card: #1c130d;
+  --color-card-foreground: #ede5d4;
+  --color-popover: #1c130d;
+  --color-popover-foreground: #ede5d4;
+  --color-primary: #d4a24e;
+  --color-primary-foreground: #1a1410;
+  --color-secondary: #2c1e12;
+  --color-secondary-foreground: #ede5d4;
+  --color-muted: #241810;
+  --color-muted-foreground: #a89980;
+  --color-accent: #2c1e12;
+  --color-accent-foreground: #ede5d4;
+  --color-destructive: #d04a3e;
+  --color-destructive-foreground: #fffdf7;
+  --color-border: #3d2e1e;
+  --color-input: #3d2e1e;
+  --color-ring: #d4a24e;
+
+  /* Custom tokens flip meaning so components hardcoded to `bg-paper`,
+     `text-ink`, etc. automatically reflect the dark palette. */
+  --color-wood: #ede5d4;
+  --color-wood-light: #d4c8b0;
+  --color-wood-lighter: #a89980;
+  --color-amber: #d4a24e;
+  --color-amber-light: #e6b870;
+  --color-amber-dark: #b07a2e;
+  --color-paper: #1c130d;
+  --color-paper-dark: #110b07;
+  --color-ink: #ede5d4;
+  --color-ink-light: #a89980;
+
+  --color-board-light: #4a3424;
+  --color-board-dark: #d4a24e;
+  --color-board-highlight: #e6b870;
+
+  --color-chip-active: rgba(212, 162, 78, 0.18);
+}
+
+@theme inline {
+  --color-background: var(--color-background);
+  --color-foreground: var(--color-foreground);
+  --color-card: var(--color-card);
+  --color-card-foreground: var(--color-card-foreground);
+  --color-popover: var(--color-popover);
+  --color-popover-foreground: var(--color-popover-foreground);
+  --color-primary: var(--color-primary);
+  --color-primary-foreground: var(--color-primary-foreground);
+  --color-secondary: var(--color-secondary);
+  --color-secondary-foreground: var(--color-secondary-foreground);
+  --color-muted: var(--color-muted);
+  --color-muted-foreground: var(--color-muted-foreground);
+  --color-accent: var(--color-accent);
+  --color-accent-foreground: var(--color-accent-foreground);
+  --color-destructive: var(--color-destructive);
+  --color-destructive-foreground: var(--color-destructive-foreground);
+  --color-border: var(--color-border);
+  --color-input: var(--color-input);
+  --color-ring: var(--color-ring);
+
+  --color-wood: var(--color-wood);
+  --color-wood-light: var(--color-wood-light);
+  --color-wood-lighter: var(--color-wood-lighter);
+  --color-amber: var(--color-amber);
+  --color-amber-light: var(--color-amber-light);
+  --color-amber-dark: var(--color-amber-dark);
+  --color-paper: var(--color-paper);
+  --color-paper-dark: var(--color-paper-dark);
+  --color-ink: var(--color-ink);
+  --color-ink-light: var(--color-ink-light);
+
+  --color-board-light: var(--color-board-light);
+  --color-board-dark: var(--color-board-dark);
+  --color-board-highlight: var(--color-board-highlight);
+
+  --radius: 0.5rem;
+  --radius-xs: 0.2rem;
+  --radius-sm: 0.3rem;
+  --radius-md: 0.4rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+
+  --font-sans: var(--font-dm-sans), system-ui, sans-serif;
+  --font-mono: var(--font-ibm-plex-mono), ui-monospace, monospace;
+  --font-serif: var(--font-fraunces), Georgia, serif;
 }
 
 * {
@@ -122,6 +206,13 @@ html {
     radial-gradient(ellipse at 80% 70%, rgba(44, 30, 18, 0.03) 0%, transparent 50%),
     linear-gradient(180deg, #f8f3ea 0%, #f5f0e6 40%, #efe8da 100%);
 }
+.dark .hero-bg {
+  background:
+    radial-gradient(ellipse at 50% 30%, rgba(212, 162, 78, 0.10) 0%, transparent 60%),
+    radial-gradient(ellipse at 20% 80%, rgba(212, 162, 78, 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 70%, rgba(0, 0, 0, 0.20) 0%, transparent 50%),
+    linear-gradient(180deg, #181009 0%, #110b07 40%, #0a0604 100%);
+}
 
 /* ========================================
    Warm inset shadow for paper panels
@@ -169,6 +260,15 @@ html {
 ::-webkit-scrollbar-thumb:hover {
   background-color: #b07a2e;
 }
+.dark ::-webkit-scrollbar-track {
+  background: rgba(61, 46, 30, 0.3);
+}
+.dark ::-webkit-scrollbar-thumb {
+  background-color: #3d2e1e;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background-color: #d4a24e;
+}
 
 /* ========================================
    Result bar gradients
@@ -199,6 +299,12 @@ html {
 .move-row:active {
   transform: translateX(1px);
   background-color: rgba(176, 122, 46, 0.12);
+}
+.dark .move-row:hover {
+  background-color: rgba(212, 162, 78, 0.10);
+}
+.dark .move-row:active {
+  background-color: rgba(212, 162, 78, 0.16);
 }
 
 /* ========================================

@@ -56,7 +56,7 @@ Scan filters (`u`, `p`, `c`, `tc`, `d`) are stored in the URL via `nuqs` so scan
 
 - shadcn/ui "new-york" style, Tailwind v4 via `@tailwindcss/postcss`. Component registry in `components.json`; primitives live in `components/ui/`.
 - Feature components are split: `components/scanner/` (form, progress, dashboard, tables, export, gap analysis) and `components/chess/` (board + continuations table). `react-chessboard` + `chess.js` power the interactive board.
-- Theming via `next-themes`, default dark.
+- Theming via `next-themes` (`attribute="class"`, follows system by default). Tokens are defined as CSS vars on `:root`/`.dark` in `app/globals.css` and re-exported through `@theme inline { --color-x: var(--color-x); }` so Tailwind utilities resolve to `var()` rather than baked literals — that's what lets dark-mode overrides actually cascade. Don't move the values back inside `@theme inline` directly.
 
 ## Conventions worth knowing
 

@@ -123,7 +123,8 @@ export interface Dictionary {
   gaps: {
     titleGlobal: string;
     titleScoped: string;
-    descGlobal: string;
+    descGlobalWhite: string;
+    descGlobalBlack: string;
     descScoped: string;
     reasonPlayed: string;
     reasonPlayedPlural: string;
@@ -135,8 +136,10 @@ export interface Dictionary {
   weakSpots: {
     titleGlobal: string;
     titleScoped: string;
-    descGlobal: string;
+    descGlobalWhite: string;
+    descGlobalBlack: string;
     descScoped: string;
+    coverageHint: string;
     afterPly: string;
     gameSuffixOne: string;
     gameSuffixMany: string;
@@ -147,8 +150,10 @@ export interface Dictionary {
   strongSpots: {
     titleGlobal: string;
     titleScoped: string;
-    descGlobal: string;
+    descGlobalWhite: string;
+    descGlobalBlack: string;
     descScoped: string;
+    coverageHint: string;
     afterPly: string;
     gameSuffixOne: string;
     gameSuffixMany: string;
@@ -161,11 +166,13 @@ export interface Dictionary {
     scopeLabel: string;
     scopeVariation: string;
     scopeSelectedOpening: string;
-    scopeAllColorGames: string;
+    scopeAllColorGamesWhite: string;
+    scopeAllColorGamesBlack: string;
     exportGames: string;
     exportGamesDesc: string;
     exportGamesDescPosition: string;
-    exportGamesDescRepertoire: string;
+    exportGamesDescRepertoireWhite: string;
+    exportGamesDescRepertoireBlack: string;
     exportRepertoire: string;
     exportRepertoireDesc: string;
     toastNoGamesMatch: string;

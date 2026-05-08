@@ -24,9 +24,9 @@ const DEFAULT_INACTIVE =
 /**
  * Shared chip-style toggle button used across the scan form.
  *
- * The inline `rgba(176,122,46,0.12)` background is a deliberate workaround:
- * Tailwind JIT wasn't catching `bg-amber/12` reliably, so we inline the color
- * when the chip is active. Keep it that way.
+ * Active background goes through `--color-chip-active` (CSS var, dark variant
+ * in globals.css) rather than a Tailwind utility — `bg-amber/12` was unreliable
+ * under v3 JIT and the var lets dark mode swap to a higher-contrast tint.
  */
 export function ChipButton({
   active = false,
@@ -50,7 +50,7 @@ export function ChipButton({
         active ? activeClassName : inactiveClassName
       } disabled:opacity-40`}
       style={
-        active ? { backgroundColor: "rgba(176,122,46,0.12)" } : undefined
+        active ? { backgroundColor: "var(--color-chip-active)" } : undefined
       }
     >
       {children}
