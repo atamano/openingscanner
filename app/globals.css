@@ -39,8 +39,12 @@
   --color-ink: #1a1410;
   --color-ink-light: #7a6b58;
 
-  --color-board-light: #ece4d4;
-  --color-board-dark: #8a5e1c;
+  /* Lichess-style brown palette — instantly recognizable as a chess board.
+     Earlier values (#ece4d4 / #8a5e1c) were too high-contrast and the dark
+     was a saturated burnt orange, which read as "off" / "swapped" to chess
+     players used to standard wood tones. */
+  --color-board-light: #f0d9b5;
+  --color-board-dark: #b58863;
   --color-board-highlight: #d4a24e;
 
   --color-chip-active: rgba(176, 122, 46, 0.12);
@@ -80,8 +84,9 @@
   --color-ink: #ede5d4;
   --color-ink-light: #a89980;
 
-  --color-board-light: #d4a24e;
-  --color-board-dark: #4a3424;
+  /* Darker variant of the lichess palette for dark mode. */
+  --color-board-light: #d6b181;
+  --color-board-dark: #6e4c2b;
   --color-board-highlight: #e6b870;
 
   --color-chip-active: rgba(212, 162, 78, 0.18);
