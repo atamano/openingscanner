@@ -64,16 +64,25 @@ const api = {
       }
     };
 
-    // Sequential per source, with per-source error isolation. The cap is the
-    // total across sources so source order acts as priority — submitting the
-    // form pushes chess.com first when both fields are filled. Breaking the
-    // outer loop ends the for-await on the active generator, which triggers
-    // its finally cleanup (e.g. lichess `reader.releaseLock`).
+    // Parallel across platforms (chess.com + lichess hit different hosts so
+    // they don't share rate limits), sequential within a platform so multiple
+    // accounts on the same host queue politely. The maxGames cap is shared
+    // across both streams; whichever stream first crosses it aborts the
+    // controller so the sibling cancels its in-flight fetch instead of
+    // wasting it. Slight overshoot is accepted (acc.add runs before the
+    // check on the trailing iteration).
+    const ccSources = params.sources.filter((s) => s.platform === "chesscom");
+    const liSources = params.sources.filter((s) => s.platform === "lichess");
+
     const sourceErrors: string[] = [];
     let topLevelError: string | undefined;
-    try {
-      outer: for (const src of params.sources) {
-        if (controller.signal.aborted) break;
+    // Internal abort flag distinct from user-aborted: lets us tell apart
+    // "cap reached" from "user clicked stop" when re-throwing.
+    let capHit = false;
+
+    const runPlatform = async (sources: ScanSource[]): Promise<void> => {
+      for (const src of sources) {
+        if (controller.signal.aborted) return;
         currentLabel = src.platform === "lichess" ? "Lichess" : "Chess.com";
         await emit();
         try {
@@ -88,17 +97,29 @@ const api = {
           for await (const game of gen) {
             fetched++;
             acc.add(game);
-            if (params.filters.maxGames && fetched >= params.filters.maxGames) {
-              break outer;
+            if (
+              params.filters.maxGames &&
+              fetched >= params.filters.maxGames
+            ) {
+              capHit = true;
+              controller.abort();
+              return;
             }
             if (fetched % 25 === 0) await emit();
           }
         } catch (err) {
-          if ((err as Error).name === "AbortError") throw err;
+          if ((err as Error).name === "AbortError") return;
           sourceErrors.push(
             `${src.platform}: ${(err as Error).message || "failed"}`,
           );
         }
+      }
+    };
+
+    try {
+      await Promise.all([runPlatform(ccSources), runPlatform(liSources)]);
+      if (controller.signal.aborted && !capHit) {
+        throw new DOMException("Scan aborted", "AbortError");
       }
     } catch (err) {
       if ((err as Error).name === "AbortError") {
