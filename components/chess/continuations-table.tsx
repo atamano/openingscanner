@@ -169,7 +169,7 @@ function GameRow({ rec }: { rec: GameRecord }) {
       <a
         href={game.url}
         target="_blank"
-        rel="noopener"
+        rel="noopener noreferrer"
         className="flex items-center gap-2 px-3 py-1.5 text-xs transition-colors hover:bg-accent/40 sm:px-4"
       >
         <span className="min-w-0 flex-1 truncate">

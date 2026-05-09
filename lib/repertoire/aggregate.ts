@@ -262,6 +262,34 @@ function emptyNode(san: string): MoveNode {
 
 export const TREE_DEPTH_LIMIT = 20;
 
+/**
+ * Filter game records to those whose continuation past `atPly` "lands" at
+ * the given `path` in the per-opening tree — i.e. the game ended exactly
+ * there or was truncated by `TREE_DEPTH_LIMIT` at that depth. Co-located
+ * with `addGameToTree` so the depth cap + continuation basis can't drift
+ * between the ingest and read paths.
+ */
+export function findGamesAtPath(
+  games: readonly GameRecord[],
+  path: readonly string[],
+): GameRecord[] {
+  const out: GameRecord[] = [];
+  for (const rec of games) {
+    const continuationLength = rec.game.moves.length - rec.atPly;
+    const effectiveDepth = Math.min(continuationLength, TREE_DEPTH_LIMIT);
+    if (effectiveDepth !== path.length) continue;
+    let matches = true;
+    for (let i = 0; i < path.length; i++) {
+      if (rec.game.moves[rec.atPly + i] !== path[i]) {
+        matches = false;
+        break;
+      }
+    }
+    if (matches) out.push(rec);
+  }
+  return out;
+}
+
 function addGameToTree(
   root: MoveNode,
   moves: readonly string[],
