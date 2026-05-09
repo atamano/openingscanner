@@ -19,6 +19,7 @@ import {
   type OpeningStats,
   type RepertoireStats,
 } from "@/lib/repertoire/aggregate";
+import { nodeAtPath } from "@/lib/repertoire/ranking";
 import { useDictionary } from "@/lib/i18n/context";
 import { useDashboardFilters } from "@/lib/state/dashboard-filters";
 import type { PlayerColor } from "@/lib/sources/types";
@@ -118,10 +119,15 @@ export function Dashboard({ stats }: DashboardProps) {
     [stats, color],
   );
 
-  const continuationsRoot = useMemo<MoveNode>(
-    () => selected?.tree ?? globalTree,
-    [selected, globalTree],
-  );
+  // When only a family chip is active, root the continuations panel at the
+  // family's position in the global tree — otherwise it would show children
+  // of the initial position (1.e4, 1.d4 …) while the board sits at e.g. the
+  // Ruy Lopez position, which is incoherent.
+  const continuationsRoot = useMemo<MoveNode>(() => {
+    if (selected) return selected.tree;
+    if (baseMoves.length === 0) return globalTree;
+    return nodeAtPath(globalTree, baseMoves) ?? globalTree;
+  }, [selected, baseMoves, globalTree]);
 
   const push = useCallback((san: string) => setPath((p) => [...p, san]), []);
   const pop = useCallback(() => setPath((p) => p.slice(0, -1)), []);
@@ -322,7 +328,7 @@ export function Dashboard({ stats }: DashboardProps) {
         stats={stats}
         color={color}
         selected={selected}
-        pathFilter={path}
+        pathFilter={selected ? path : boardMoves}
         onSelectOpening={(openingId) => jumpToVariation(openingId, [])}
         onSelectVariation={jumpToVariation}
       />
@@ -331,7 +337,7 @@ export function Dashboard({ stats }: DashboardProps) {
         stats={stats}
         color={color}
         selected={selected}
-        pathFilter={path}
+        pathFilter={selected ? path : boardMoves}
         onSelectOpening={(openingId) => jumpToVariation(openingId, [])}
         onSelectVariation={jumpToVariation}
       />
@@ -340,8 +346,8 @@ export function Dashboard({ stats }: DashboardProps) {
         stats={stats}
         color={color}
         onSelect={(moves) => setPreviewMoves(moves)}
-        scopePrefix={selected?.entry?.moves}
-        scopeLabel={selected?.entry?.name ?? null}
+        scopePrefix={selected?.entry?.moves ?? (baseMoves.length > 0 ? baseMoves : undefined)}
+        scopeLabel={selected?.entry?.name ?? selectedFamily ?? null}
       />
     </section>
   );
