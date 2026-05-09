@@ -13,6 +13,7 @@ interface WeakSpotsProps {
   stats: RepertoireStats;
   color: PlayerColor;
   selected: OpeningStats | null;
+  pathFilter: string[];
   onSelectOpening: (openingId: string) => void;
   onSelectVariation: (openingId: string, path: string[]) => void;
 }

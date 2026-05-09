@@ -44,6 +44,9 @@ interface SpotsPanelProps {
   stats: RepertoireStats;
   color: PlayerColor;
   selected: OpeningStats | null;
+  /** Current move path on the board. Treated as a filter: variations must
+   *  descend from it; openings must be compatible with it. */
+  pathFilter: string[];
   onSelectOpening: (openingId: string) => void;
   onSelectVariation: (openingId: string, path: string[]) => void;
   icon: LucideIcon;
@@ -73,6 +76,7 @@ export function SpotsPanel({
   stats,
   color,
   selected,
+  pathFilter,
   onSelectOpening,
   onSelectVariation,
   icon: Icon,
@@ -85,21 +89,45 @@ export function SpotsPanel({
   const dict = useDictionary();
   const copy = kind === "strong" ? dict.strongSpots : dict.weakSpots;
 
-  const openings = useMemo(
-    () =>
-      selected ? [] : computeOpenings(stats, color, Number.MAX_SAFE_INTEGER),
-    [stats, color, selected, computeOpenings],
-  );
+  // Treat `pathFilter` as a scope filter on the board state:
+  //   - With a selected opening: keep only variations that descend strictly
+  //     from `pathFilter` (the user has navigated past it on the board).
+  //   - Without a selected opening: keep only openings whose move sequence
+  //     is compatible with `pathFilter` (shared prefix up to min length).
+  const openings = useMemo(() => {
+    if (selected) return [];
+    const all = computeOpenings(stats, color, Number.MAX_SAFE_INTEGER);
+    if (pathFilter.length === 0) return all;
+    return all.filter((o) => {
+      const moves = o.stats.entry?.moves ?? [];
+      const minLen = Math.min(pathFilter.length, moves.length);
+      for (let i = 0; i < minLen; i++) {
+        if (pathFilter[i] !== moves[i]) return false;
+      }
+      return true;
+    });
+  }, [stats, color, selected, pathFilter, computeOpenings]);
 
-  const variations = useMemo(
-    () => (selected ? computeVariations(selected) : []),
-    [selected, computeVariations],
-  );
+  const variations = useMemo(() => {
+    if (!selected) return [];
+    const all = computeVariations(selected);
+    if (pathFilter.length === 0) return all;
+    return all.filter((v) => {
+      if (v.path.length < pathFilter.length) return false;
+      for (let i = 0; i < pathFilter.length; i++) {
+        if (v.path[i] !== pathFilter[i]) return false;
+      }
+      return true;
+    });
+  }, [selected, pathFilter, computeVariations]);
 
   const rowCount = selected ? variations.length : openings.length;
 
   const [visible, setVisible] = useState(PAGE_SIZE);
-  useEffect(() => setVisible(PAGE_SIZE), [selected, color, stats]);
+  useEffect(
+    () => setVisible(PAGE_SIZE),
+    [selected, color, stats, pathFilter],
+  );
 
   // Coverage = how many of the player's games-on-this-color are accounted for
   // by the ranked openings. Anything filtered out (low sample, neutral score,

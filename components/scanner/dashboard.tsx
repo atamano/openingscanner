@@ -293,6 +293,7 @@ export function Dashboard({ stats }: DashboardProps) {
         stats={stats}
         color={color}
         selected={selected}
+        pathFilter={path}
         onSelectOpening={(openingId) => jumpToVariation(openingId, [])}
         onSelectVariation={jumpToVariation}
       />
@@ -301,6 +302,7 @@ export function Dashboard({ stats }: DashboardProps) {
         stats={stats}
         color={color}
         selected={selected}
+        pathFilter={path}
         onSelectOpening={(openingId) => jumpToVariation(openingId, [])}
         onSelectVariation={jumpToVariation}
       />
