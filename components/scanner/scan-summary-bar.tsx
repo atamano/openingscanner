@@ -210,7 +210,7 @@ export function ScanSummaryBar({
           {familyLabel ? (
             <FilterChip label={familyLabel} onRemove={handleRemoveFamily} />
           ) : null}
-          {variationLabel ? (
+          {variationLabel && variationLabel !== familyLabel ? (
             <FilterChip
               label={variationLabel}
               onRemove={handleRemoveVariation}
