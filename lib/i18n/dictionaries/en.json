@@ -124,6 +124,7 @@
   "continuations": {
     "move": "Move",
     "games": "Games",
+    "gamesAtPosition": "Games here",
     "results": "Results",
     "noFurther": "No further continuations from this position.",
     "noRecurring": "No recurring continuations yet.",

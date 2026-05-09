@@ -122,6 +122,7 @@
   "continuations": {
     "move": "手",
     "games": "対局",
+    "gamesAtPosition": "この局面の対局",
     "results": "結果",
     "noFurther": "この局面からの継続手はありません。",
     "noRecurring": "繰り返される継続手はまだありません。",

@@ -122,6 +122,7 @@
   "continuations": {
     "move": "Hamle",
     "games": "Oyun",
+    "gamesAtPosition": "Buradaki oyunlar",
     "results": "Sonuçlar",
     "noFurther": "Bu konumdan başka devam yok.",
     "noRecurring": "Henüz tekrar eden devam yok.",

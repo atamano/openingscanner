@@ -15,6 +15,8 @@ import {
 } from "@/components/ui/toggle-group";
 import {
   buildGlobalTree,
+  TREE_DEPTH_LIMIT,
+  type GameRecord,
   type MoveNode,
   type OpeningStats,
   type RepertoireStats,
@@ -148,6 +150,33 @@ export function Dashboard({ stats }: DashboardProps) {
 
   const [focusIndex, setFocusIndex] = useState(0);
   useEffect(() => setFocusIndex(0), [selectedId, path]);
+
+  // Games whose move sequence "ends" at the current position in the tree —
+  // either the player resigned/got mated here, OR they hit our depth cap and
+  // their tree path was truncated here. Mirrors openingtree's behavior of
+  // surfacing clickable game links once the user drills deep enough that the
+  // tree converges. Skipped for the global tree (no opening selected) since
+  // it would have to scan every game in the repertoire on every nav tick.
+  const gamesAtPosition = useMemo<GameRecord[]>(() => {
+    if (!selected) return [];
+    if (!stats.gamesRetained) return [];
+    const out: GameRecord[] = [];
+    for (const rec of selected.games) {
+      const continuation = rec.game.moves.slice(rec.atPly);
+      const effectiveDepth = Math.min(continuation.length, TREE_DEPTH_LIMIT);
+      if (effectiveDepth !== path.length) continue;
+      let matches = true;
+      for (let i = 0; i < path.length; i++) {
+        if (continuation[i] !== path[i]) {
+          matches = false;
+          break;
+        }
+      }
+      if (matches) out.push(rec);
+    }
+    out.sort((a, b) => b.game.date - a.game.date);
+    return out;
+  }, [selected, path, stats.gamesRetained]);
 
   const focusedSan = currentChildren[focusIndex]?.san ?? null;
 
@@ -302,6 +331,7 @@ export function Dashboard({ stats }: DashboardProps) {
               root={continuationsRoot}
               path={path}
               baseDepth={baseMoves.length}
+              gamesAtPosition={gamesAtPosition}
               onPush={push}
               onPop={pop}
               onReset={resetPath}

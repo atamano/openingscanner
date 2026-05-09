@@ -122,6 +122,7 @@
   "continuations": {
     "move": "Mossa",
     "games": "Partite",
+    "gamesAtPosition": "Partite qui",
     "results": "Risultati",
     "noFurther": "Nessuna continuazione da questa posizione.",
     "noRecurring": "Nessuna continuazione ricorrente ancora.",

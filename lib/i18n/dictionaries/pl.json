@@ -122,6 +122,7 @@
   "continuations": {
     "move": "Ruch",
     "games": "Partie",
+    "gamesAtPosition": "Partie tutaj",
     "results": "Wyniki",
     "noFurther": "Brak kolejnych kontynuacji z tej pozycji.",
     "noRecurring": "Jeszcze brak powtarzających się kontynuacji.",

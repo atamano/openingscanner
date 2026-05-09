@@ -122,6 +122,7 @@
   "continuations": {
     "move": "Zug",
     "games": "Partien",
+    "gamesAtPosition": "Partien hier",
     "results": "Ergebnisse",
     "noFurther": "Keine weiteren Fortsetzungen aus dieser Stellung.",
     "noRecurring": "Noch keine wiederkehrenden Fortsetzungen.",

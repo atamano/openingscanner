@@ -122,6 +122,7 @@
   "continuations": {
     "move": "Coup",
     "games": "Parties",
+    "gamesAtPosition": "Parties ici",
     "results": "Résultats",
     "noFurther": "Aucune suite depuis cette position.",
     "noRecurring": "Pas encore de suite récurrente.",

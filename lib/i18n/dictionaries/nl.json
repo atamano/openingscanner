@@ -122,6 +122,7 @@
   "continuations": {
     "move": "Zet",
     "games": "Partijen",
+    "gamesAtPosition": "Partijen hier",
     "results": "Resultaten",
     "noFurther": "Geen verdere vervolgzetten vanuit deze stelling.",
     "noRecurring": "Nog geen terugkerende vervolgzetten.",

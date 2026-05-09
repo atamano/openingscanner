@@ -3,12 +3,15 @@
 import { ContinuationsTable } from "@/components/chess/continuations-table";
 import { Separator } from "@/components/ui/separator";
 import { useDictionary } from "@/lib/i18n/context";
-import type { MoveNode } from "@/lib/repertoire/aggregate";
+import type { GameRecord, MoveNode } from "@/lib/repertoire/aggregate";
 
 interface ContinuationsPanelProps {
   root: MoveNode;
   path: string[];
   baseDepth: number;
+  /** Games that ended (or were truncated by the depth cap) at the current
+   *  position. Surfaced as clickable links above the moves table. */
+  gamesAtPosition?: GameRecord[];
   onPush: (san: string) => void;
   onPop: () => void;
   onReset: () => void;
@@ -21,6 +24,7 @@ export function ContinuationsPanel({
   root,
   path,
   baseDepth,
+  gamesAtPosition,
   onPush,
   onPop,
   onReset,
@@ -48,6 +52,7 @@ export function ContinuationsPanel({
       <ContinuationsTable
         root={root}
         path={path}
+        gamesAtPosition={gamesAtPosition}
         onPush={onPush}
         onPop={onPop}
         onReset={onReset}

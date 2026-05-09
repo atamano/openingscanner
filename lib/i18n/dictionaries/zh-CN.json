@@ -122,6 +122,7 @@
   "continuations": {
     "move": "着法",
     "games": "对局",
+    "gamesAtPosition": "此局面的对局",
     "results": "结果",
     "noFurther": "此局面后无后续着法。",
     "noRecurring": "尚无重复后续。",

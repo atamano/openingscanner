@@ -114,6 +114,7 @@ export interface Dictionary {
   continuations: {
     move: string;
     games: string;
+    gamesAtPosition: string;
     results: string;
     noFurther: string;
     noRecurring: string;

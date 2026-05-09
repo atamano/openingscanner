@@ -122,6 +122,7 @@
   "continuations": {
     "move": "Lance",
     "games": "Partidas",
+    "gamesAtPosition": "Partidas aqui",
     "results": "Resultados",
     "noFurther": "Sem continuações a partir dessa posição.",
     "noRecurring": "Ainda sem continuações recorrentes.",

@@ -260,7 +260,7 @@ function emptyNode(san: string): MoveNode {
   };
 }
 
-const TREE_DEPTH_LIMIT = 20;
+export const TREE_DEPTH_LIMIT = 20;
 
 function addGameToTree(
   root: MoveNode,

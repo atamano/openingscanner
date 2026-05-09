@@ -1,14 +1,15 @@
 "use client";
 
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
 import { useEffect, useMemo, useRef } from "react";
 import { useDictionary } from "@/lib/i18n/context";
-import type { MoveNode } from "@/lib/repertoire/aggregate";
+import type { GameRecord, MoveNode } from "@/lib/repertoire/aggregate";
 import { cn } from "@/lib/utils";
 
 interface ContinuationsTableProps {
   root: MoveNode;
   path: string[];
+  gamesAtPosition?: GameRecord[];
   onPush: (san: string) => void;
   onPop: () => void;
   onReset: () => void;
@@ -16,9 +17,16 @@ interface ContinuationsTableProps {
   onFocus?: (san: string) => void;
 }
 
+const RESULT_LABEL: Record<GameRecord["game"]["result"], string> = {
+  white: "1-0",
+  black: "0-1",
+  draw: "½-½",
+};
+
 export function ContinuationsTable({
   root,
   path,
+  gamesAtPosition,
   onPush,
   onPop,
   onReset,
@@ -39,8 +47,11 @@ export function ContinuationsTable({
     focusedRef.current?.scrollIntoView({ block: "nearest" });
   }, [focusedSan, path]);
 
+  const games = gamesAtPosition ?? [];
+
   return (
     <div className="flex h-full min-h-0 flex-col">
+      {games.length > 0 ? <GamesSection games={games} /> : null}
       <div className="grid grid-cols-[auto_minmax(3rem,1fr)_minmax(5rem,56%)] items-center gap-2 border-b px-3 py-2 sm:gap-3 sm:px-4 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
         <span>{dict.continuations.move}</span>
         <span>{dict.continuations.games}</span>
@@ -126,6 +137,56 @@ function Kbd({ children }: { children: React.ReactNode }) {
     <kbd className="inline-flex min-w-[1.25rem] items-center justify-center rounded border bg-background px-1 py-0.5 font-mono text-[10px] font-semibold leading-none text-foreground">
       {children}
     </kbd>
+  );
+}
+
+function GamesSection({ games }: { games: GameRecord[] }) {
+  const dict = useDictionary();
+  return (
+    <div className="border-b">
+      <div className="flex items-baseline justify-between px-3 pt-2 pb-1 sm:px-4">
+        <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+          {dict.continuations.gamesAtPosition}
+        </span>
+        <span className="text-[11px] font-mono tabular-nums text-muted-foreground">
+          {games.length}
+        </span>
+      </div>
+      <ul className="max-h-32 divide-y overflow-y-auto">
+        {games.slice(0, 50).map((rec) => (
+          <GameRow key={rec.game.id} rec={rec} />
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function GameRow({ rec }: { rec: GameRecord }) {
+  const { game } = rec;
+  const result = RESULT_LABEL[game.result];
+  return (
+    <li>
+      <a
+        href={game.url}
+        target="_blank"
+        rel="noopener"
+        className="flex items-center gap-2 px-3 py-1.5 text-xs transition-colors hover:bg-accent/40 sm:px-4"
+      >
+        <span className="min-w-0 flex-1 truncate">
+          <span className={game.result === "white" ? "font-semibold" : ""}>
+            {game.white.name}
+          </span>
+          <span className="text-muted-foreground"> vs </span>
+          <span className={game.result === "black" ? "font-semibold" : ""}>
+            {game.black.name}
+          </span>
+        </span>
+        <span className="font-mono tabular-nums text-muted-foreground">
+          {result}
+        </span>
+        <ExternalLink className="size-3 text-muted-foreground" />
+      </a>
+    </li>
   );
 }
 
