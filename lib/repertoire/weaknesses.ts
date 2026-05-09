@@ -1,28 +1,19 @@
-import { isUncategorizedId } from "@/lib/catalog/openings";
 import type { PlayerColor } from "@/lib/sources/types";
-import type { MoveNode, OpeningStats, RepertoireStats } from "./aggregate";
+import type { OpeningStats, RepertoireStats } from "./aggregate";
+import {
+  rankOpenings,
+  rankVariations,
+  type RankedOpening,
+  type RankedVariation,
+} from "./ranking";
 
-export interface WeakOpening {
-  stats: OpeningStats;
-  winPct: number;
-  lossPct: number;
-  drawPct: number;
-}
-
-export interface WeakVariation {
-  /** SAN moves from the ECO-matched position down to this node. */
-  path: string[];
-  count: number;
-  winPct: number;
-  lossPct: number;
-  drawPct: number;
-}
+export type WeakOpening = RankedOpening;
+export type WeakVariation = RankedVariation;
 
 /**
- * Rank the player's own openings by poorest score on a given side.
- * Only openings with enough games to be meaningful are considered. Openings
- * with expected score ≥ 0.5 are excluded so a given opening can only show up
- * in one of the two panels (strong vs weak split on break-even).
+ * Rank the player's openings by poorest expected score on a given side.
+ * Openings with score ≥ 0.5 are excluded so a given opening can only show
+ * up in one of the two panels (split on break-even).
  */
 export function computeWeakOpenings(
   stats: RepertoireStats,
@@ -30,43 +21,14 @@ export function computeWeakOpenings(
   limit = Number.MAX_SAFE_INTEGER,
   minGames = 5,
 ): WeakOpening[] {
-  const rows = Object.values(stats.byOpening).filter(
-    (s) =>
-      !isUncategorizedId(s.openingId) &&
-      s.color === color &&
-      s.gameCount >= minGames,
-  );
-
-  const scored = rows
-    .map((s) => ({
-      stats: s,
-      winPct: s.playerWins / s.gameCount,
-      lossPct: s.playerLosses / s.gameCount,
-      drawPct: s.draws / s.gameCount,
-    }))
-    .filter((s) => s.winPct + 0.5 * s.drawPct < 0.5);
-
-  // Lowest expected score first (wins + 0.5·draws). Break ties with sample
-  // size (more games = more reliable signal) and then higher loss-rate.
-  scored.sort((a, b) => {
-    const scoreA = a.winPct + 0.5 * a.drawPct;
-    const scoreB = b.winPct + 0.5 * b.drawPct;
-    if (scoreA !== scoreB) return scoreA - scoreB;
-    if (a.stats.gameCount !== b.stats.gameCount) {
-      return b.stats.gameCount - a.stats.gameCount;
-    }
-    return b.lossPct - a.lossPct;
-  });
-
-  return scored.slice(0, limit);
+  return rankOpenings(stats, color, "worst", limit, minGames);
 }
 
 /**
- * Walk an opening's tree and surface the worst-performing lines. Only nodes
- * with at least `minGames` games are kept so we're not ranking statistical
- * noise from one-off blunders. Weakness is gated on expected score
- * (wins + 0.5·draws) rather than raw win-rate so 100%-draw lines don't
- * masquerade as catastrophes while mixed-result lines get filtered out.
+ * Walk an opening's tree and surface the worst-performing lines (expected
+ * score < 0.45). When a parent and a descendant both qualify, the descendant
+ * is kept — it isolates where the player actually falls apart, since the
+ * parent's score is just the weighted average of its children.
  */
 const WEAK_VARIATION_SCORE_MAX = 0.45;
 
@@ -76,66 +38,12 @@ export function computeWeakVariations(
   minGames = 3,
   maxDepth = 12,
 ): WeakVariation[] {
-  const out: WeakVariation[] = [];
-
-  const visit = (node: MoveNode, path: string[]) => {
-    if (path.length > 0 && node.count >= minGames) {
-      const winPct = node.playerWins / node.count;
-      const drawPct = node.draws / node.count;
-      const score = winPct + 0.5 * drawPct;
-      if (score < WEAK_VARIATION_SCORE_MAX) {
-        out.push({
-          path: [...path],
-          count: node.count,
-          winPct,
-          lossPct: node.playerLosses / node.count,
-          drawPct,
-        });
-      }
-    }
-    if (path.length >= maxDepth) return;
-    for (const child of Object.values(node.children)) {
-      visit(child, [...path, child.san]);
-    }
-  };
-
-  visit(opening.tree, []);
-
-  // Keep the deepest branch per move-prefix: if a parent AND its child both
-  // qualify, the child better isolates where the player actually falls apart.
-  // (Parent's win-rate is a weighted average that includes the child.)
-  const kept: WeakVariation[] = [];
-  for (const v of out) {
-    let dominated = false;
-    for (const other of out) {
-      if (other === v) continue;
-      if (other.path.length <= v.path.length) continue;
-      // Is `other` a descendant of `v` that also qualifies? If so, `v` gets
-      // dropped — we surface the deeper, more specific line.
-      let isPrefix = true;
-      for (let i = 0; i < v.path.length; i++) {
-        if (other.path[i] !== v.path[i]) {
-          isPrefix = false;
-          break;
-        }
-      }
-      if (isPrefix) {
-        dominated = true;
-        break;
-      }
-    }
-    if (!dominated) kept.push(v);
-  }
-
-  // Ascending expected score — worst lines first. Ties broken by larger
-  // sample size (more reliable signal) then higher loss-rate.
-  kept.sort((a, b) => {
-    const scoreA = a.winPct + 0.5 * a.drawPct;
-    const scoreB = b.winPct + 0.5 * b.drawPct;
-    if (scoreA !== scoreB) return scoreA - scoreB;
-    if (a.count !== b.count) return b.count - a.count;
-    return b.lossPct - a.lossPct;
-  });
-
-  return kept.slice(0, limit);
+  return rankVariations(
+    opening,
+    "worst",
+    WEAK_VARIATION_SCORE_MAX,
+    limit,
+    minGames,
+    maxDepth,
+  );
 }
