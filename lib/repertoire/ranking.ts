@@ -53,18 +53,42 @@ export function rankOpenings(
   return scored.slice(0, limit);
 }
 
+export interface RankVariationsOptions {
+  /**
+   * Moves prepended to each emitted `path`. Used when ranking from a sub-tree
+   * (the path filter on the dashboard) so emitted paths stay anchored to the
+   * opening's ECO root, not to the sub-tree's local root.
+   */
+  basePath?: readonly string[];
+  limit?: number;
+  minGames?: number;
+  /** Maximum *relative* depth from `rootNode`. */
+  maxDepth?: number;
+}
+
+/**
+ * `rootNode` is the tree to walk. When the caller has navigated into a
+ * sub-position via `basePath`, pass the descendant node + the basePath so
+ * `pruneByDomination` evaluates "shallowest qualifying" within the sub-tree
+ * (otherwise an ancestor scored on a different sibling would silently drop
+ * everything in this branch).
+ */
 export function rankVariations(
-  opening: OpeningStats,
+  rootNode: MoveNode,
   direction: RankingDirection,
   scoreThreshold: number,
-  limit = Number.MAX_SAFE_INTEGER,
-  minGames = 3,
-  maxDepth = 12,
+  options: RankVariationsOptions = {},
 ): RankedVariation[] {
+  const {
+    basePath = [],
+    limit = Number.MAX_SAFE_INTEGER,
+    minGames = 3,
+    maxDepth = 12,
+  } = options;
   const out: RankedVariation[] = [];
 
-  const visit = (node: MoveNode, path: string[]) => {
-    if (path.length > 0 && node.count >= minGames) {
+  const visit = (node: MoveNode, relativePath: string[]) => {
+    if (relativePath.length > 0 && node.count >= minGames) {
       const winPct = node.playerWins / node.count;
       const drawPct = node.draws / node.count;
       const score = winPct + 0.5 * drawPct;
@@ -74,7 +98,7 @@ export function rankVariations(
           : score < scoreThreshold;
       if (qualifies) {
         out.push({
-          path: [...path],
+          path: [...basePath, ...relativePath],
           count: node.count,
           winPct,
           lossPct: node.playerLosses / node.count,
@@ -82,16 +106,33 @@ export function rankVariations(
         });
       }
     }
-    if (path.length >= maxDepth) return;
+    if (relativePath.length >= maxDepth) return;
     for (const child of Object.values(node.children)) {
-      visit(child, [...path, child.san]);
+      visit(child, [...relativePath, child.san]);
     }
   };
-  visit(opening.tree, []);
+  visit(rootNode, []);
 
   const kept = pruneByDomination(out, direction);
   kept.sort(compareVariations(direction));
   return kept.slice(0, limit);
+}
+
+/**
+ * Walk a tree along `path` and return the descendant node, or null when the
+ * path doesn't exist. Used to scope variation ranking to a sub-position.
+ */
+export function nodeAtPath(
+  root: MoveNode,
+  path: readonly string[],
+): MoveNode | null {
+  let node = root;
+  for (const san of path) {
+    const next = node.children[san];
+    if (!next) return null;
+    node = next;
+  }
+  return node;
 }
 
 /**

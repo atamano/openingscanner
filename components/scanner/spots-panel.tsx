@@ -61,7 +61,10 @@ interface SpotsPanelProps {
     color: PlayerColor,
     limit: number,
   ) => RankedOpening[];
-  computeVariations: (opening: OpeningStats) => RankedVariation[];
+  computeVariations: (
+    opening: OpeningStats,
+    pathFilter: readonly string[],
+  ) => RankedVariation[];
 }
 
 const PAGE_SIZE = 8;
@@ -90,8 +93,10 @@ export function SpotsPanel({
   const copy = kind === "strong" ? dict.strongSpots : dict.weakSpots;
 
   // Treat `pathFilter` as a scope filter on the board state:
-  //   - With a selected opening: keep only variations that descend strictly
-  //     from `pathFilter` (the user has navigated past it on the board).
+  //   - With a selected opening: rank from the sub-tree at `pathFilter` so the
+  //     "shallowest / deepest qualifying" pruning is evaluated within that
+  //     sub-tree. Filtering after the fact would let an unrelated sibling
+  //     branch silently drop everything below the user's current position.
   //   - Without a selected opening: keep only openings whose move sequence
   //     is compatible with `pathFilter` (shared prefix up to min length).
   const openings = useMemo(() => {
@@ -108,18 +113,10 @@ export function SpotsPanel({
     });
   }, [stats, color, selected, pathFilter, computeOpenings]);
 
-  const variations = useMemo(() => {
-    if (!selected) return [];
-    const all = computeVariations(selected);
-    if (pathFilter.length === 0) return all;
-    return all.filter((v) => {
-      if (v.path.length < pathFilter.length) return false;
-      for (let i = 0; i < pathFilter.length; i++) {
-        if (v.path[i] !== pathFilter[i]) return false;
-      }
-      return true;
-    });
-  }, [selected, pathFilter, computeVariations]);
+  const variations = useMemo(
+    () => (selected ? computeVariations(selected, pathFilter) : []),
+    [selected, pathFilter, computeVariations],
+  );
 
   const rowCount = selected ? variations.length : openings.length;
 
