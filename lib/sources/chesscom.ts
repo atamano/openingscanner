@@ -34,11 +34,14 @@ export async function* streamChessComGames(
   filters: ScanFilters,
   onLabel?: (label: string) => void,
   signal?: AbortSignal,
+  onWarn?: (msg: string) => void,
 ): AsyncGenerator<GameSummary> {
   const archivesUrl = `https://api.chess.com/pub/player/${encodeURIComponent(
-    username.toLowerCase(),
+    username.trim().toLowerCase(),
   )}/games/archives`;
-  const archivesRes = await fetch(archivesUrl, { signal });
+  // Route through retry too — chess.com's archives endpoint is the gate to
+  // the whole scan, and a single 429/5xx here used to kill the entire run.
+  const archivesRes = await fetchArchiveWithRetry(archivesUrl, signal);
   if (!archivesRes.ok) {
     if (archivesRes.status === 404) {
       throw new Error(`Chess.com user "${username}" not found`);
@@ -51,7 +54,13 @@ export async function* streamChessComGames(
     : [];
 
   // Iterate archives newest-first so maxGames caps the most recent window.
-  const ordered = [...archives].reverse();
+  // Sort explicitly by year/month rather than relying on the API's documented
+  // (but not guaranteed) ascending order.
+  const ordered = [...archives].sort((a, b) => {
+    const ab = archiveBounds(a)?.start ?? 0;
+    const bb = archiveBounds(b)?.start ?? 0;
+    return bb - ab;
+  });
 
   let emitted = 0;
 
@@ -68,16 +77,19 @@ export async function* streamChessComGames(
 
     const monthRes = await fetchArchiveWithRetry(archiveUrl, signal);
     if (!monthRes.ok) {
-      // Don't kill the whole scan on a single archive failure. Skip it so the
-      // accumulator keeps what it has; the UI can show a partial result.
+      // Don't kill the whole scan on a single archive failure. Surface a
+      // warning so the UI can tell the user the scan is partial.
+      onWarn?.(`${label} archive failed (${monthRes.status})`);
       continue;
     }
     const monthBody = (await monthRes.json()) as { games?: ChessComGame[] };
     const games = Array.isArray(monthBody.games) ? monthBody.games : [];
 
-    // Chess.com returns each month chronologically ascending; reverse once for
-    // newest-first without paying for a full sort.
-    const reversed = games.slice().reverse();
+    // Sort newest-first explicitly — the chess.com API's chronological order
+    // is empirically ascending but undocumented.
+    const reversed = games
+      .slice()
+      .sort((a, b) => b.end_time - a.end_time);
 
     for (const raw of reversed) {
       if (signal?.aborted) return;

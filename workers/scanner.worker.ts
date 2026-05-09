@@ -28,12 +28,19 @@ function streamForSource(
   source: ScanSource,
   filters: ScanFilters,
   onLabel: (label: string) => void,
+  onWarn: (msg: string) => void,
   signal: AbortSignal,
 ): AsyncGenerator<GameSummary> {
   if (source.platform === "lichess") {
     return streamLichessGames(source.username, filters, undefined, signal);
   }
-  return streamChessComGames(source.username, filters, onLabel, signal);
+  return streamChessComGames(
+    source.username,
+    filters,
+    onLabel,
+    signal,
+    onWarn,
+  );
 }
 
 const api = {
@@ -80,6 +87,11 @@ const api = {
     // "cap reached" from "user clicked stop" when re-throwing.
     let capHit = false;
 
+    // Errors carry the source handle so multi-account scans can tell two
+    // failing lichess (or chess.com) handles apart.
+    const sourceLabel = (src: ScanSource) =>
+      `${src.platform === "lichess" ? "Lichess" : "Chess.com"} (${src.username})`;
+
     const runPlatform = async (sources: ScanSource[]): Promise<void> => {
       for (const src of sources) {
         if (controller.signal.aborted) return;
@@ -91,6 +103,9 @@ const api = {
             params.filters,
             (label) => {
               currentLabel = label;
+            },
+            (msg) => {
+              sourceErrors.push(`${sourceLabel(src)}: ${msg}`);
             },
             controller.signal,
           );
@@ -110,7 +125,7 @@ const api = {
         } catch (err) {
           if ((err as Error).name === "AbortError") return;
           sourceErrors.push(
-            `${src.platform}: ${(err as Error).message || "failed"}`,
+            `${sourceLabel(src)}: ${(err as Error).message || "failed"}`,
           );
         }
       }
@@ -133,7 +148,10 @@ const api = {
       Comlink.releaseProxy
     ];
     release?.();
-    const error = topLevelError ?? (sourceErrors.length ? sourceErrors.join("; ") : undefined);
+    // Combine top-level + per-source errors so neither hides the other.
+    const error =
+      [topLevelError, ...sourceErrors].filter(Boolean).join("; ") ||
+      undefined;
     return error
       ? { stats: acc.finalize(), error }
       : { stats: acc.finalize() };

@@ -67,7 +67,10 @@ export async function* streamLichessGames(
   if (filters.ratedOnly) params.set("rated", "true");
   if (filters.since) params.set("since", String(filters.since));
   if (filters.until) params.set("until", String(filters.until));
-  if (filters.maxGames) params.set("max", String(filters.maxGames));
+  // Don't pass `max` per source — the worker enforces a single shared cap
+  // across all sources. Sending it here multiplies the cap by the number
+  // of lichess accounts (multi-account scans would fetch N×maxGames bytes
+  // before the worker check fires).
   if (filters.timeClasses.length) {
     const perfs = filters.timeClasses.flatMap(
       (tc) => TIMECLASS_TO_LICHESS_PERF[tc] ?? [],

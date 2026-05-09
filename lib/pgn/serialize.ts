@@ -247,7 +247,12 @@ function platformLabel(platform: GameSummary["platform"]): string {
 }
 
 function escapeTag(value: string): string {
-  return value.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+  // PGN tag values must be a single line. Strip control whitespace before
+  // escaping so a pasted multi-line handle can't break the export.
+  return value
+    .replace(/[\r\n\t]+/g, " ")
+    .replace(/\\/g, "\\\\")
+    .replace(/"/g, '\\"');
 }
 
 function formatDate(ms: number): string {

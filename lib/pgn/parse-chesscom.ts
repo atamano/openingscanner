@@ -8,18 +8,30 @@
  */
 const TAG_PAIR_BLOCK = /^\s*(\[[^\]]*\]\s*)+/;
 const COMMENT = /\{[^}]*\}/g;
-const VARIATION = /\([^)]*\)/g;
+// Innermost-paren variation. Strip in a loop so nested `(...(...)...)`
+// is fully removed — a single pass would leave the outer parens intact
+// and expose inner SAN tokens to the move list.
+const INNER_VARIATION = /\([^()]*\)/g;
 const NAG = /\$\d+/g;
 const MOVE_NUMBER = /\b\d+\.{1,3}/g;
 const RESULT = /\s+(1-0|0-1|1\/2-1\/2|\*)\s*$/;
 
 const SAN_TOKEN = /^([NBRQK]?[a-h]?[1-8]?x?[a-h][1-8](=[NBRQ])?|O-O(-O)?)[+#]?[!?]*$/;
 
+function stripVariations(body: string): string {
+  let out = body;
+  let prev: string;
+  do {
+    prev = out;
+    out = out.replace(INNER_VARIATION, "");
+  } while (out !== prev);
+  return out;
+}
+
 export function pgnToSanMoves(pgn: string): string[] {
-  const body = pgn
-    .replace(TAG_PAIR_BLOCK, "")
-    .replace(COMMENT, "")
-    .replace(VARIATION, "")
+  const body = stripVariations(
+    pgn.replace(TAG_PAIR_BLOCK, "").replace(COMMENT, ""),
+  )
     .replace(NAG, "")
     .replace(MOVE_NUMBER, "")
     .replace(RESULT, "")
