@@ -3,7 +3,6 @@ import {
   UNCATEGORIZED_ID,
   type CatalogEntry,
 } from "@/lib/catalog/openings";
-import { resolvePlayerColor } from "@/lib/catalog/classify";
 import type {
   GameSummary,
   PartialOpeningSnapshot,
@@ -77,24 +76,40 @@ export class RepertoireAccumulator {
     white: emptyNode(""),
     black: emptyNode(""),
   };
-  private usernameByPlatform: Partial<Record<Platform, string>>;
+  // Multiple accounts on the same platform are supported, so we keep a set
+  // of lowercased handles per platform and check both seats of each game
+  // against it. Older single-account code used resolvePlayerColor, but it
+  // only takes one name — inlining the check lets the same accumulator
+  // merge games from a player's main + secondary handles.
+  private usernamesByPlatform: Partial<Record<Platform, Set<string>>>;
 
   constructor(sources: ScanSource[]) {
-    this.usernameByPlatform = {};
+    this.usernamesByPlatform = {};
     for (const src of sources) {
-      this.usernameByPlatform[src.platform] = src.username;
+      const set =
+        this.usernamesByPlatform[src.platform] ?? new Set<string>();
+      set.add(src.username.trim().toLowerCase());
+      this.usernamesByPlatform[src.platform] = set;
     }
     this.username = sources.map((s) => s.username).join("+");
   }
 
   add(game: GameSummary): void {
-    const playerName = this.usernameByPlatform[game.platform];
-    if (!playerName) return;
-    const playerColor = resolvePlayerColor(
-      game.white.name,
-      game.black.name,
-      playerName,
-    );
+    const set = this.usernamesByPlatform[game.platform];
+    if (!set || set.size === 0) return;
+    const w = game.white.name.toLowerCase();
+    const b = game.black.name.toLowerCase();
+    const isWhite = set.has(w);
+    const isBlack = set.has(b);
+    // Two of the player's accounts played each other. Skip — counting it
+    // would either inflate stats (classify twice) or pick a side arbitrarily,
+    // and a self-game has no opening-repertoire signal.
+    if (isWhite && isBlack) return;
+    const playerColor: PlayerColor | null = isWhite
+      ? "white"
+      : isBlack
+        ? "black"
+        : null;
     if (!playerColor) return;
 
     this.totalGames++;

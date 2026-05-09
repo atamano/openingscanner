@@ -26,6 +26,8 @@ export interface Dictionary {
     placeholderChesscom: string;
     sourcesTitle: string;
     sourcesHint: string;
+    addAccount: string;
+    removeAccount: string;
     popular: string;
     colorWhite: string;
     colorBlack: string;

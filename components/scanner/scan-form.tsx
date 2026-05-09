@@ -1,6 +1,6 @@
 "use client";
 
-import { Loader2, Search } from "lucide-react";
+import { Loader2, Plus, Search, X } from "lucide-react";
 import { useMemo } from "react";
 import {
   parseAsBoolean,
@@ -19,6 +19,7 @@ import {
   type LimitPreset,
 } from "@/lib/scan/params";
 import type {
+  Platform,
   ScanParams,
   ScanSource,
   TimeClass,
@@ -55,14 +56,26 @@ interface ScanFormProps {
   onAbort: () => void;
 }
 
+// URL transport: comma-separated handles per platform. Always renders at
+// least one row so a fresh page shows both inputs; trailing commas are
+// preserved so newly added empty rows survive a re-render.
+function parseRows(raw: string): string[] {
+  const parts = raw.split(",");
+  return parts.length > 0 ? parts : [""];
+}
+
+function serializeRows(rows: string[]): string {
+  return rows.join(",");
+}
+
 export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
   const dict = useDictionary();
 
-  const [chesscomUser, setChesscomUser] = useQueryState(
+  const [chesscomRaw, setChesscomRaw] = useQueryState(
     "u_cc",
     parseAsString.withDefault(""),
   );
-  const [lichessUser, setLichessUser] = useQueryState(
+  const [lichessRaw, setLichessRaw] = useQueryState(
     "u_li",
     parseAsString.withDefault(""),
   );
@@ -97,13 +110,52 @@ export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
     [times],
   );
 
-  const sources: ScanSource[] = [];
-  if (chesscomUser.trim().length > 0) {
-    sources.push({ platform: "chesscom", username: chesscomUser.trim() });
-  }
-  if (lichessUser.trim().length > 0) {
-    sources.push({ platform: "lichess", username: lichessUser.trim() });
-  }
+  const ccRows = useMemo(() => parseRows(chesscomRaw), [chesscomRaw]);
+  const liRows = useMemo(() => parseRows(lichessRaw), [lichessRaw]);
+
+  const updateRow = (platform: Platform, idx: number, value: string) => {
+    const next = platform === "chesscom" ? [...ccRows] : [...liRows];
+    next[idx] = value.replace(/,/g, "");
+    (platform === "chesscom" ? setChesscomRaw : setLichessRaw)(
+      serializeRows(next),
+    );
+  };
+
+  const removeRow = (platform: Platform, idx: number) => {
+    const list = platform === "chesscom" ? ccRows : liRows;
+    if (list.length <= 1) return;
+    const next = list.filter((_, i) => i !== idx);
+    (platform === "chesscom" ? setChesscomRaw : setLichessRaw)(
+      serializeRows(next),
+    );
+  };
+
+  const addRow = (platform: Platform) => {
+    const list = platform === "chesscom" ? ccRows : liRows;
+    (platform === "chesscom" ? setChesscomRaw : setLichessRaw)(
+      serializeRows([...list, ""]),
+    );
+  };
+
+  // Sources: chess.com first to preserve the per-source priority the worker
+  // depends on (the maxGames cap is shared, so order acts as priority).
+  // Dedupe on `${platform}:${lowercased handle}` so a duplicate handle
+  // doesn't double-count games, and skip empty rows.
+  const sources = useMemo<ScanSource[]>(() => {
+    const seen = new Set<string>();
+    const out: ScanSource[] = [];
+    const push = (platform: Platform, handle: string) => {
+      const trimmed = handle.trim();
+      if (!trimmed) return;
+      const key = `${platform}:${trimmed.toLowerCase()}`;
+      if (seen.has(key)) return;
+      seen.add(key);
+      out.push({ platform, username: trimmed });
+    };
+    for (const u of ccRows) push("chesscom", u);
+    for (const u of liRows) push("lichess", u);
+    return out;
+  }, [ccRows, liRows]);
 
   const canSubmit = sources.length > 0 && !running;
 
@@ -165,7 +217,9 @@ export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
         submit();
       }}
     >
-      {/* Players: one row per platform. Both optional, at least one required. */}
+      {/* Players: any number of accounts per platform, all merged into one
+          repertoire. The "+ Add Chess.com / Lichess" buttons append blank
+          rows so the user can paste a second handle. */}
       <div className="space-y-2">
         <div className="flex items-baseline justify-between gap-2">
           <span className="text-[11px] uppercase tracking-widest text-ink-light font-semibold">
@@ -175,40 +229,88 @@ export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
             {dict.form.sourcesHint}
           </span>
         </div>
-        <SourceRow
-          label="Chess.com"
-          icon="♘"
-          value={chesscomUser}
-          onChange={setChesscomUser}
-          placeholder={dict.form.placeholderChesscom}
-          disabled={running}
-        />
-        <SourceRow
-          label="Lichess"
-          icon="♞"
-          value={lichessUser}
-          onChange={setLichessUser}
-          placeholder={dict.form.placeholderLichess}
-          disabled={running}
-        />
+        {ccRows.map((value, i) => (
+          <SourceRow
+            key={`cc-${i}`}
+            label="Chess.com"
+            icon="♘"
+            value={value}
+            onChange={(v) => updateRow("chesscom", i, v)}
+            placeholder={dict.form.placeholderChesscom}
+            disabled={running}
+            onRemove={
+              ccRows.length > 1
+                ? () => removeRow("chesscom", i)
+                : undefined
+            }
+            removeLabel={dict.form.removeAccount}
+          />
+        ))}
+        {liRows.map((value, i) => (
+          <SourceRow
+            key={`li-${i}`}
+            label="Lichess"
+            icon="♞"
+            value={value}
+            onChange={(v) => updateRow("lichess", i, v)}
+            placeholder={dict.form.placeholderLichess}
+            disabled={running}
+            onRemove={
+              liRows.length > 1
+                ? () => removeRow("lichess", i)
+                : undefined
+            }
+            removeLabel={dict.form.removeAccount}
+          />
+        ))}
+        <div className="flex flex-wrap gap-1.5 pt-0.5">
+          <ChipButton
+            onClick={() => addRow("chesscom")}
+            disabled={running}
+            className="h-7 px-2.5 rounded-md text-xs font-medium border inline-flex items-center gap-1"
+          >
+            <Plus className="h-3 w-3" />
+            {dict.form.addAccount.replace("{platform}", "Chess.com")}
+          </ChipButton>
+          <ChipButton
+            onClick={() => addRow("lichess")}
+            disabled={running}
+            className="h-7 px-2.5 rounded-md text-xs font-medium border inline-flex items-center gap-1"
+          >
+            <Plus className="h-3 w-3" />
+            {dict.form.addAccount.replace("{platform}", "Lichess")}
+          </ChipButton>
+        </div>
         <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
           <span className="text-[10px] uppercase tracking-widest text-ink-light/70 font-semibold">
             {dict.form.popular}
           </span>
+          {/* Compare against the parsed handle list, not the raw URL string —
+              with multi-row support, a trailing empty row leaves the raw
+              value as e.g. "Hikaru,", which would never equal "Hikaru". */}
           {POPULAR_PLAYERS.map((p) => {
-            const ccMatch = (p.chesscom ?? "").toLowerCase();
-            const liMatch = (p.lichess ?? "").toLowerCase();
-            const ccCurrent = chesscomUser.trim().toLowerCase();
-            const liCurrent = lichessUser.trim().toLowerCase();
-            const active =
-              ccCurrent === ccMatch && liCurrent === liMatch;
+            const ccPreset = (p.chesscom ?? "").toLowerCase();
+            const liPreset = (p.lichess ?? "").toLowerCase();
+            const ccActual = ccRows
+              .map((s) => s.trim().toLowerCase())
+              .filter(Boolean);
+            const liActual = liRows
+              .map((s) => s.trim().toLowerCase())
+              .filter(Boolean);
+            const ccActive = ccPreset
+              ? ccActual.length === 1 && ccActual[0] === ccPreset
+              : ccActual.length === 0;
+            const liActive = liPreset
+              ? liActual.length === 1 && liActual[0] === liPreset
+              : liActual.length === 0;
+            const active = ccActive && liActive;
             return (
               <ChipButton
                 key={p.label}
                 active={active}
                 onClick={() => {
-                  setChesscomUser(p.chesscom ?? "");
-                  setLichessUser(p.lichess ?? "");
+                  setChesscomRaw(p.chesscom ?? "");
+                  setLichessRaw(p.lichess ?? "");
                 }}
                 disabled={running}
                 title={[p.chesscom && `${p.chesscom} on Chess.com`, p.lichess && `${p.lichess} on Lichess`]
@@ -352,6 +454,8 @@ interface SourceRowProps {
   onChange: (next: string) => void;
   placeholder: string;
   disabled: boolean;
+  onRemove?: () => void;
+  removeLabel?: string;
 }
 
 function SourceRow({
@@ -361,6 +465,8 @@ function SourceRow({
   onChange,
   placeholder,
   disabled,
+  onRemove,
+  removeLabel,
 }: SourceRowProps) {
   return (
     <div className="flex items-stretch gap-2">
@@ -377,8 +483,19 @@ function SourceRow({
           autoComplete="off"
           spellCheck={false}
           disabled={disabled}
-          className="w-full h-12 pl-10 pr-4 rounded-lg border border-border bg-paper-dark text-base font-mono text-foreground placeholder:text-ink-light/40 focus:border-amber focus:ring-2 focus:ring-amber/20 outline-none transition-all"
+          className={`w-full h-12 pl-10 ${onRemove ? "pr-12" : "pr-4"} rounded-lg border border-border bg-paper-dark text-base font-mono text-foreground placeholder:text-ink-light/40 focus:border-amber focus:ring-2 focus:ring-amber/20 outline-none transition-all`}
         />
+        {onRemove ? (
+          <button
+            type="button"
+            onClick={onRemove}
+            disabled={disabled}
+            aria-label={removeLabel ?? "Remove account"}
+            className="absolute right-2 top-1/2 -translate-y-1/2 grid h-7 w-7 place-items-center rounded-md text-ink-light/60 hover:bg-paper hover:text-foreground transition-colors disabled:opacity-40"
+          >
+            <X className="h-3.5 w-3.5" />
+          </button>
+        ) : null}
       </div>
     </div>
   );
