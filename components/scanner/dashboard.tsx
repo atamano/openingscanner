@@ -39,6 +39,7 @@ export function Dashboard({ stats }: DashboardProps) {
 
   const [color, setColor] = useState<PlayerColor>(availableColors[0] ?? "white");
   const {
+    selectedFamily,
     selectedId,
     path,
     previewMoves,
@@ -66,7 +67,28 @@ export function Dashboard({ stats }: DashboardProps) {
   }, [color, clearOpening]);
 
   const selected = selectedId ? stats.byOpening[selectedId] : null;
-  const baseMoves = selected?.entry?.moves ?? [];
+  // When only a family chip is active (variation cleared but family kept),
+  // anchor the board on the longest common prefix of that family's entry
+  // moves for the current color so the position matches the chip — not the
+  // initial position, which is misleading.
+  const baseMoves = useMemo<string[]>(() => {
+    if (selected?.entry?.moves) return selected.entry.moves;
+    if (!selectedFamily) return [];
+    const familyEntries = Object.values(stats.byOpening).filter(
+      (s) => s.color === color && s.entry?.family === selectedFamily,
+    );
+    if (familyEntries.length === 0) return [];
+    let prefix = familyEntries[0].entry?.moves ?? [];
+    for (let i = 1; i < familyEntries.length && prefix.length > 0; i++) {
+      const moves = familyEntries[i].entry?.moves ?? [];
+      let j = 0;
+      while (j < prefix.length && j < moves.length && prefix[j] === moves[j]) {
+        j++;
+      }
+      prefix = prefix.slice(0, j);
+    }
+    return prefix;
+  }, [selected, selectedFamily, stats, color]);
   const boardMoves = previewMoves ?? [...baseMoves, ...path];
 
   // When a new opening is picked we normally reset the drill path. The
