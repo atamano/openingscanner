@@ -50,6 +50,7 @@
     "timeBlitz": "Blitz",
     "timeRapid": "Hızlı",
     "timeClassical": "Klasik",
+    "timeCorrespondence": "Yazışmalı",
     "window30d": "30 g",
     "window6m": "6 ay",
     "window1y": "1 yıl",
@@ -114,6 +115,7 @@
     "kpiLoss": "K%",
     "filterLabel": "Filtre:",
     "filterPlySuffix": "· {count} yarı-hamle içinde",
+    "filterPlyChipLabel": "{count} yarı-hamle",
     "clearFilter": "Temizle",
     "colorFilterLabel": "Renge göre filtrele"
   },

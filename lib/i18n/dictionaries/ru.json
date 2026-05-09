@@ -50,6 +50,7 @@
     "timeBlitz": "Блиц",
     "timeRapid": "Рапид",
     "timeClassical": "Классика",
+    "timeCorrespondence": "По переписке",
     "window30d": "30 д",
     "window6m": "6 мес",
     "window1y": "1 год",
@@ -114,6 +115,7 @@
     "kpiLoss": "П%",
     "filterLabel": "Фильтр:",
     "filterPlySuffix": "· на {count} полуходов в глубину",
+    "filterPlyChipLabel": "{count} полуходов",
     "clearFilter": "Сбросить",
     "colorFilterLabel": "Фильтр по цвету"
   },

@@ -50,6 +50,7 @@
     "timeBlitz": "Blitz",
     "timeRapid": "Rapid",
     "timeClassical": "Klassiek",
+    "timeCorrespondence": "Correspondentie",
     "window30d": "30 d",
     "window6m": "6 mnd",
     "window1y": "1 jr",
@@ -114,6 +115,7 @@
     "kpiLoss": "V%",
     "filterLabel": "Gefilterd op",
     "filterPlySuffix": "· {count} halve zetten erin",
+    "filterPlyChipLabel": "{count} halve zetten",
     "clearFilter": "Wissen",
     "colorFilterLabel": "Filter op kleur"
   },

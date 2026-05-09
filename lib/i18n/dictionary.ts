@@ -1,4 +1,4 @@
-import type { Locale } from "./config";
+import { DEFAULT_LOCALE, type Locale } from "./config";
 
 export interface Dictionary {
   meta: {
@@ -42,6 +42,7 @@ export interface Dictionary {
     timeBlitz: string;
     timeRapid: string;
     timeClassical: string;
+    timeCorrespondence: string;
     window30d: string;
     window6m: string;
     window1y: string;
@@ -106,6 +107,7 @@ export interface Dictionary {
     kpiLoss: string;
     filterLabel: string;
     filterPlySuffix: string;
+    filterPlyChipLabel: string;
     clearFilter: string;
     colorFilterLabel: string;
   };
@@ -196,36 +198,28 @@ export interface Dictionary {
 }
 
 /**
- * Lazy-load the JSON dictionary on the server. The JSON files live next to
- * this module and are resolved at build time via dynamic import.
+ * Lazy-load the JSON dictionary on the server. JSON files live next to this
+ * module; the loader map is `Record<Locale, ...>` so adding a new locale to
+ * `LOCALES` without registering its JSON loader is a compile error rather
+ * than a runtime `undefined`.
  */
+const LOADERS: Record<Locale, () => Promise<{ default: Dictionary }>> = {
+  en: () => import("./dictionaries/en.json"),
+  es: () => import("./dictionaries/es.json"),
+  fr: () => import("./dictionaries/fr.json"),
+  de: () => import("./dictionaries/de.json"),
+  it: () => import("./dictionaries/it.json"),
+  "pt-BR": () => import("./dictionaries/pt-BR.json"),
+  nl: () => import("./dictionaries/nl.json"),
+  pl: () => import("./dictionaries/pl.json"),
+  tr: () => import("./dictionaries/tr.json"),
+  ru: () => import("./dictionaries/ru.json"),
+  uk: () => import("./dictionaries/uk.json"),
+  ja: () => import("./dictionaries/ja.json"),
+  "zh-CN": () => import("./dictionaries/zh-CN.json"),
+};
+
 export async function getDictionary(locale: Locale): Promise<Dictionary> {
-  switch (locale) {
-    case "en":
-      return (await import("./dictionaries/en.json")).default as Dictionary;
-    case "es":
-      return (await import("./dictionaries/es.json")).default as Dictionary;
-    case "fr":
-      return (await import("./dictionaries/fr.json")).default as Dictionary;
-    case "de":
-      return (await import("./dictionaries/de.json")).default as Dictionary;
-    case "it":
-      return (await import("./dictionaries/it.json")).default as Dictionary;
-    case "pt-BR":
-      return (await import("./dictionaries/pt-BR.json")).default as Dictionary;
-    case "nl":
-      return (await import("./dictionaries/nl.json")).default as Dictionary;
-    case "pl":
-      return (await import("./dictionaries/pl.json")).default as Dictionary;
-    case "tr":
-      return (await import("./dictionaries/tr.json")).default as Dictionary;
-    case "ru":
-      return (await import("./dictionaries/ru.json")).default as Dictionary;
-    case "uk":
-      return (await import("./dictionaries/uk.json")).default as Dictionary;
-    case "ja":
-      return (await import("./dictionaries/ja.json")).default as Dictionary;
-    case "zh-CN":
-      return (await import("./dictionaries/zh-CN.json")).default as Dictionary;
-  }
+  const load = LOADERS[locale] ?? LOADERS[DEFAULT_LOCALE];
+  return (await load()).default;
 }

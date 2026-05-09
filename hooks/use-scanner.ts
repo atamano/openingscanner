@@ -99,11 +99,17 @@ export function useScanner() {
       } else {
         if (result.error) setError(result.error);
         setStatus("done");
-        void saveLastScan({
+        // Await the save so a subsequent reset()'s clearLastScan can't be
+        // re-overwritten by a still-in-flight put. After the save, double
+        // check the scan id — if reset fired during the await, undo.
+        await saveLastScan({
           params,
           stats: result.stats,
           finishedAt: Date.now(),
         });
+        if (scanIdRef.current !== myId) {
+          void clearLastScan();
+        }
       }
     } catch (e) {
       if (scanIdRef.current !== myId) return;

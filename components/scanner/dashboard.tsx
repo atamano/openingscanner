@@ -1,7 +1,7 @@
 "use client";
 
 import { GitBranch, Info, MousePointerClick } from "lucide-react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ChessBoard } from "@/components/chess/chess-board";
 import { ContinuationsPanel } from "@/components/scanner/continuations-panel";
 import { ExportMenu } from "@/components/scanner/export-menu";
@@ -121,6 +121,11 @@ export function Dashboard({ stats }: DashboardProps) {
   //  →   push the focused continuation (defaults to the most-played one)
   //  ↑/↓ cycle the focus through alternative continuations
   // Home reset to the opening position
+  //
+  // Bind the listener once per mount via a ref so children/focus changes
+  // don't churn document.addEventListener on every key press.
+  const navStateRef = useRef({ currentChildren, focusIndex });
+  navStateRef.current = { currentChildren, focusIndex };
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       const target = e.target as HTMLElement | null;
@@ -137,6 +142,8 @@ export function Dashboard({ stats }: DashboardProps) {
       ) {
         return;
       }
+
+      const { currentChildren, focusIndex } = navStateRef.current;
 
       if (e.key === "ArrowLeft") {
         e.preventDefault();
@@ -166,7 +173,7 @@ export function Dashboard({ stats }: DashboardProps) {
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [currentChildren, focusIndex]);
+  }, [setPath]);
 
   return (
     <section className="space-y-3">

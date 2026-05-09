@@ -69,6 +69,7 @@ export function ScanSummaryBar({
     blitz: dict.form.timeBlitz,
     rapid: dict.form.timeRapid,
     classical: dict.form.timeClassical,
+    correspondence: dict.form.timeCorrespondence,
   };
   const localizedTimeClasses = timeClasses
     .map((tc) => timeClassLabelMap[tc] ?? tc)
@@ -217,9 +218,10 @@ export function ScanSummaryBar({
           ) : null}
           {path.length > 0 ? (
             <FilterChip
-              label={dict.dashboard.filterPlySuffix
-                .replace(/^·\s*/, "")
-                .replace("{count}", String(path.length))}
+              label={dict.dashboard.filterPlyChipLabel.replace(
+                "{count}",
+                String(path.length),
+              )}
               onRemove={clearPath}
               subtle
             />

@@ -50,6 +50,7 @@
     "timeBlitz": "闪电",
     "timeRapid": "快棋",
     "timeClassical": "慢棋",
+    "timeCorrespondence": "通讯",
     "window30d": "30 天",
     "window6m": "6 月",
     "window1y": "1 年",
@@ -114,6 +115,7 @@
     "kpiLoss": "负%",
     "filterLabel": "已筛选:",
     "filterPlySuffix": "· 深入 {count} 个半回合",
+    "filterPlyChipLabel": "{count} 个半回合",
     "clearFilter": "清除",
     "colorFilterLabel": "按颜色筛选"
   },

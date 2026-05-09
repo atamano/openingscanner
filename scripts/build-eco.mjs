@@ -7,6 +7,7 @@
  * Usage: node scripts/build-eco.mjs
  */
 import { readFileSync, writeFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { Chess } from "chess.js";
 
 const files = ["a", "b", "c", "d", "e"].map(
@@ -98,8 +99,9 @@ export const ECO_BY_EPD: Record<string, EcoRecord> = ${JSON.stringify(
 export const ECO_ENTRY_COUNT = ${entries.length};
 `;
 
-writeFileSync(
-  "lib/catalog/eco-data.ts",
-  header,
+// Anchor the output path to the script location so this works from any CWD.
+const outPath = fileURLToPath(
+  new URL("../lib/catalog/eco-data.ts", import.meta.url),
 );
-console.error("Wrote lib/catalog/eco-data.ts");
+writeFileSync(outPath, header);
+console.error(`Wrote ${outPath}`);

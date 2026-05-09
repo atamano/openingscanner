@@ -8,6 +8,11 @@ import {
   parseAsStringLiteral,
   useQueryState,
 } from "nuqs";
+// `String.split(",")` always returns ≥1 element so a fallback would be
+// unreachable. Kept as a tiny named helper purely for readability at the
+// call site.
+const parseRows = (raw: string) => raw.split(",");
+const serializeRows = (rows: string[]) => rows.join(",");
 import { useDictionary } from "@/lib/i18n/context";
 import {
   DATE_PRESETS,
@@ -26,7 +31,13 @@ import type {
 } from "@/lib/sources/types";
 import { ChipButton } from "./chip-button";
 
-const TIME_VALUES = ["bullet", "blitz", "rapid", "classical"] as const;
+const TIME_VALUES = [
+  "bullet",
+  "blitz",
+  "rapid",
+  "classical",
+  "correspondence",
+] as const;
 const DATE_VALUES = DATE_PRESETS;
 const LIMIT_VALUES = LIMIT_PRESETS;
 
@@ -54,18 +65,6 @@ interface ScanFormProps {
   onSubmit: (params: ScanParams) => void;
   running: boolean;
   onAbort: () => void;
-}
-
-// URL transport: comma-separated handles per platform. Always renders at
-// least one row so a fresh page shows both inputs; trailing commas are
-// preserved so newly added empty rows survive a re-render.
-function parseRows(raw: string): string[] {
-  const parts = raw.split(",");
-  return parts.length > 0 ? parts : [""];
-}
-
-function serializeRows(rows: string[]): string {
-  return rows.join(",");
 }
 
 export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
@@ -110,8 +109,8 @@ export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
     [times],
   );
 
-  const ccRows = useMemo(() => parseRows(chesscomRaw), [chesscomRaw]);
-  const liRows = useMemo(() => parseRows(lichessRaw), [lichessRaw]);
+  const ccRows = parseRows(chesscomRaw);
+  const liRows = parseRows(lichessRaw);
 
   const updateRow = (platform: Platform, idx: number, value: string) => {
     const next = platform === "chesscom" ? [...ccRows] : [...liRows];
@@ -137,11 +136,10 @@ export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
     );
   };
 
-  // Sources: chess.com first to preserve the per-source priority the worker
-  // depends on (the maxGames cap is shared, so order acts as priority).
   // Dedupe on `${platform}:${lowercased handle}` so a duplicate handle
-  // doesn't double-count games, and skip empty rows.
-  const sources = useMemo<ScanSource[]>(() => {
+  // doesn't double-count games, and skip empty rows. Worker fetches
+  // platforms in parallel, so chess.com order is no longer load-bearing.
+  const sources: ScanSource[] = (() => {
     const seen = new Set<string>();
     const out: ScanSource[] = [];
     const push = (platform: Platform, handle: string) => {
@@ -155,7 +153,7 @@ export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
     for (const u of ccRows) push("chesscom", u);
     for (const u of liRows) push("lichess", u);
     return out;
-  }, [ccRows, liRows]);
+  })();
 
   const canSubmit = sources.length > 0 && !running;
 
@@ -164,6 +162,7 @@ export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
     blitz: dict.form.timeBlitz,
     rapid: dict.form.timeRapid,
     classical: dict.form.timeClassical,
+    correspondence: dict.form.timeCorrespondence,
   };
 
   const dateLabels: Record<DatePreset, string> = {

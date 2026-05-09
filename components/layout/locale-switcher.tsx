@@ -25,13 +25,16 @@ export function LocaleSwitcher() {
   const switchTo = (next: Locale) => {
     if (next === current) return;
     // Swap the first path segment if it's a known locale; otherwise prepend.
-    const segments = pathname.split("/");
-    if (segments[1] && LOCALES.includes(segments[1] as Locale)) {
-      segments[1] = next;
+    // Filter out empty segments first so the root path "/" doesn't produce
+    // a trailing slash like "/fr/" (which then triggers an extra redirect
+    // through proxy.ts).
+    const parts = pathname.split("/").filter(Boolean);
+    if (parts[0] && LOCALES.includes(parts[0] as Locale)) {
+      parts[0] = next;
     } else {
-      segments.splice(1, 0, next);
+      parts.unshift(next);
     }
-    const nextPath = segments.join("/") || `/${next}`;
+    const nextPath = `/${parts.join("/")}`;
     const qs = searchParams?.toString();
     const href = qs ? `${nextPath}?${qs}` : nextPath;
 

@@ -50,6 +50,7 @@
     "timeBlitz": "Blitz",
     "timeRapid": "Rapide",
     "timeClassical": "Classique",
+    "timeCorrespondence": "Correspondance",
     "window30d": "30 j",
     "window6m": "6 mois",
     "window1y": "1 an",
@@ -114,6 +115,7 @@
     "kpiLoss": "D%",
     "filterLabel": "Filtré sur",
     "filterPlySuffix": "· {count} demi-coups plus loin",
+    "filterPlyChipLabel": "{count} demi-coups",
     "clearFilter": "Effacer",
     "colorFilterLabel": "Filtrer par couleur"
   },

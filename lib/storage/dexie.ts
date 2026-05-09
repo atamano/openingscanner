@@ -38,6 +38,13 @@ class ScannerDB extends Dexie {
     this.version(3)
       .stores({ scans: "id" })
       .upgrade((tx) => tx.table("scans").clear());
+
+    // Multi-tab safety: if a newer tab loads with a bumped schema version,
+    // close this connection so the upgrade can proceed instead of blocking.
+    this.on("versionchange", () => this.close());
+    this.on("blocked", () => {
+      console.warn("scanner DB upgrade blocked by another tab");
+    });
   }
 }
 
@@ -80,11 +87,28 @@ export async function saveLastScan(
   }
 }
 
+function isValidSavedScan(row: unknown): row is SavedScan {
+  if (!row || typeof row !== "object") return false;
+  const r = row as Partial<SavedScan>;
+  if (r.schemaVersion !== SCHEMA_VERSION) return false;
+  const s = r.stats;
+  if (!s || typeof s !== "object") return false;
+  return (
+    typeof s.byOpening === "object" &&
+    s.byOpening !== null &&
+    typeof s.colorBreakdown === "object" &&
+    s.colorBreakdown !== null &&
+    typeof s.globalTreeByColor === "object" &&
+    s.globalTreeByColor !== null
+  );
+}
+
 export async function loadLastScan(): Promise<SavedScan | null> {
   try {
     const row = await db().scans.get("last");
     if (!row) return null;
-    if (row.schemaVersion !== SCHEMA_VERSION) {
+    if (!isValidSavedScan(row)) {
+      // Stale schema or corrupted row — drop it so next scan writes fresh.
       await db().scans.delete("last");
       return null;
     }

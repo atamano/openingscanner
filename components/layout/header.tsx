@@ -17,26 +17,17 @@ export function Header({ onNewScan, subtitle }: HeaderProps) {
   return (
     <header className="wood-panel border-b-2 border-amber-dark/30 shrink-0">
       <div className="flex h-11 items-center gap-2 px-3 sm:gap-4 sm:px-5">
-        {onNewScan ? (
-          <button
-            type="button"
-            onClick={onNewScan}
-            className="text-base font-bold tracking-tight text-amber-light select-none rounded-md -mx-1 px-1 hover:text-paper transition-colors"
-            style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
-            aria-label={dict.header.newScan}
-          >
-            Opening Scanner
-          </button>
-        ) : (
-          <Link
-            href={`/${locale}`}
-            className="text-base font-bold tracking-tight text-amber-light select-none rounded-md -mx-1 px-1 hover:text-paper transition-colors"
-            style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
-            aria-label={dict.header.backToHome}
-          >
-            Opening Scanner
-          </Link>
-        )}
+        {/* Brand always links home — never overload it as a destructive
+            new-scan trigger; the explicit "+ New scan" button on the right
+            is the single discoverable way to reset state. */}
+        <Link
+          href={`/${locale}`}
+          className="text-base font-bold tracking-tight text-amber-light select-none rounded-md -mx-1 px-1 hover:text-paper transition-colors"
+          style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
+          aria-label={dict.header.backToHome}
+        >
+          Opening Scanner
+        </Link>
 
         {subtitle ? (
           <>

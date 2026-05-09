@@ -50,6 +50,7 @@
     "timeBlitz": "Бліц",
     "timeRapid": "Рапід",
     "timeClassical": "Класика",
+    "timeCorrespondence": "По листуванню",
     "window30d": "30 д",
     "window6m": "6 міс",
     "window1y": "1 рік",
@@ -114,6 +115,7 @@
     "kpiLoss": "П%",
     "filterLabel": "Фільтр:",
     "filterPlySuffix": "· на {count} півходів углиб",
+    "filterPlyChipLabel": "{count} півходів",
     "clearFilter": "Очистити",
     "colorFilterLabel": "Фільтр за кольором"
   },

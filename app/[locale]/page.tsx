@@ -2,7 +2,7 @@
 
 import { AlertCircle, Radar } from "lucide-react";
 import { parseAsString, parseAsStringLiteral, useQueryState } from "nuqs";
-import { Suspense, useEffect, useRef, useState } from "react";
+import { Suspense, useState } from "react";
 import { Header } from "@/components/layout/header";
 import { Dashboard } from "@/components/scanner/dashboard";
 import { ScanForm } from "@/components/scanner/scan-form";
@@ -58,15 +58,6 @@ function HomeInner() {
 
   const started = status !== "idle";
   const [expanded, setExpanded] = useState(false);
-
-  const autoCollapsedRef = useRef(false);
-  useEffect(() => {
-    if (status === "running" && !autoCollapsedRef.current) {
-      autoCollapsedRef.current = true;
-      setExpanded(false);
-    }
-    if (status === "idle") autoCollapsedRef.current = false;
-  }, [status]);
 
   const [scanGen, setScanGen] = useState(0);
   const submit = (params: ScanParams) => {

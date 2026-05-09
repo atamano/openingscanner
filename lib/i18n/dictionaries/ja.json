@@ -50,6 +50,7 @@
     "timeBlitz": "ブリッツ",
     "timeRapid": "ラピッド",
     "timeClassical": "クラシカル",
+    "timeCorrespondence": "通信",
     "window30d": "30日",
     "window6m": "6ヶ月",
     "window1y": "1年",
@@ -114,6 +115,7 @@
     "kpiLoss": "負%",
     "filterLabel": "フィルタ:",
     "filterPlySuffix": "· {count}半手先",
+    "filterPlyChipLabel": "{count}半手",
     "clearFilter": "クリア",
     "colorFilterLabel": "色で絞り込む"
   },
