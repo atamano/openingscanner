@@ -18,6 +18,13 @@ export interface MoveNode {
   draws: number;
   playerLosses: number;
   children: Record<string, MoveNode>;
+  /**
+   * Reference to the most recent game whose continuation traversed this node.
+   * Used to render an inline "single game" row when `count === 1` so the user
+   * can see the game without drilling all the way to the leaf. Stripped on
+   * IDB persistence to keep the payload small.
+   */
+  lastGame?: GameSummary;
 }
 
 export interface GameRecord {
@@ -171,7 +178,7 @@ export class RepertoireAccumulator {
     const continuation = match
       ? game.moves.slice(match.atPly)
       : game.moves;
-    addGameToTree(stats.tree, continuation, playerColor, game.result);
+    addGameToTree(stats.tree, continuation, playerColor, game);
 
     // Build the global-from-initial-position tree incrementally so finalize()
     // stays O(openings) instead of re-walking every game at the end.
@@ -179,7 +186,7 @@ export class RepertoireAccumulator {
       this.globalTreeByColor[playerColor],
       game.moves,
       playerColor,
-      game.result,
+      game,
     );
   }
 
@@ -294,8 +301,9 @@ function addGameToTree(
   root: MoveNode,
   moves: readonly string[],
   playerColor: PlayerColor,
-  result: GameSummary["result"],
+  game: GameSummary,
 ): void {
+  const result = game.result;
   let node = root;
   const depth = Math.min(moves.length, TREE_DEPTH_LIMIT);
   for (let i = 0; i < depth; i++) {
@@ -306,6 +314,7 @@ function addGameToTree(
       node.children[san] = child;
     }
     child.count++;
+    child.lastGame = game;
     if (result === playerColor) child.playerWins++;
     else if (result === "draw") child.draws++;
     else child.playerLosses++;

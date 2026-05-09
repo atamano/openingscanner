@@ -67,20 +67,39 @@ export function ContinuationsTable({
           </div>
         ) : (
           <ul className="divide-y">
-            {children.map((child) => (
-              <ContinuationRow
-                key={child.san}
-                node={child}
-                focused={child.san === focusedSan}
-                buttonRef={
-                  child.san === focusedSan ? focusedRef : undefined
-                }
-                onClick={() => onPush(child.san)}
-                onHover={
-                  onFocus ? () => onFocus(child.san) : undefined
-                }
-              />
-            ))}
+            {children.map((child) => {
+              const focused = child.san === focusedSan;
+              const ref = focused ? focusedRef : undefined;
+              const onHover = onFocus ? () => onFocus(child.san) : undefined;
+              // openingtree-style: when a continuation has been played in
+              // exactly one game, surface the player names + result + game
+              // link inline instead of forcing the user to drill all the way
+              // to the leaf to discover it. `lastGame` is set during tree
+              // ingestion and stripped on IDB rehydrate, so guard on both.
+              if (child.count === 1 && child.lastGame) {
+                return (
+                  <SingleGameRow
+                    key={child.san}
+                    node={child}
+                    game={child.lastGame}
+                    focused={focused}
+                    buttonRef={ref}
+                    onClick={() => onPush(child.san)}
+                    onHover={onHover}
+                  />
+                );
+              }
+              return (
+                <ContinuationRow
+                  key={child.san}
+                  node={child}
+                  focused={focused}
+                  buttonRef={ref}
+                  onClick={() => onPush(child.san)}
+                  onHover={onHover}
+                />
+              );
+            })}
           </ul>
         )}
       </div>
@@ -185,6 +204,68 @@ function GameRow({ rec }: { rec: GameRecord }) {
           {result}
         </span>
         <ExternalLink className="size-3 text-muted-foreground" />
+      </a>
+    </li>
+  );
+}
+
+function SingleGameRow({
+  node,
+  game,
+  focused,
+  buttonRef,
+  onClick,
+  onHover,
+}: {
+  node: MoveNode;
+  game: NonNullable<MoveNode["lastGame"]>;
+  focused: boolean;
+  buttonRef?: React.Ref<HTMLButtonElement>;
+  onClick: () => void;
+  onHover?: () => void;
+}) {
+  const result = RESULT_LABEL[game.result];
+  return (
+    <li className="relative">
+      <button
+        type="button"
+        ref={buttonRef}
+        onClick={onClick}
+        onMouseEnter={onHover}
+        className={cn(
+          "group grid w-full grid-cols-[auto_1fr_auto] items-center gap-2 px-3 py-2.5 pr-10 text-left text-sm transition-colors sm:gap-3 sm:px-4 sm:pr-12",
+          "hover:bg-accent/40 focus-visible:bg-accent/60 focus-visible:outline-none",
+          focused && "bg-primary/10",
+        )}
+      >
+        {focused ? (
+          <span className="absolute inset-y-0 left-0 w-0.5 bg-primary" />
+        ) : null}
+        <span className="font-mono text-sm font-semibold tabular-nums">
+          {node.san}
+        </span>
+        <span className="min-w-0 truncate text-xs text-muted-foreground">
+          <span className={game.result === "white" ? "font-semibold text-foreground" : ""}>
+            {game.white.name}
+          </span>
+          <span> vs </span>
+          <span className={game.result === "black" ? "font-semibold text-foreground" : ""}>
+            {game.black.name}
+          </span>
+        </span>
+        <span className="font-mono tabular-nums text-xs text-muted-foreground">
+          {result}
+        </span>
+      </button>
+      <a
+        href={game.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={(e) => e.stopPropagation()}
+        className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground sm:right-3"
+        aria-label={`${game.white.name} vs ${game.black.name}`}
+      >
+        <ExternalLink className="size-3.5" />
       </a>
     </li>
   );

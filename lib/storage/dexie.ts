@@ -1,5 +1,5 @@
 import Dexie, { type EntityTable } from "dexie";
-import type { RepertoireStats } from "@/lib/repertoire/aggregate";
+import type { MoveNode, RepertoireStats } from "@/lib/repertoire/aggregate";
 import type { ScanParams } from "@/lib/sources/types";
 
 /**
@@ -61,14 +61,44 @@ function db(): ScannerDB {
 /**
  * Raw games multiply the payload size 10–50×. We don't ship them to IDB —
  * exports are an in-session feature, and a rehydrated scan surfaces its
- * unavailable-exports state via `stats.gamesRetained === false`.
+ * unavailable-exports state via `stats.gamesRetained === false`. Move-tree
+ * nodes also carry a `lastGame` reference for inline single-game rows;
+ * structured-clone would deep-copy each one and bloat the payload, so we
+ * strip them here too. The render path already gates on `gamesRetained`.
  */
 function stripGamesForPersistence(stats: RepertoireStats): RepertoireStats {
   const byOpening: RepertoireStats["byOpening"] = {};
   for (const [id, opening] of Object.entries(stats.byOpening)) {
-    byOpening[id] = { ...opening, games: [] };
+    byOpening[id] = {
+      ...opening,
+      games: [],
+      tree: stripLastGame(opening.tree),
+    };
   }
-  return { ...stats, byOpening, gamesRetained: false };
+  return {
+    ...stats,
+    byOpening,
+    globalTreeByColor: {
+      white: stripLastGame(stats.globalTreeByColor.white),
+      black: stripLastGame(stats.globalTreeByColor.black),
+    },
+    gamesRetained: false,
+  };
+}
+
+function stripLastGame(node: MoveNode): MoveNode {
+  const children: Record<string, MoveNode> = {};
+  for (const [san, child] of Object.entries(node.children)) {
+    children[san] = stripLastGame(child);
+  }
+  return {
+    san: node.san,
+    count: node.count,
+    playerWins: node.playerWins,
+    draws: node.draws,
+    playerLosses: node.playerLosses,
+    children,
+  };
 }
 
 export async function saveLastScan(
