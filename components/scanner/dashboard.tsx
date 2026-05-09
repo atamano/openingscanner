@@ -68,9 +68,12 @@ export function Dashboard({ stats }: DashboardProps) {
 
   const selected = selectedId ? stats.byOpening[selectedId] : null;
   // When only a family chip is active (variation cleared but family kept),
-  // anchor the board on the longest common prefix of that family's entry
-  // moves for the current color so the position matches the chip — not the
-  // initial position, which is misleading.
+  // anchor the board on the longest common prefix of the family's entry
+  // moves for the current color. Some Lichess "families" group unrelated
+  // lines under one colorful name (e.g. "Pterodactyl Defense" spans both
+  // 1.e4 and 1.d4 transpositions), so when no common prefix exists fall
+  // back to the most-played variant's entry moves — at least a concrete,
+  // representative position rather than the empty starting board.
   const baseMoves = useMemo<string[]>(() => {
     if (selected?.entry?.moves) return selected.entry.moves;
     if (!selectedFamily) return [];
@@ -87,7 +90,11 @@ export function Dashboard({ stats }: DashboardProps) {
       }
       prefix = prefix.slice(0, j);
     }
-    return prefix;
+    if (prefix.length > 0) return prefix;
+    const mostPlayed = familyEntries.reduce((best, current) =>
+      current.gameCount > best.gameCount ? current : best,
+    );
+    return mostPlayed.entry?.moves ?? [];
   }, [selected, selectedFamily, stats, color]);
   const boardMoves = previewMoves ?? [...baseMoves, ...path];
 
