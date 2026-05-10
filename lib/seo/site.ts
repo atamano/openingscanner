@@ -1,5 +1,10 @@
 const DEFAULT_DEV_URL = "http://localhost:3000";
 
+// The apex (openingscanner.com) 307s to the www host, so canonicals and
+// sitemap entries must use the www host directly to avoid pointing search
+// engines at a redirect.
+const PRODUCTION_SITE_URL = "https://www.openingscanner.com";
+
 function stripTrailingSlash(url: string): string {
   return url.endsWith("/") ? url.slice(0, -1) : url;
 }
@@ -15,19 +20,15 @@ export function getSiteUrl(): string {
   const explicit = process.env.NEXT_PUBLIC_SITE_URL;
   if (explicit) return stripTrailingSlash(explicit);
 
-  // On production, always use the canonical production URL — sitemap entries
-  // have to match their sitemap origin, so the branch alias (which is always
-  // present, even on prod) must NOT leak into the sitemap on prod.
-  const vercelEnv = process.env.VERCEL_ENV;
-  const prodUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL;
-  if (vercelEnv === "production" && prodUrl) {
-    return `https://${stripTrailingSlash(prodUrl)}`;
+  if (process.env.VERCEL_ENV === "production") {
+    return PRODUCTION_SITE_URL;
   }
 
   // On previews, use the branch/preview URL so canonical/hreflang match the
   // origin the visitor is actually on.
   const branch = process.env.VERCEL_BRANCH_URL;
   if (branch) return `https://${stripTrailingSlash(branch)}`;
+  const prodUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL;
   if (prodUrl) return `https://${stripTrailingSlash(prodUrl)}`;
 
   return DEFAULT_DEV_URL;
