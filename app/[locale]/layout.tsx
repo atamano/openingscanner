@@ -4,10 +4,12 @@ import Script from "next/script";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { notFound } from "next/navigation";
 import { Toaster } from "sonner";
+import { FooterLocaleNav } from "@/components/layout/footer-locale-nav";
 import { ThemeProvider } from "@/components/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { I18nProvider } from "@/lib/i18n/context";
 import {
+  DEFAULT_LOCALE,
   LOCALES,
   LOCALE_INFO,
   isLocale,
@@ -64,7 +66,10 @@ export async function generateMetadata({
   const languages = Object.fromEntries(
     LOCALES.map((l) => [LOCALE_INFO[l].bcp47, `${siteUrl}/${l}`]),
   );
-  languages["x-default"] = siteUrl;
+  // Point x-default at the canonical /en URL, not the apex — the apex 307s
+  // through the locale-negotiating proxy, which Ahrefs et al. flag as a
+  // redirected hreflang.
+  languages["x-default"] = `${siteUrl}/${DEFAULT_LOCALE}`;
   const indexable = isProductionDeployment();
 
   return {
@@ -119,6 +124,52 @@ export async function generateMetadata({
       address: false,
     },
   };
+}
+
+function SiteFooter({
+  currentLocale,
+  languageLabel,
+}: {
+  currentLocale: Locale;
+  languageLabel: string;
+}) {
+  return (
+    <footer className="border-t border-border/60 bg-paper text-ink-light">
+      <div className="mx-auto max-w-7xl px-4 py-6 text-xs flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <FooterLocaleNav
+          currentLocale={currentLocale}
+          label={languageLabel}
+        />
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+          <a
+            href="https://github.com/atamano/openingscanner"
+            target="_blank"
+            rel="noopener"
+            className="hover:text-foreground"
+          >
+            GitHub
+          </a>
+          <span aria-hidden>·</span>
+          <a
+            href="https://darksquares.net"
+            target="_blank"
+            rel="noopener"
+            className="hover:text-foreground"
+          >
+            darksquares.net
+          </a>
+          <a
+            href="https://chessatlas.net"
+            target="_blank"
+            rel="noopener"
+            className="hover:text-foreground"
+          >
+            chessatlas.net
+          </a>
+        </div>
+      </div>
+    </footer>
+  );
 }
 
 export default async function LocaleLayout({
@@ -176,6 +227,15 @@ export default async function LocaleLayout({
             <Toaster richColors closeButton position="bottom-right" />
           </I18nProvider>
         </ThemeProvider>
+        {/* Server-rendered so crawlers see real <a> tags. The page body itself
+            sits behind a Suspense fallback={null} (nuqs bails SSR on
+            useSearchParams), which would otherwise leave the HTML with zero
+            outlinks. Keep this outside the providers — it must not depend on
+            client-only context. */}
+        <SiteFooter
+          currentLocale={locale}
+          languageLabel={dict.header.languageLabel}
+        />
       </body>
     </html>
   );
