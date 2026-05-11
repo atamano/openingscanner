@@ -176,6 +176,13 @@
     "showMore": "Mostrar mais {count}",
     "collapse": "Recolher"
   },
+  "confidence": {
+    "weak": "Sinal fraco",
+    "moderate": "Moderado",
+    "high": "Alta confiança",
+    "stable": "Perfil estável",
+    "tooltip": "{label} · com base em {n} partidas. Limites: menos de 50 exploratório, 50 a 199 moderado, 200 a 999 alto, 1000+ estável."
+  },
   "export": {
     "trigger": "Exportar",
     "scopeLabel": "Escopo da exportação",

@@ -176,6 +176,13 @@
     "showMore": "再显示 {count} 项",
     "collapse": "折叠"
   },
+  "confidence": {
+    "weak": "信号较弱",
+    "moderate": "中等",
+    "high": "高置信度",
+    "stable": "稳定档案",
+    "tooltip": "{label} · 基于 {n} 局。阈值：少于 50 为探索性，50 至 199 为中等，200 至 999 为高，1000+ 为稳定。"
+  },
   "export": {
     "trigger": "导出",
     "scopeLabel": "导出范围",

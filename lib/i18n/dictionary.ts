@@ -168,6 +168,13 @@ export interface Dictionary {
     showMore: string;
     collapse: string;
   };
+  confidence: {
+    weak: string;
+    moderate: string;
+    high: string;
+    stable: string;
+    tooltip: string;
+  };
   export: {
     trigger: string;
     scopeLabel: string;

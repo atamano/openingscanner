@@ -2,6 +2,7 @@
 
 import { ChevronLeft, ChevronRight, Search, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import { ConfidenceBadge } from "@/components/ui/confidence-badge";
 import { isUncategorizedId } from "@/lib/catalog/openings";
 import { useDictionary } from "@/lib/i18n/context";
 import type { OpeningStats, RepertoireStats } from "@/lib/repertoire/aggregate";
@@ -294,7 +295,8 @@ function FamilyRow({
         />
       </div>
       <div className="flex flex-col items-end gap-0.5 text-right">
-        <span className="font-mono text-sm font-semibold tabular-nums leading-tight">
+        <span className="flex items-center justify-end gap-1.5 font-mono text-sm font-semibold tabular-nums leading-tight">
+          <ConfidenceBadge n={group.totalGames} dotOnly />
           {group.totalGames}
         </span>
         <span className="text-[10px] text-muted-foreground">
@@ -369,7 +371,8 @@ function OpeningRow({
       </div>
 
       <div className="flex flex-col items-end gap-0.5 text-right">
-        <span className="font-mono text-sm font-semibold tabular-nums leading-tight">
+        <span className="flex items-center justify-end gap-1.5 font-mono text-sm font-semibold tabular-nums leading-tight">
+          <ConfidenceBadge n={stats.gameCount} dotOnly />
           {stats.gameCount}
         </span>
         <span className="text-[10px] text-muted-foreground">

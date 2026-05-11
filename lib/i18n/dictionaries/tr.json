@@ -176,6 +176,13 @@
     "showMore": "{count} tane daha göster",
     "collapse": "Daralt"
   },
+  "confidence": {
+    "weak": "Zayıf sinyal",
+    "moderate": "Orta",
+    "high": "Yüksek güven",
+    "stable": "Kararlı profil",
+    "tooltip": "{label} · {n} oyuna dayalı. Eşikler: 50 altı keşifsel, 50 ila 199 orta, 200 ila 999 yüksek, 1000+ kararlı."
+  },
   "export": {
     "trigger": "Dışa aktar",
     "scopeLabel": "Dışa aktarım kapsamı",

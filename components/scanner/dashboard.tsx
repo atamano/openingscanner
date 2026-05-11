@@ -9,6 +9,7 @@ import { GapAnalysis } from "@/components/scanner/gap-analysis";
 import { RepertoireList } from "@/components/scanner/repertoire-list";
 import { StrongSpots } from "@/components/scanner/strong-spots";
 import { WeakSpots } from "@/components/scanner/weak-spots";
+import { ConfidenceBadge } from "@/components/ui/confidence-badge";
 import {
   ToggleGroup,
   ToggleGroupItem,
@@ -488,6 +489,10 @@ function CenterPanel({
 
       <div className="mx-auto w-full max-w-[min(100%,calc(100dvh-20rem))]">
         <ChessBoard moves={boardMoves} orientation={color} />
+      </div>
+
+      <div className="flex justify-center">
+        <ConfidenceBadge n={stats.gameCount} />
       </div>
 
       <div className="grid grid-cols-4 gap-2 text-xs">

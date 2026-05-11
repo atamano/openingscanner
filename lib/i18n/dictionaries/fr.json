@@ -176,6 +176,13 @@
     "showMore": "Voir {count} de plus",
     "collapse": "Réduire"
   },
+  "confidence": {
+    "weak": "Signal faible",
+    "moderate": "Modéré",
+    "high": "Confiance élevée",
+    "stable": "Profil stable",
+    "tooltip": "{label} · basé sur {n} parties. Seuils : moins de 50 exploratoire, 50 à 199 modéré, 200 à 999 élevé, 1000+ stable."
+  },
   "export": {
     "trigger": "Exporter",
     "scopeLabel": "Portée de l'export",

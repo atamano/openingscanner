@@ -176,6 +176,13 @@
     "showMore": "Mostrar {count} más",
     "collapse": "Contraer"
   },
+  "confidence": {
+    "weak": "Señal débil",
+    "moderate": "Moderado",
+    "high": "Confianza alta",
+    "stable": "Perfil estable",
+    "tooltip": "{label} · basado en {n} partidas. Umbrales: menos de 50 exploratorio, 50 a 199 moderado, 200 a 999 alto, 1000+ estable."
+  },
   "export": {
     "trigger": "Exportar",
     "scopeLabel": "Alcance de exportación",

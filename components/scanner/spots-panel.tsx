@@ -10,6 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { ConfidenceBadge } from "@/components/ui/confidence-badge";
 import { useDictionary } from "@/lib/i18n/context";
 import { formatLastMove, renderPreview } from "@/lib/pgn/format";
 import type { OpeningStats, RepertoireStats } from "@/lib/repertoire/aggregate";
@@ -190,6 +191,11 @@ export function SpotsPanel({
                   <span className={`text-xs tabular-nums ${statClassName}`}>
                     {formatPct(v.winPct, 1)}W · {formatPct(v.lossPct, 1)}L
                   </span>
+                  <ConfidenceBadge
+                    n={v.count}
+                    size="xs"
+                    className="ml-auto"
+                  />
                 </div>
                 <div className="font-medium">
                   {formatLastMove(selected.entry?.moves ?? [], v.path)}
@@ -217,6 +223,11 @@ export function SpotsPanel({
                   <span className={`text-xs tabular-nums ${statClassName}`}>
                     {formatPct(w.winPct, 1)}W · {formatPct(w.lossPct, 1)}L
                   </span>
+                  <ConfidenceBadge
+                    n={w.stats.gameCount}
+                    size="xs"
+                    className="ml-auto"
+                  />
                 </div>
                 <div className="line-clamp-1 font-medium">
                   {w.stats.entry?.name ?? dict.dashboard.uncategorized}

@@ -176,6 +176,13 @@
     "showMore": "Pokaż {count} więcej",
     "collapse": "Zwiń"
   },
+  "confidence": {
+    "weak": "Słaby sygnał",
+    "moderate": "Umiarkowany",
+    "high": "Wysoka pewność",
+    "stable": "Stabilny profil",
+    "tooltip": "{label} · na podstawie {n} partii. Progi: poniżej 50 eksploracyjny, 50 do 199 umiarkowany, 200 do 999 wysoki, 1000+ stabilny."
+  },
   "export": {
     "trigger": "Eksportuj",
     "scopeLabel": "Zakres eksportu",
