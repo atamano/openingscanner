@@ -1,11 +1,16 @@
 "use client";
 
 import { useDictionary } from "@/lib/i18n/context";
-import {
-  type ConfidenceTier,
-  confidenceTier,
-} from "@/lib/repertoire/confidence";
 import { cn } from "@/lib/utils";
+
+type ConfidenceTier = "weak" | "moderate" | "high" | "stable";
+
+function confidenceTier(n: number): ConfidenceTier {
+  if (n >= 1000) return "stable";
+  if (n >= 200) return "high";
+  if (n >= 50) return "moderate";
+  return "weak";
+}
 
 const STYLE: Record<ConfidenceTier, string> = {
   weak: "border-border bg-muted/60 text-muted-foreground",
@@ -27,15 +32,12 @@ interface ConfidenceBadgeProps {
   n: number;
   size?: "xs" | "sm";
   className?: string;
-  /** Hide the text label, keep just the dot (and tooltip on hover). */
-  dotOnly?: boolean;
 }
 
 export function ConfidenceBadge({
   n,
   size = "sm",
   className,
-  dotOnly = false,
 }: ConfidenceBadgeProps) {
   const dict = useDictionary();
   const tier = confidenceTier(n);
@@ -43,21 +45,6 @@ export function ConfidenceBadge({
   const tooltip = dict.confidence.tooltip
     .replace("{label}", label)
     .replace("{n}", String(n));
-
-  if (dotOnly) {
-    return (
-      <span
-        role="img"
-        aria-label={tooltip}
-        title={tooltip}
-        className={cn(
-          "inline-block size-2 rounded-full",
-          DOT[tier],
-          className,
-        )}
-      />
-    );
-  }
 
   return (
     <span

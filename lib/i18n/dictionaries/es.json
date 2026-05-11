@@ -181,7 +181,7 @@
     "moderate": "Moderado",
     "high": "Confianza alta",
     "stable": "Perfil estable",
-    "tooltip": "{label} · basado en {n} partidas. Umbrales: menos de 50 exploratorio, 50 a 199 moderado, 200 a 999 alto, 1000+ estable."
+    "tooltip": "{label} · basado en {n} partidas."
   },
   "export": {
     "trigger": "Exportar",

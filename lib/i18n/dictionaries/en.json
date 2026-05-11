@@ -183,7 +183,7 @@
     "moderate": "Moderate",
     "high": "High confidence",
     "stable": "Stable profile",
-    "tooltip": "{label} · based on {n} games. Thresholds: under 50 exploratory, 50 to 199 moderate, 200 to 999 high, 1000+ stable."
+    "tooltip": "{label} · based on {n} games."
   },
   "export": {
     "trigger": "Export",

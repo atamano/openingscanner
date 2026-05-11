@@ -181,7 +181,7 @@
     "moderate": "Moderato",
     "high": "Alta affidabilità",
     "stable": "Profilo stabile",
-    "tooltip": "{label} · basato su {n} partite. Soglie: meno di 50 esplorativo, 50 a 199 moderato, 200 a 999 alto, 1000+ stabile."
+    "tooltip": "{label} · basato su {n} partite."
   },
   "export": {
     "trigger": "Esporta",

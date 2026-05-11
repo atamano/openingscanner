@@ -181,7 +181,7 @@
     "moderate": "Moderado",
     "high": "Alta confiança",
     "stable": "Perfil estável",
-    "tooltip": "{label} · com base em {n} partidas. Limites: menos de 50 exploratório, 50 a 199 moderado, 200 a 999 alto, 1000+ estável."
+    "tooltip": "{label} · com base em {n} partidas."
   },
   "export": {
     "trigger": "Exportar",

@@ -181,7 +181,7 @@
     "moderate": "中等",
     "high": "高置信度",
     "stable": "稳定档案",
-    "tooltip": "{label} · 基于 {n} 局。阈值：少于 50 为探索性，50 至 199 为中等，200 至 999 为高，1000+ 为稳定。"
+    "tooltip": "{label} · 基于 {n} 局。"
   },
   "export": {
     "trigger": "导出",

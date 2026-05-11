@@ -181,7 +181,7 @@
     "moderate": "Mäßig",
     "high": "Hohes Vertrauen",
     "stable": "Stabiles Profil",
-    "tooltip": "{label} · basierend auf {n} Partien. Schwellen: unter 50 explorativ, 50 bis 199 mäßig, 200 bis 999 hoch, 1000+ stabil."
+    "tooltip": "{label} · basierend auf {n} Partien."
   },
   "export": {
     "trigger": "Exportieren",

@@ -181,7 +181,7 @@
     "moderate": "Matig",
     "high": "Hoge betrouwbaarheid",
     "stable": "Stabiel profiel",
-    "tooltip": "{label} · gebaseerd op {n} partijen. Drempels: minder dan 50 verkennend, 50 tot 199 matig, 200 tot 999 hoog, 1000+ stabiel."
+    "tooltip": "{label} · gebaseerd op {n} partijen."
   },
   "export": {
     "trigger": "Exporteren",
