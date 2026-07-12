@@ -163,6 +163,14 @@ function SiteFooter({
           >
             chessatlas.net
           </a>
+          <a
+            href="https://chessendings.com"
+            target="_blank"
+            rel="noopener"
+            className="hover:text-foreground"
+          >
+            chessendings.com
+          </a>
         </div>
       </div>
     </footer>

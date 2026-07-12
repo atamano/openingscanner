@@ -127,6 +127,7 @@ OpeningScanner is part of a small family of free, player-first chess tools:
 
 - [darksquares.net](https://darksquares.net)
 - [chessatlas.net](https://chessatlas.net)
+- [chessendings.com](https://chessendings.com)
 
 ## License
 
