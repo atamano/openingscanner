@@ -9,14 +9,17 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { I18nProvider } from "@/lib/i18n/context";
 import {
-  DEFAULT_LOCALE,
   LOCALES,
   LOCALE_INFO,
   isLocale,
   type Locale,
 } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionary";
-import { getSiteUrl, isProductionDeployment } from "@/lib/seo/site";
+import {
+  getLanguageAlternates,
+  getSiteUrl,
+  isProductionDeployment,
+} from "@/lib/seo/site";
 import "../globals.css";
 
 const dmSans = DM_Sans({
@@ -63,13 +66,7 @@ export async function generateMetadata({
   const info = LOCALE_INFO[locale];
   const siteUrl = getSiteUrl();
 
-  const languages = Object.fromEntries(
-    LOCALES.map((l) => [LOCALE_INFO[l].bcp47, `${siteUrl}/${l}`]),
-  );
-  // Point x-default at the canonical /en URL, not the apex — the apex 307s
-  // through the locale-negotiating proxy, which Ahrefs et al. flag as a
-  // redirected hreflang.
-  languages["x-default"] = `${siteUrl}/${DEFAULT_LOCALE}`;
+  const languages = getLanguageAlternates(siteUrl);
   const indexable = isProductionDeployment();
 
   return {

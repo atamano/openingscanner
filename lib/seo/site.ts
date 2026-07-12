@@ -1,3 +1,5 @@
+import { DEFAULT_LOCALE, LOCALES, LOCALE_INFO } from "@/lib/i18n/config";
+
 const DEFAULT_DEV_URL = "http://localhost:3000";
 
 function stripTrailingSlash(url: string): string {
@@ -32,4 +34,19 @@ export function getSiteUrl(): string {
   if (prodUrl) return `https://${stripTrailingSlash(prodUrl)}`;
 
   return DEFAULT_DEV_URL;
+}
+
+// hreflang alternates, keyed by BCP-47 tag. Both the page metadata and the
+// sitemap must advertise the same set: crawlers merge the two, so any
+// disagreement surfaces as a language linked to more than one page. x-default
+// points at the canonical default-locale URL rather than the apex, which 307s
+// through the locale-negotiating proxy.
+export function getLanguageAlternates(
+  siteUrl: string,
+): Record<string, string> {
+  const languages = Object.fromEntries(
+    LOCALES.map((l) => [LOCALE_INFO[l].bcp47, `${siteUrl}/${l}`]),
+  );
+  languages["x-default"] = `${siteUrl}/${DEFAULT_LOCALE}`;
+  return languages;
 }
