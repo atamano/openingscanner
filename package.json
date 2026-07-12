@@ -49,26 +49,34 @@
     "clsx": "^2.1.1",
     "comlink": "^4.4.2",
     "dexie": "^4.4.2",
-    "lucide-react": "^1.11.0",
-    "next": "^16.0.0",
+    "lucide-react": "^1.14.0",
+    "next": "^16.2.6",
     "next-themes": "^0.4.6",
     "nuqs": "^2.2.3",
-    "react": "^19.0.0",
+    "react": "^19.2.7",
     "react-chessboard": "^5.2.0",
-    "react-dom": "^19.0.0",
+    "react-dom": "^19.2.7",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.5.0",
-    "zustand": "^5.0.2"
+    "zustand": "^5.0.14"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.2.4",
-    "@types/node": "^25.6.0",
+    "@tailwindcss/postcss": "^4.3.0",
+    "@types/node": "^25.7.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "eslint": "^9.17.0",
-    "eslint-config-next": "^16.0.0",
-    "postcss": "^8.5.12",
-    "tailwindcss": "^4.2.4",
+    "eslint-config-next": "^16.2.6",
+    "postcss": "^8.5.14",
+    "tailwindcss": "^4.3.0",
     "typescript": "^5.7.2"
+  },
+  "//pnpm.overrides": "Patch transitive advisories whose parent pins below the fix (next pins postcss 8.4.31 exactly, so bumping next never clears it). Keep each range inside the parent's major: an open-ended range resolves to the next major and breaks the consumer.",
+  "pnpm": {
+    "overrides": {
+      "postcss@<8.5.10": "^8.5.10",
+      "js-yaml@<4.2.0": "^4.2.0",
+      "@babel/core@<7.29.6": "^7.29.6"
+    }
   }
 }
