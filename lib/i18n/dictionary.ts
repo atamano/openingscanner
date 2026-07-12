@@ -202,6 +202,10 @@ export interface Dictionary {
     noGamesMatched: string;
     widenTryHint: string;
   };
+  heatmap: {
+    label: string;
+    tooltip: string;
+  };
   loading: string;
 }
 

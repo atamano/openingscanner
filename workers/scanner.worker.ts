@@ -1,5 +1,6 @@
 /// <reference lib="webworker" />
 import * as Comlink from "comlink";
+import { lookupEcoByEpd, type EcoLabel } from "@/lib/catalog/eco-classify";
 import { streamChessComGames } from "@/lib/sources/chesscom";
 import { streamLichessGames } from "@/lib/sources/lichess";
 import {
@@ -159,6 +160,19 @@ const api = {
 
   abort() {
     currentController?.abort();
+  },
+
+  /**
+   * Name the openings reached at a batch of EPDs. The heatmap needs a label per
+   * candidate square (~20 at a time), and this keeps that lookup on the side of
+   * the wire that already holds the ECO catalog — importing `eco-data` on the
+   * main thread would parse a second ~830 kB copy of it there.
+   */
+  lookupEco(epds: readonly string[]): (EcoLabel | null)[] {
+    return epds.map((epd) => {
+      const rec = lookupEcoByEpd(epd);
+      return rec ? { eco: rec.eco, name: rec.name, family: rec.family } : null;
+    });
   },
 };
 

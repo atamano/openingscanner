@@ -39,6 +39,7 @@ function HomeInner() {
     scan,
     abort,
     reset,
+    lookupEco,
   } = useScanner();
 
   const [color] = useQueryState(
@@ -132,7 +133,7 @@ function HomeInner() {
             ) : null}
 
             {status === "done" && stats && stats.totalGames > 0 ? (
-              <Dashboard stats={stats} />
+              <Dashboard stats={stats} lookupEco={lookupEco} />
             ) : null}
 
             {status === "done" && stats && stats.totalGames === 0 ? (

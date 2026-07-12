@@ -2,6 +2,7 @@
 
 import * as Comlink from "comlink";
 import { useCallback, useEffect, useRef, useState } from "react";
+import type { EcoLabel } from "@/lib/catalog/eco-classify";
 import type { RepertoireStats } from "@/lib/repertoire/aggregate";
 import type {
   ScanParams,
@@ -126,6 +127,16 @@ export function useScanner() {
     }
   }, []);
 
+  /** Name the openings at a batch of EPDs. Routed to the worker so the ~830 kB
+   *  ECO catalog is never imported on the main thread. */
+  const lookupEco = useCallback(
+    async (epds: readonly string[]): Promise<(EcoLabel | null)[]> => {
+      if (!apiRef.current || epds.length === 0) return [];
+      return apiRef.current.lookupEco(epds);
+    },
+    [],
+  );
+
   const abort = useCallback(() => {
     scanIdRef.current++;
     apiRef.current?.abort();
@@ -154,5 +165,10 @@ export function useScanner() {
     scan,
     abort,
     reset,
+    lookupEco,
   };
 }
+
+export type EcoLookup = (
+  epds: readonly string[],
+) => Promise<(EcoLabel | null)[]>;
