@@ -171,6 +171,14 @@ function SiteFooter({
           >
             chessendings.com
           </a>
+          <a
+            href="https://chesstactics.app"
+            target="_blank"
+            rel="noopener"
+            className="hover:text-foreground"
+          >
+            chesstactics.app
+          </a>
         </div>
       </div>
     </footer>
