@@ -202,6 +202,15 @@ function LandingHero({
               className="underline hover:text-ink-light"
             >
               chessatlas.net
+            </a>{" "}
+            ·{" "}
+            <a
+              href="https://chesstactics.app"
+              target="_blank"
+              rel="noopener"
+              className="underline hover:text-ink-light"
+            >
+              chesstactics.app
             </a>
           </p>
         </div>
