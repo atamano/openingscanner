@@ -21,7 +21,11 @@
     "h1": "Opening Scanner",
     "subtitle": "そのプレイヤーは実際にどのオープニングを指すのか？",
     "footer": "無料。ローカルファースト。ブラウザから何も送信されません。",
-    "sisterSitesPrefix": "他のプロジェクト"
+    "sisterSitesPrefix": "他のプロジェクト",
+    "stepUsername": "ユーザー名",
+    "stepScan": "対局をスキャン",
+    "stepExplore": "ツリーを探索",
+    "openSource": "オープンソース"
   },
   "header": {
     "newScan": "新しいスキャン",
@@ -56,7 +60,8 @@
     "window1y": "1年",
     "windowAll": "全期間",
     "limit": "最大対局数",
-    "limitAll": "上限なし"
+    "limitAll": "上限なし",
+    "moreOptions": "オプション"
   },
   "progress": {
     "streaming": "対局を受信中…",

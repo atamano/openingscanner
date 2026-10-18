@@ -7,89 +7,111 @@
    these via var() so Tailwind generates utilities like `bg-paper {
    background-color: var(--color-paper); }` rather than inlining the literal
    value at build time (which would defeat the override). */
+/* Myrtille palette: lilac page, white sticker cards outlined in deep ink,
+   violet for actions. Pop colors (yellow / pink / sky) are fills only and
+   always carry `on-pop` ink text, in both themes. */
 :root {
-  --color-background: #f5f0e6;
-  --color-foreground: #1a1410;
-  --color-card: #fffdf7;
-  --color-card-foreground: #1a1410;
-  --color-popover: #fffdf7;
-  --color-popover-foreground: #1a1410;
-  --color-primary: #b07a2e;
-  --color-primary-foreground: #fffdf7;
-  --color-secondary: #ece4d4;
-  --color-secondary-foreground: #3d2e1e;
-  --color-muted: #e8dfd0;
-  --color-muted-foreground: #7a6b58;
-  --color-accent: #e8dfd0;
-  --color-accent-foreground: #3d2e1e;
-  --color-destructive: #a83228;
-  --color-destructive-foreground: #fffdf7;
-  --color-border: #d4c8b0;
-  --color-input: #d4c8b0;
-  --color-ring: #b07a2e;
+  --color-background: #ede6ff;
+  --color-foreground: #1d1442;
+  --color-card: #ffffff;
+  --color-card-foreground: #1d1442;
+  --color-popover: #ffffff;
+  --color-popover-foreground: #1d1442;
+  --color-primary: #5b3df5;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #f5f1ff;
+  --color-secondary-foreground: #1d1442;
+  --color-muted: #f1ecff;
+  --color-muted-foreground: #5a507c;
+  --color-accent: #f1ecff;
+  --color-accent-foreground: #1d1442;
+  --color-destructive: #d41e52;
+  --color-destructive-foreground: #ffffff;
+  --color-border: #d9cff7;
+  --color-input: #c9bdf0;
+  --color-ring: #5b3df5;
 
-  --color-wood: #2c1e12;
-  --color-wood-light: #3d2e1e;
-  --color-wood-lighter: #5a4433;
-  --color-amber: #b07a2e;
-  --color-amber-light: #d4a24e;
-  --color-amber-dark: #8a5e1c;
-  --color-paper: #fffdf7;
-  --color-paper-dark: #f5f0e6;
-  --color-ink: #1a1410;
-  --color-ink-light: #7a6b58;
+  /* Sticker outline + hard shadow. */
+  --color-line: #1d1442;
 
-  /* Lichess-style brown palette — instantly recognizable as a chess board.
-     Earlier values (#ece4d4 / #8a5e1c) were too high-contrast and the dark
-     was a saturated burnt orange, which read as "off" / "swapped" to chess
-     players used to standard wood tones. */
-  --color-board-light: #f0d9b5;
-  --color-board-dark: #b58863;
-  --color-board-highlight: #d4a24e;
+  --color-pop-yellow: #ffd43b;
+  --color-pop-pink: #ff9acb;
+  --color-pop-sky: #8fd8ff;
+  --color-on-pop: #1d1442;
 
-  --color-chip-active: rgba(176, 122, 46, 0.12);
+  /* Results. `*-fill` for bars, plain token for text (contrast-checked). */
+  --color-win: #5b3df5;
+  --color-draw: #8a6100;
+  --color-loss: #c8194a;
+  --color-win-fill: #5b3df5;
+  --color-draw-fill: #ffd43b;
+  --color-loss-fill: #ff4d7d;
+
+  /* Legacy names kept so existing utilities resolve to the new palette. */
+  --color-wood: #1d1442;
+  --color-wood-light: #2c2160;
+  --color-wood-lighter: #4a3f7a;
+  --color-amber: #5b3df5;
+  --color-amber-light: #8a74ff;
+  --color-amber-dark: #4527d6;
+  --color-paper: #ffffff;
+  --color-paper-dark: #ede6ff;
+  --color-ink: #1d1442;
+  --color-ink-light: #5a507c;
+
+  --color-board-light: #fff1d0;
+  --color-board-dark: #9483f2;
+  --color-board-highlight: #ffd43b;
+
+  --color-chip-active: rgba(91, 61, 245, 0.12);
 }
 
 .dark {
-  --color-background: #110b07;
-  --color-foreground: #ede5d4;
-  --color-card: #1c130d;
-  --color-card-foreground: #ede5d4;
-  --color-popover: #1c130d;
-  --color-popover-foreground: #ede5d4;
-  --color-primary: #d4a24e;
-  --color-primary-foreground: #1a1410;
-  --color-secondary: #2c1e12;
-  --color-secondary-foreground: #ede5d4;
-  --color-muted: #241810;
-  --color-muted-foreground: #a89980;
-  --color-accent: #2c1e12;
-  --color-accent-foreground: #ede5d4;
-  --color-destructive: #d04a3e;
-  --color-destructive-foreground: #fffdf7;
-  --color-border: #3d2e1e;
-  --color-input: #3d2e1e;
-  --color-ring: #d4a24e;
+  --color-background: #1d1744;
+  --color-foreground: #f1ecff;
+  --color-card: #2c2358;
+  --color-card-foreground: #f1ecff;
+  --color-popover: #2c2358;
+  --color-popover-foreground: #f1ecff;
+  --color-primary: #a594ff;
+  --color-primary-foreground: #1d1744;
+  --color-secondary: #352b68;
+  --color-secondary-foreground: #f1ecff;
+  --color-muted: #352b68;
+  --color-muted-foreground: #bdb3e0;
+  --color-accent: #3a2f70;
+  --color-accent-foreground: #f1ecff;
+  --color-destructive: #ff6b93;
+  --color-destructive-foreground: #1d1744;
+  --color-border: #463a85;
+  --color-input: #54479a;
+  --color-ring: #a594ff;
 
-  /* Custom tokens flip meaning so components hardcoded to `bg-paper`,
-     `text-ink`, etc. automatically reflect the dark palette. */
-  --color-wood: #ede5d4;
-  --color-wood-light: #d4c8b0;
-  --color-wood-lighter: #a89980;
-  --color-amber: #d4a24e;
-  --color-amber-light: #e6b870;
-  --color-amber-dark: #b07a2e;
-  --color-paper: #1c130d;
-  --color-paper-dark: #110b07;
-  --color-ink: #ede5d4;
-  --color-ink-light: #a89980;
+  --color-line: #05030f;
 
-  /* Darker variant of the lichess palette for dark mode. */
-  --color-board-light: #d6b181;
-  --color-board-dark: #6e4c2b;
-  --color-board-highlight: #e6b870;
+  --color-win: #b3a5ff;
+  --color-draw: #ffd43b;
+  --color-loss: #ff7da1;
+  --color-win-fill: #a594ff;
+  --color-draw-fill: #ffd43b;
+  --color-loss-fill: #ff6b93;
 
-  --color-chip-active: rgba(212, 162, 78, 0.18);
+  --color-wood: #f1ecff;
+  --color-wood-light: #d9d0ff;
+  --color-wood-lighter: #bdb3e0;
+  --color-amber: #a594ff;
+  --color-amber-light: #c3b8ff;
+  --color-amber-dark: #c3b8ff;
+  --color-paper: #2c2358;
+  --color-paper-dark: #1d1744;
+  --color-ink: #f1ecff;
+  --color-ink-light: #bdb3e0;
+
+  --color-board-light: #ece4ff;
+  --color-board-dark: #7563e0;
+  --color-board-highlight: #ffd43b;
+
+  --color-chip-active: rgba(165, 148, 255, 0.2);
 }
 
 @theme inline {
@@ -124,6 +146,19 @@
   --color-ink: var(--color-ink);
   --color-ink-light: var(--color-ink-light);
 
+  --color-line: var(--color-line);
+  --color-chip-active: var(--color-chip-active);
+  --color-pop-yellow: var(--color-pop-yellow);
+  --color-pop-pink: var(--color-pop-pink);
+  --color-pop-sky: var(--color-pop-sky);
+  --color-on-pop: var(--color-on-pop);
+  --color-win: var(--color-win);
+  --color-draw: var(--color-draw);
+  --color-loss: var(--color-loss);
+  --color-win-fill: var(--color-win-fill);
+  --color-draw-fill: var(--color-draw-fill);
+  --color-loss-fill: var(--color-loss-fill);
+
   --color-board-light: var(--color-board-light);
   --color-board-dark: var(--color-board-dark);
   --color-board-highlight: var(--color-board-highlight);
@@ -135,9 +170,8 @@
   --radius-lg: 0.5rem;
   --radius-xl: 0.75rem;
 
-  --font-sans: var(--font-dm-sans), system-ui, sans-serif;
+  --font-sans: var(--font-bricolage), system-ui, sans-serif;
   --font-mono: var(--font-ibm-plex-mono), ui-monospace, monospace;
-  --font-serif: var(--font-fraunces), Georgia, serif;
 }
 
 * {
@@ -156,136 +190,73 @@ html {
 }
 
 /* ========================================
-   Paper texture overlay
+   Stickers: ink outline + hard offset shadow
    ======================================== */
-.paper-texture {
-  position: relative;
+.sticker,
+.sticker-sm,
+.sticker-lg {
+  border: 2px solid var(--color-line);
 }
-.paper-texture::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  opacity: 0.03;
-  pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-  background-size: 256px 256px;
-  z-index: 1;
+.sticker { box-shadow: 4px 4px 0 var(--color-line); }
+.sticker-sm { box-shadow: 2px 2px 0 var(--color-line); }
+.sticker-lg { box-shadow: 6px 6px 0 var(--color-line); }
+
+/* Pressable sticker: lifts on hover, sinks on press. */
+.sticker-press {
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.sticker-press:not(:disabled):hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--color-line);
+}
+.sticker-press:not(:disabled):active {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 var(--color-line);
+}
+@media (prefers-reduced-motion: reduce) {
+  .sticker-press,
+  .sticker-press:not(:disabled):hover,
+  .sticker-press:not(:disabled):active {
+    transform: none;
+    transition: none;
+  }
 }
 
-/* ========================================
-   Wood panel backgrounds
-   ======================================== */
-.wood-panel {
-  background: linear-gradient(
-    180deg,
-    #2c1e12 0%,
-    #341f10 40%,
-    #2a1a0e 60%,
-    #231610 100%
-  );
+/* Chess glyphs: force a font that ships solid pieces. */
+.chess-glyph {
+  font-family: "Apple Symbols", "Segoe UI Symbol", "Noto Sans Symbols 2", "DejaVu Sans", sans-serif;
+  line-height: 1;
 }
 
-/* Wood frame around the chess board */
+/* Board frame. */
 .wood-frame {
-  background: linear-gradient(
-    145deg,
-    #4a3420 0%,
-    #3d2e1e 20%,
-    #2c1e12 50%,
-    #3d2e1e 80%,
-    #4a3420 100%
-  );
-  box-shadow:
-    0 4px 20px rgba(26, 20, 16, 0.3),
-    0 1px 4px rgba(26, 20, 16, 0.2),
-    inset 0 1px 0 rgba(255, 253, 247, 0.05);
+  background: var(--color-card);
+  border: 2px solid var(--color-line);
+  box-shadow: 4px 4px 0 var(--color-line);
 }
 
 /* ========================================
-   Hero landing page background
+   Scrollbars
    ======================================== */
-.hero-bg {
-  background:
-    radial-gradient(ellipse at 50% 30%, rgba(176, 122, 46, 0.08) 0%, transparent 60%),
-    radial-gradient(ellipse at 20% 80%, rgba(176, 122, 46, 0.04) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 70%, rgba(44, 30, 18, 0.03) 0%, transparent 50%),
-    linear-gradient(180deg, #f8f3ea 0%, #f5f0e6 40%, #efe8da 100%);
-}
-.dark .hero-bg {
-  background:
-    radial-gradient(ellipse at 50% 30%, rgba(212, 162, 78, 0.10) 0%, transparent 60%),
-    radial-gradient(ellipse at 20% 80%, rgba(212, 162, 78, 0.05) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 70%, rgba(0, 0, 0, 0.20) 0%, transparent 50%),
-    linear-gradient(180deg, #181009 0%, #110b07 40%, #0a0604 100%);
-}
-
-/* ========================================
-   Warm inset shadow for paper panels
-   ======================================== */
-.paper-inset {
-  box-shadow:
-    inset 0 1px 3px rgba(26, 20, 16, 0.06),
-    0 1px 2px rgba(26, 20, 16, 0.04);
-}
-
-/* ========================================
-   Custom scrollbar — warm paper style
-   ======================================== */
-.paper-scroll::-webkit-scrollbar {
-  width: 6px;
-}
-.paper-scroll::-webkit-scrollbar-track {
-  background: transparent;
-}
-.paper-scroll::-webkit-scrollbar-thumb {
-  background-color: #d4c8b0;
-  border-radius: 3px;
-}
-.paper-scroll::-webkit-scrollbar-thumb:hover {
-  background-color: #b07a2e;
-}
 .paper-scroll {
   scrollbar-width: thin;
-  scrollbar-color: #d4c8b0 transparent;
+  scrollbar-color: var(--color-input) transparent;
 }
-
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: rgba(212, 200, 176, 0.2);
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: #d4c8b0;
+  background-color: var(--color-input);
   border-radius: 4px;
   border: 2px solid transparent;
   background-clip: content-box;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background-color: #b07a2e;
-}
-.dark ::-webkit-scrollbar-track {
-  background: rgba(61, 46, 30, 0.3);
-}
-.dark ::-webkit-scrollbar-thumb {
-  background-color: #3d2e1e;
-}
-.dark ::-webkit-scrollbar-thumb:hover {
-  background-color: #d4a24e;
-}
-
-/* ========================================
-   Result bar gradients
-   ======================================== */
-.result-white {
-  background: linear-gradient(180deg, #faf7f0 0%, #ece4d4 100%);
-}
-.result-draw {
-  background: linear-gradient(180deg, #d4a24e 0%, #b07a2e 100%);
-}
-.result-black {
-  background: linear-gradient(180deg, #3d2e1e 0%, #2c1e12 100%);
+  background-color: var(--color-primary);
 }
 
 /* ========================================
@@ -298,18 +269,11 @@ html {
     box-shadow 0.15s ease;
 }
 .move-row:hover {
-  background-color: rgba(176, 122, 46, 0.08);
+  background-color: var(--color-chip-active);
   transform: translateX(2px);
 }
 .move-row:active {
   transform: translateX(1px);
-  background-color: rgba(176, 122, 46, 0.12);
-}
-.dark .move-row:hover {
-  background-color: rgba(212, 162, 78, 0.10);
-}
-.dark .move-row:active {
-  background-color: rgba(212, 162, 78, 0.16);
 }
 
 /* ========================================

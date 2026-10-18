@@ -21,7 +21,11 @@
     "h1": "Opening Scanner",
     "subtitle": "Welche Eröffnungen spielt ein Spieler wirklich?",
     "footer": "Kostenlos. Läuft komplett im Browser. Nichts verlässt deinen Browser.",
-    "sisterSitesPrefix": "Weitere Projekte von uns"
+    "sisterSitesPrefix": "Weitere Projekte von uns",
+    "stepUsername": "Ein Benutzername",
+    "stepScan": "Wir scannen die Partien",
+    "stepExplore": "Erkunde den Baum",
+    "openSource": "Open Source"
   },
   "header": {
     "newScan": "Neuer Scan",
@@ -56,7 +60,8 @@
     "window1y": "1 J",
     "windowAll": "Alle",
     "limit": "Max. Partien",
-    "limitAll": "Alle"
+    "limitAll": "Alle",
+    "moreOptions": "Optionen"
   },
   "progress": {
     "streaming": "Partien werden geladen…",

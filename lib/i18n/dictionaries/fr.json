@@ -19,9 +19,13 @@
   "landing": {
     "badge": "Scannez et classez des parties en ligne contre le catalogue ECO",
     "h1": "Opening Scanner",
-    "subtitle": "Quelles ouvertures un joueur joue-t-il vraiment ?",
+    "subtitle": "Quelles ouvertures un joueur joue-t-il vraiment ?",
     "footer": "Gratuit. En local. Rien ne quitte votre navigateur.",
-    "sisterSitesPrefix": "Nos autres projets"
+    "sisterSitesPrefix": "Nos autres projets",
+    "stepUsername": "Un pseudo",
+    "stepScan": "On scanne les parties",
+    "stepExplore": "Explore l'arbre",
+    "openSource": "Open source"
   },
   "header": {
     "newScan": "Nouveau scan",
@@ -56,7 +60,8 @@
     "window1y": "1 an",
     "windowAll": "Tout",
     "limit": "Nb max de parties",
-    "limitAll": "Tout"
+    "limitAll": "Tout",
+    "moreOptions": "Réglages"
   },
   "progress": {
     "streaming": "Réception des parties…",

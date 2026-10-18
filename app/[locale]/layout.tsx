@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { DM_Sans, Fraunces, IBM_Plex_Mono } from "next/font/google";
+import { Bricolage_Grotesque, IBM_Plex_Mono } from "next/font/google";
 import Script from "next/script";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { notFound } from "next/navigation";
@@ -22,8 +22,8 @@ import {
 } from "@/lib/seo/site";
 import "../globals.css";
 
-const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
+const bricolage = Bricolage_Grotesque({
+  variable: "--font-bricolage",
   subsets: ["latin"],
   display: "swap",
 });
@@ -35,12 +35,6 @@ const ibmPlexMono = IBM_Plex_Mono({
   display: "swap",
 });
 
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
-  subsets: ["latin"],
-  display: "swap",
-});
-
 export function generateStaticParams() {
   return LOCALES.map((locale) => ({ locale }));
 }
@@ -48,10 +42,8 @@ export function generateStaticParams() {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f5f0e6" },
-    { media: "(prefers-color-scheme: dark)", color: "#110b07" },
-  ],
+  // Light is the default theme regardless of OS preference.
+  themeColor: "#ede6ff",
 };
 
 export async function generateMetadata({
@@ -131,7 +123,7 @@ function SiteFooter({
   languageLabel: string;
 }) {
   return (
-    <footer className="border-t border-border/60 bg-paper text-ink-light">
+    <footer className="border-t-2 border-line bg-card text-ink-light">
       <div className="mx-auto max-w-7xl px-4 py-6 text-xs flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <FooterLocaleNav
           currentLocale={currentLocale}
@@ -219,7 +211,7 @@ export default async function LocaleLayout({
       lang={info.bcp47}
       dir={info.dir}
       data-scroll-behavior="smooth"
-      className={`${dmSans.variable} ${ibmPlexMono.variable} ${fraunces.variable}`}
+      className={`${bricolage.variable} ${ibmPlexMono.variable}`}
       suppressHydrationWarning
     >
       <body className="antialiased bg-background text-foreground">

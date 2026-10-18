@@ -100,10 +100,10 @@ export function ScanSummaryBar({
   };
 
   return (
-    <div className="rounded-xl border border-border bg-paper paper-inset">
+    <div className="sticker rounded-2xl bg-card">
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2 px-3 py-3 sm:px-4">
         <div className="flex min-w-0 flex-1 items-center gap-2.5">
-          <div className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-amber/10 text-amber-dark">
+          <div className="sticker-sm grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-pop-sky text-on-pop">
             <UserCircle className="h-4 w-4" />
           </div>
           <div className="min-w-0">
@@ -117,10 +117,10 @@ export function ScanSummaryBar({
                     className="inline-flex items-center gap-1.5"
                   >
                     {i > 0 ? (
-                      <span className="text-ink-light/60">+</span>
+                      <span className="text-ink-light">+</span>
                     ) : null}
                     <span className="truncate font-mono">{src.username}</span>
-                    <span className="hidden sm:inline-flex shrink-0 rounded-full border border-border px-2 py-0.5 text-[10px] font-medium uppercase tracking-widest text-ink-light">
+                    <span className="hidden sm:inline-flex shrink-0 rounded-full border border-border px-2 py-0.5 text-[11px] font-semibold text-ink-light">
                       {PLATFORM_LABEL[src.platform] ?? src.platform}
                     </span>
                   </span>
@@ -141,17 +141,17 @@ export function ScanSummaryBar({
             className={cn(
               "hidden items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs sm:flex",
               running
-                ? "border-amber/40 bg-amber/10 text-amber-dark"
+                ? "border-line bg-pop-yellow text-on-pop"
                 : "border-border text-ink-light",
             )}
           >
             <span
               className={cn(
                 "h-1.5 w-1.5 rounded-full",
-                running ? "animate-warm-pulse bg-amber" : "bg-ink-light/40",
+                running ? "animate-warm-pulse bg-on-pop" : "bg-ink-light/40",
               )}
             />
-            <span className="font-mono tabular-nums text-foreground">
+            <span className="font-bold tabular-nums">
               {formatNumber(gameCount)}
             </span>
             <span>
@@ -163,7 +163,7 @@ export function ScanSummaryBar({
             <button
               type="button"
               onClick={onAbort}
-              className="h-8 px-3 rounded-md bg-destructive text-destructive-foreground text-xs font-semibold hover:bg-destructive/90 transition-colors"
+              className="sticker-sm sticker-press h-9 px-3 rounded-xl bg-destructive text-destructive-foreground text-xs font-bold"
             >
               {dict.summary.stop}
             </button>
@@ -173,10 +173,10 @@ export function ScanSummaryBar({
             type="button"
             onClick={onToggle}
             className={cn(
-              "flex items-center gap-1.5 h-8 px-3 rounded-md text-xs font-medium transition-all border",
+              "sticker-sm sticker-press flex items-center gap-1.5 h-9 px-3 rounded-xl text-xs font-bold",
               expanded
-                ? "border-amber/40 bg-amber/10 text-amber-dark"
-                : "border-border text-ink-light hover:border-amber/30 hover:text-foreground",
+                ? "bg-pop-yellow text-on-pop"
+                : "bg-card text-foreground",
             )}
           >
             <Pencil className="h-3.5 w-3.5" />
@@ -194,7 +194,7 @@ export function ScanSummaryBar({
           <button
             type="button"
             onClick={onReset}
-            className="flex items-center gap-1.5 h-8 px-3 rounded-md text-xs font-medium text-ink-light hover:text-foreground hover:bg-paper-dark transition-all"
+            className="sticker-sm sticker-press flex items-center gap-1.5 h-9 px-3 rounded-xl bg-primary text-xs font-bold text-primary-foreground"
           >
             <RotateCcw className="h-3.5 w-3.5" />
             <span className="hidden sm:inline">{dict.summary.newScan}</span>
@@ -204,7 +204,7 @@ export function ScanSummaryBar({
 
       {hasFilters ? (
         <div className="flex flex-wrap items-center gap-1.5 border-t border-border/60 px-3 py-2 sm:px-4">
-          <span className="text-[11px] font-medium uppercase tracking-wider text-ink-light">
+          <span className="text-xs font-bold text-ink-light">
             {dict.dashboard.filterLabel}
           </span>
           {familyLabel ? (
@@ -268,14 +268,19 @@ function FilterChip({
         "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-medium",
         subtle
           ? "border-border bg-paper-dark/40 text-ink-light"
-          : "border-amber/40 bg-amber/10 text-foreground",
+          : "border-line bg-pop-yellow text-on-pop",
       )}
     >
       <span className="truncate max-w-[10rem] sm:max-w-[16rem]">{label}</span>
       <button
         type="button"
         onClick={onRemove}
-        className="-mr-1 rounded-full p-0.5 text-ink-light/70 hover:bg-rose-500/10 hover:text-rose-500 transition-colors"
+        className={cn(
+          "-mr-1 rounded-full p-0.5 transition-colors",
+          subtle
+            ? "text-ink-light hover:bg-loss/10 hover:text-loss"
+            : "text-on-pop hover:bg-on-pop/15",
+        )}
         aria-label="Remove filter"
       >
         <X className="size-3" />

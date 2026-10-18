@@ -51,9 +51,9 @@ interface SpotsPanelProps {
   onSelectOpening: (openingId: string) => void;
   onSelectVariation: (openingId: string, path: string[]) => void;
   icon: LucideIcon;
-  /** Tailwind class for the header icon color (e.g. `text-emerald-500`). */
+  /** Tailwind class for the header icon color (e.g. `text-win`). */
   iconClassName: string;
-  /** Tailwind class for the stat pill text color (e.g. `text-emerald-500`). */
+  /** Tailwind class for the stat pill text color (e.g. `text-win`). */
   statClassName: string;
   /** Tailwind classes merged into card-button hover state. */
   hoverClassName: string;
@@ -165,7 +165,7 @@ export function SpotsPanel({
               : descGlobal}
           </CardDescription>
           {!selected && colorTotal > 0 ? (
-            <div className="mt-1 text-[11px] text-muted-foreground/80">
+            <div className="mt-1 text-[11px] text-muted-foreground">
               {copy.coverageHint
                 .replace("{covered}", String(coveredGames))
                 .replace("{total}", String(colorTotal))}

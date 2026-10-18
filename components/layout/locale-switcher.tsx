@@ -45,7 +45,7 @@ export function LocaleSwitcher() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        className="flex items-center gap-1.5 h-7 px-2.5 rounded-md text-xs font-medium text-amber-light/80 hover:text-amber-light hover:bg-wood-lighter/30 transition-all"
+        className="sticker-sm sticker-press flex h-9 items-center gap-1.5 rounded-xl bg-card px-2.5 text-sm font-semibold text-foreground"
         aria-label={dict.header.changeLanguage}
       >
         <Languages className="h-3.5 w-3.5" />

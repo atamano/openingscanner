@@ -21,7 +21,11 @@
     "h1": "Opening Scanner",
     "subtitle": "Bir oyuncu gerçekten hangi açılışları oynar?",
     "footer": "Ücretsiz. Her şey tarayıcınızda çalışır. Hiçbir şey dışarı çıkmaz.",
-    "sisterSitesPrefix": "Diğer projelerimiz"
+    "sisterSitesPrefix": "Diğer projelerimiz",
+    "stepUsername": "Bir kullanıcı adı",
+    "stepScan": "Oyunları tarıyoruz",
+    "stepExplore": "Ağacı keşfet",
+    "openSource": "Açık kaynak"
   },
   "header": {
     "newScan": "Yeni tarama",
@@ -56,7 +60,8 @@
     "window1y": "1 yıl",
     "windowAll": "Hepsi",
     "limit": "Maks. oyun",
-    "limitAll": "Hepsi"
+    "limitAll": "Hepsi",
+    "moreOptions": "Seçenekler"
   },
   "progress": {
     "streaming": "Oyunlar alınıyor…",

@@ -1,7 +1,7 @@
 "use client";
 
-import { Loader2, Plus, Search, X } from "lucide-react";
-import { useMemo } from "react";
+import { ChevronDown, Loader2, Plus, Search, SlidersHorizontal, X } from "lucide-react";
+import { useMemo, useState } from "react";
 import {
   parseAsBoolean,
   parseAsString,
@@ -65,10 +65,18 @@ interface ScanFormProps {
   onSubmit: (params: ScanParams) => void;
   running: boolean;
   onAbort: () => void;
+  /** Show the color / time / window / limit options without a click. */
+  optionsOpenByDefault?: boolean;
 }
 
-export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
+export function ScanForm({
+  onSubmit,
+  running,
+  onAbort,
+  optionsOpenByDefault = false,
+}: ScanFormProps) {
   const dict = useDictionary();
+  const [optionsOpen, setOptionsOpen] = useState(optionsOpenByDefault);
 
   const [chesscomRaw, setChesscomRaw] = useQueryState(
     "u_cc",
@@ -219,20 +227,13 @@ export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
       {/* Players: any number of accounts per platform, all merged into one
           repertoire. The "+ Add Chess.com / Lichess" buttons append blank
           rows so the user can paste a second handle. */}
-      <div className="space-y-2">
-        <div className="flex items-baseline justify-between gap-2">
-          <span className="text-[11px] uppercase tracking-widest text-ink-light font-semibold">
-            {dict.form.sourcesTitle}
-          </span>
-          <span className="text-[11px] text-ink-light/70">
-            {dict.form.sourcesHint}
-          </span>
-        </div>
+      <div className="space-y-2.5">
         {ccRows.map((value, i) => (
           <SourceRow
             key={`cc-${i}`}
             label="Chess.com"
             icon="♘"
+            tone="sky"
             value={value}
             onChange={(v) => updateRow("chesscom", i, v)}
             placeholder={dict.form.placeholderChesscom}
@@ -250,6 +251,7 @@ export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
             key={`li-${i}`}
             label="Lichess"
             icon="♞"
+            tone="pink"
             value={value}
             onChange={(v) => updateRow("lichess", i, v)}
             placeholder={dict.form.placeholderLichess}
@@ -262,26 +264,26 @@ export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
             removeLabel={dict.form.removeAccount}
           />
         ))}
-        <div className="flex flex-wrap gap-1.5 pt-0.5">
-          <ChipButton
-            onClick={() => addRow("chesscom")}
-            disabled={running}
-            className="h-7 px-2.5 rounded-md text-xs font-medium border inline-flex items-center gap-1"
-          >
-            <Plus className="h-3 w-3" />
-            {dict.form.addAccount.replace("{platform}", "Chess.com")}
-          </ChipButton>
-          <ChipButton
-            onClick={() => addRow("lichess")}
-            disabled={running}
-            className="h-7 px-2.5 rounded-md text-xs font-medium border inline-flex items-center gap-1"
-          >
-            <Plus className="h-3 w-3" />
-            {dict.form.addAccount.replace("{platform}", "Lichess")}
-          </ChipButton>
-        </div>
         <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
-          <span className="text-[10px] uppercase tracking-widest text-ink-light/70 font-semibold">
+          {(["chesscom", "lichess"] as const).map((platform) => (
+            <button
+              key={platform}
+              type="button"
+              onClick={() => addRow(platform)}
+              disabled={running}
+              title={dict.form.sourcesHint}
+              className="inline-flex h-7 items-center gap-1 rounded-full px-2 text-xs font-semibold text-ink-light transition-colors hover:text-foreground disabled:opacity-40"
+            >
+              <Plus className="h-3.5 w-3.5" />
+              {dict.form.addAccount.replace(
+                "{platform}",
+                platform === "chesscom" ? "Chess.com" : "Lichess",
+              )}
+            </button>
+          ))}
+        </div>
+        <div className="flex flex-wrap items-center gap-1.5">
+          <span className="mr-0.5 text-xs font-bold text-ink-light">
             {dict.form.popular}
           </span>
           {/* Compare against the parsed handle list, not the raw URL string —
@@ -315,7 +317,7 @@ export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
                 title={[p.chesscom && `${p.chesscom} on Chess.com`, p.lichess && `${p.lichess} on Lichess`]
                   .filter(Boolean)
                   .join(" · ")}
-                className="h-7 px-2.5 rounded-full text-xs font-medium border"
+                className="h-7 px-3 rounded-full text-xs font-semibold border-2"
               >
                 {p.label}
               </ChipButton>
@@ -324,30 +326,38 @@ export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
         </div>
       </div>
 
-      {/* Color selector + submit. Stacks on mobile, single row from sm+. */}
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-        <div className="flex w-full rounded-lg border border-border overflow-hidden sm:w-auto">
-          {(["white", "black", "both"] as const).map((c) => (
-            <ChipButton
-              key={c}
-              active={color === c}
-              onClick={() => setColor(c)}
-              disabled={running}
-              className="h-10 flex-1 px-3 text-sm font-medium sm:flex-none sm:px-4"
-              activeClassName="text-amber-dark"
-              inactiveClassName="text-ink-light hover:text-foreground hover:bg-paper-dark"
-            >
-              {c === "white" ? "○ " : c === "black" ? "● " : ""}
-              {colorLabel(c)}
-            </ChipButton>
-          ))}
-        </div>
+      {/* One primary action. Everything else folds behind "Options", with a
+          one-line summary so the hidden state is never a surprise. */}
+      <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center">
+        <button
+          type="button"
+          onClick={() => setOptionsOpen((v) => !v)}
+          aria-expanded={optionsOpen}
+          className="inline-flex min-w-0 items-center gap-2 self-start rounded-full px-1 py-1 text-sm font-semibold text-ink-light transition-colors hover:text-foreground sm:self-auto"
+        >
+          <SlidersHorizontal className="h-4 w-4 shrink-0 text-primary" />
+          <span>{dict.form.moreOptions}</span>
+          {!optionsOpen ? (
+            <span className="hidden truncate text-xs font-normal md:inline">
+              {[
+                colorLabel(color),
+                selectedTimes.map((t) => timeLabels[t]).join(", "),
+                dateLabels[datePreset],
+              ]
+                .filter(Boolean)
+                .join(" · ")}
+            </span>
+          ) : null}
+          <ChevronDown
+            className={`h-4 w-4 shrink-0 transition-transform ${optionsOpen ? "rotate-180" : ""}`}
+          />
+        </button>
         <div className="hidden flex-1 sm:block" />
         {!running ? (
           <button
             type="submit"
             disabled={!canSubmit}
-            className="h-11 w-full rounded-lg bg-wood px-6 text-sm font-semibold text-paper transition-all shadow-md hover:bg-wood-light hover:shadow-lg active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40 sm:h-10 sm:w-auto"
+            className="sticker sticker-press h-12 w-full rounded-2xl bg-primary px-7 text-base font-extrabold text-primary-foreground disabled:cursor-not-allowed disabled:bg-muted disabled:text-ink-light sm:w-auto"
           >
             {dict.form.submit}
           </button>
@@ -355,7 +365,7 @@ export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
           <button
             type="button"
             onClick={onAbort}
-            className="flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-destructive px-5 text-sm font-semibold text-destructive-foreground transition-colors hover:bg-destructive/90 sm:h-10 sm:w-auto"
+            className="sticker sticker-press flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-destructive px-6 text-base font-extrabold text-destructive-foreground sm:w-auto"
           >
             <Loader2 className="h-4 w-4 animate-spin" />
             {dict.form.stop}
@@ -363,92 +373,104 @@ export function ScanForm({ onSubmit, running, onAbort }: ScanFormProps) {
         )}
       </div>
 
-      {/* Advanced filters */}
-      <div className="grid gap-3 border-t border-border/60 pt-4 sm:grid-cols-2">
-        <div className="space-y-1.5">
-          <span className="text-[11px] uppercase tracking-widest text-ink-light font-semibold">
-            {dict.form.timeControls}
-          </span>
-          <div className="flex flex-wrap gap-1.5">
-            {TIME_VALUES.map((value) => {
-              const active = selectedTimes.includes(value);
-              return (
-                <ChipButton
-                  key={value}
-                  active={active}
-                  onClick={() => toggleTime(value)}
-                  disabled={running}
-                  className="h-8 px-3 rounded-md text-xs font-medium border"
-                >
-                  {timeLabels[value]}
-                </ChipButton>
-              );
-            })}
-          </div>
-        </div>
+      {optionsOpen ? (
+        <div className="grid gap-4 rounded-2xl bg-muted p-4 sm:grid-cols-2 animate-fade-up">
+          <OptionGroup label={dict.form.asColorPrefix} className="sm:col-span-2">
+            {(["white", "black", "both"] as const).map((c) => (
+              <ChipButton
+                key={c}
+                active={color === c}
+                onClick={() => setColor(c)}
+                disabled={running}
+                className="h-8 px-3 rounded-full text-xs font-semibold border-2"
+              >
+                <span aria-hidden className="chess-glyph mr-1">
+                  {c === "white" ? "♔" : c === "black" ? "♚" : "♔♚"}
+                </span>
+                {colorLabel(c)}
+              </ChipButton>
+            ))}
+          </OptionGroup>
 
-        <div className="space-y-1.5">
-          <span className="text-[11px] uppercase tracking-widest text-ink-light font-semibold">
-            {dict.form.window}
-          </span>
-          <div className="flex flex-wrap gap-1.5">
-            {DATE_VALUES.map((value) => {
-              const active = datePreset === value;
-              return (
-                <ChipButton
-                  key={value}
-                  active={active}
-                  onClick={() => setDatePreset(value)}
-                  disabled={running}
-                  className="h-8 px-3 rounded-md text-xs font-medium border"
-                >
-                  {dateLabels[value]}
-                </ChipButton>
-              );
-            })}
-          </div>
-        </div>
+          <OptionGroup label={dict.form.timeControls}>
+            {TIME_VALUES.map((value) => (
+              <ChipButton
+                key={value}
+                active={selectedTimes.includes(value)}
+                onClick={() => toggleTime(value)}
+                disabled={running}
+                className="h-8 px-3 rounded-full text-xs font-semibold border-2"
+              >
+                {timeLabels[value]}
+              </ChipButton>
+            ))}
+          </OptionGroup>
 
-        <div className="space-y-1.5 sm:col-span-2">
-          <span className="text-[11px] uppercase tracking-widest text-ink-light font-semibold">
-            {dict.form.limit}
-          </span>
-          <div className="flex flex-wrap gap-1.5">
-            {LIMIT_VALUES.map((value) => {
-              const active = limitPreset === value;
-              return (
-                <ChipButton
-                  key={value}
-                  active={active}
-                  onClick={() => setLimitPreset(value)}
-                  disabled={running}
-                  className="h-8 px-3 rounded-md text-xs font-medium border"
-                >
-                  {limitLabels[value]}
-                </ChipButton>
-              );
-            })}
-          </div>
-        </div>
-      </div>
+          <OptionGroup label={dict.form.window}>
+            {DATE_VALUES.map((value) => (
+              <ChipButton
+                key={value}
+                active={datePreset === value}
+                onClick={() => setDatePreset(value)}
+                disabled={running}
+                className="h-8 px-3 rounded-full text-xs font-semibold border-2"
+              >
+                {dateLabels[value]}
+              </ChipButton>
+            ))}
+          </OptionGroup>
 
-      <label className="flex items-center gap-2 text-xs text-ink-light cursor-pointer select-none">
-        <input
-          type="checkbox"
-          checked={rated}
-          onChange={(e) => setRated(e.target.checked)}
-          disabled={running}
-          className="h-3.5 w-3.5 rounded border-border accent-amber"
-        />
-        {dict.form.ratedOnly}
-      </label>
+          <OptionGroup label={dict.form.limit}>
+            {LIMIT_VALUES.map((value) => (
+              <ChipButton
+                key={value}
+                active={limitPreset === value}
+                onClick={() => setLimitPreset(value)}
+                disabled={running}
+                className="h-8 px-3 rounded-full text-xs font-semibold border-2"
+              >
+                {limitLabels[value]}
+              </ChipButton>
+            ))}
+          </OptionGroup>
+
+          <label className="flex cursor-pointer select-none items-center gap-2 self-end text-sm font-semibold text-ink-light">
+            <input
+              type="checkbox"
+              checked={rated}
+              onChange={(e) => setRated(e.target.checked)}
+              disabled={running}
+              className="h-4 w-4 rounded border-border accent-primary"
+            />
+            {dict.form.ratedOnly}
+          </label>
+        </div>
+      ) : null}
     </form>
+  );
+}
+
+function OptionGroup({
+  label,
+  className = "",
+  children,
+}: {
+  label: string;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className={`space-y-1.5 ${className}`}>
+      <span className="text-xs font-bold text-ink-light">{label}</span>
+      <div className="flex flex-wrap gap-1.5">{children}</div>
+    </div>
   );
 }
 
 interface SourceRowProps {
   label: string;
   icon: string;
+  tone: "sky" | "pink";
   value: string;
   onChange: (next: string) => void;
   placeholder: string;
@@ -460,6 +482,7 @@ interface SourceRowProps {
 function SourceRow({
   label,
   icon,
+  tone,
   value,
   onChange,
   placeholder,
@@ -468,34 +491,35 @@ function SourceRow({
   removeLabel,
 }: SourceRowProps) {
   return (
-    <div className="flex items-stretch gap-2">
-      <span className="inline-flex h-12 w-24 shrink-0 items-center justify-center gap-1.5 rounded-lg border border-border bg-paper-dark px-2.5 text-xs font-semibold text-ink-light">
-        <span>{icon}</span>
+    <div className="sticker-sm flex items-center gap-2 rounded-2xl bg-card p-1.5 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-ring">
+      <span
+        className={`inline-flex h-10 shrink-0 items-center gap-1.5 rounded-xl px-3 text-xs font-bold text-on-pop ${tone === "sky" ? "bg-pop-sky" : "bg-pop-pink"}`}
+      >
+        <span aria-hidden className="chess-glyph text-base">{icon}</span>
         <span>{label}</span>
       </span>
-      <div className="relative flex-1">
-        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-ink-light/40" />
-        <input
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder={placeholder}
-          autoComplete="off"
-          spellCheck={false}
+      <Search aria-hidden className="h-4 w-4 shrink-0 text-ink-light" />
+      <input
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        aria-label={placeholder}
+        autoComplete="off"
+        spellCheck={false}
+        disabled={disabled}
+        className="h-10 min-w-0 flex-1 bg-transparent text-base font-semibold text-foreground placeholder:font-normal placeholder:text-ink-light outline-none"
+      />
+      {onRemove ? (
+        <button
+          type="button"
+          onClick={onRemove}
           disabled={disabled}
-          className={`w-full h-12 pl-10 ${onRemove ? "pr-12" : "pr-4"} rounded-lg border border-border bg-paper-dark text-base font-mono text-foreground placeholder:text-ink-light/40 focus:border-amber focus:ring-2 focus:ring-amber/20 outline-none transition-all`}
-        />
-        {onRemove ? (
-          <button
-            type="button"
-            onClick={onRemove}
-            disabled={disabled}
-            aria-label={removeLabel ?? "Remove account"}
-            className="absolute right-2 top-1/2 -translate-y-1/2 grid h-7 w-7 place-items-center rounded-md text-ink-light/60 hover:bg-paper hover:text-foreground transition-colors disabled:opacity-40"
-          >
-            <X className="h-3.5 w-3.5" />
-          </button>
-        ) : null}
-      </div>
+          aria-label={removeLabel ?? "Remove account"}
+          className="grid h-8 w-8 shrink-0 place-items-center rounded-lg text-ink-light hover:bg-muted hover:text-foreground transition-colors disabled:opacity-40"
+        >
+          <X className="h-4 w-4" />
+        </button>
+      ) : null}
     </div>
   );
 }

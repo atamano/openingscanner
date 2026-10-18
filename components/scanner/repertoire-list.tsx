@@ -87,7 +87,7 @@ export function RepertoireList({
   const showingVariants = !isSearching && drilledGroup !== null;
 
   return (
-    <div className="flex h-full min-h-0 flex-col overflow-hidden rounded-xl border bg-card">
+    <div className="sticker flex h-full min-h-0 flex-col overflow-hidden rounded-2xl bg-card">
       <div className="space-y-2 border-b p-3">
         {showingVariants ? (
           <button
@@ -128,7 +128,7 @@ export function RepertoireList({
               placeholder={dict.dashboard.searchPlaceholder}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="h-8 w-full rounded-md border border-input bg-background pl-8 pr-7 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="h-9 w-full rounded-xl border-2 border-input bg-background pl-8 pr-7 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             />
             {query ? (
               <button
@@ -277,10 +277,10 @@ function FamilyRow({
       onClick={onOpen}
       className={cn(
         "grid w-full grid-cols-[auto_minmax(0,1fr)_auto_auto] items-center gap-2 px-3 py-2.5 text-left transition-colors",
-        containsSelection ? "bg-primary/5" : "hover:bg-accent/40",
+        containsSelection ? "bg-chip-active" : "hover:bg-accent",
       )}
     >
-      <span className="inline-flex h-6 min-w-[2.25rem] items-center justify-center rounded border border-dashed px-1.5 font-mono text-[10px] text-muted-foreground/80">
+      <span className="inline-flex h-6 min-w-[2.25rem] items-center justify-center rounded border border-dashed px-1.5 font-mono text-[10px] text-muted-foreground">
         {group.entries.length}
       </span>
       <div className="min-w-0">
@@ -301,7 +301,7 @@ function FamilyRow({
           {formatPct(pct, 0)}
         </span>
       </div>
-      <ChevronRight className="size-4 shrink-0 text-muted-foreground/50" />
+      <ChevronRight className="size-4 shrink-0 text-muted-foreground" />
     </button>
   );
 }
@@ -339,11 +339,11 @@ function OpeningRow({
       onClick={onSelect}
       className={cn(
         "relative grid w-full grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-3 py-2 text-left transition-colors",
-        selected ? "bg-primary/10" : "hover:bg-accent/40",
+        selected ? "bg-pop-yellow text-on-pop [&_*]:!text-on-pop" : "hover:bg-accent",
       )}
     >
       {selected ? (
-        <span className="absolute inset-y-0 left-0 w-0.5 bg-primary" />
+        <span className="absolute inset-y-0 left-0 w-1 bg-line" />
       ) : null}
 
       {eco ? (
@@ -351,7 +351,7 @@ function OpeningRow({
           {eco}
         </span>
       ) : (
-        <span className="inline-flex h-6 min-w-[2.25rem] items-center justify-center rounded border border-dashed px-1.5 font-mono text-[10px] text-muted-foreground/60">
+        <span className="inline-flex h-6 min-w-[2.25rem] items-center justify-center rounded border border-dashed px-1.5 font-mono text-[10px] text-muted-foreground">
           —
         </span>
       )}
@@ -406,17 +406,17 @@ function MiniResultsBar({
   lossPct: number;
 }) {
   return (
-    <div className="mt-1.5 flex h-1 w-full overflow-hidden rounded-full bg-muted/50">
+    <div className="mt-1.5 flex h-1.5 w-full overflow-hidden rounded-full bg-muted">
       <span
-        className="bg-emerald-500/85"
+        className="bg-win-fill"
         style={{ width: `${winPct * 100}%` }}
       />
       <span
-        className="bg-amber-400/70"
+        className="bg-draw-fill"
         style={{ width: `${drawPct * 100}%` }}
       />
       <span
-        className="bg-rose-500/70"
+        className="bg-loss-fill"
         style={{ width: `${lossPct * 100}%` }}
       />
     </div>

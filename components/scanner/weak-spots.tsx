@@ -24,9 +24,9 @@ export function WeakSpots(props: WeakSpotsProps) {
       kind="weak"
       {...props}
       icon={AlertTriangle}
-      iconClassName="text-rose-500"
-      statClassName="text-rose-500"
-      hoverClassName="hover:border-rose-500/60 hover:bg-rose-500/5"
+      iconClassName="text-loss"
+      statClassName="text-loss"
+      hoverClassName="hover:border-line hover:bg-loss/5"
       computeOpenings={computeWeakOpenings}
       computeVariations={computeWeakVariations}
     />

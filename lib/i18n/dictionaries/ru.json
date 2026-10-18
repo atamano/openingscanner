@@ -21,7 +21,11 @@
     "h1": "Opening Scanner",
     "subtitle": "Какие дебюты на самом деле играет игрок?",
     "footer": "Бесплатно. Всё работает локально. Ничего не покидает ваш браузер.",
-    "sisterSitesPrefix": "Наши другие проекты"
+    "sisterSitesPrefix": "Наши другие проекты",
+    "stepUsername": "Ник игрока",
+    "stepScan": "Сканируем партии",
+    "stepExplore": "Изучай дерево",
+    "openSource": "Открытый код"
   },
   "header": {
     "newScan": "Новое сканирование",
@@ -56,7 +60,8 @@
     "window1y": "1 год",
     "windowAll": "Всё",
     "limit": "Макс. партий",
-    "limitAll": "Все"
+    "limitAll": "Все",
+    "moreOptions": "Настройки"
   },
   "progress": {
     "streaming": "Получение партий…",

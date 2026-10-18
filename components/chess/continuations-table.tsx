@@ -52,7 +52,7 @@ export function ContinuationsTable({
   return (
     <div className="flex h-full min-h-0 flex-col">
       {games.length > 0 ? <GamesSection games={games} /> : null}
-      <div className="grid grid-cols-[auto_minmax(3rem,1fr)_minmax(5rem,56%)] items-center gap-2 border-b px-3 py-2 sm:gap-3 sm:px-4 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+      <div className="grid grid-cols-[auto_minmax(3rem,1fr)_minmax(5rem,56%)] items-center gap-2 border-b px-3 py-2 sm:gap-3 sm:px-4 text-[11px] font-semibold text-muted-foreground">
         <span>{dict.continuations.move}</span>
         <span>{dict.continuations.games}</span>
         <span>{dict.continuations.results}</span>
@@ -164,7 +164,7 @@ function GamesSection({ games }: { games: GameRecord[] }) {
   return (
     <div className="border-b">
       <div className="flex items-baseline justify-between px-3 pt-2 pb-1 sm:px-4">
-        <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+        <span className="text-[11px] font-semibold text-muted-foreground">
           {dict.continuations.gamesAtPosition}
         </span>
         <span className="text-[11px] font-mono tabular-nums text-muted-foreground">
@@ -320,7 +320,7 @@ function ContinuationRow({
             drawPct={drawPct}
             lossPct={lossPct}
           />
-          <ChevronRight className="size-3.5 shrink-0 text-muted-foreground/40 transition-all group-hover:translate-x-0.5 group-hover:text-muted-foreground" />
+          <ChevronRight className="size-3.5 shrink-0 text-muted-foreground transition-all group-hover:translate-x-0.5 group-hover:text-muted-foreground" />
         </div>
       </button>
     </li>
@@ -353,17 +353,17 @@ function ResultsBar({
       <Segment
         pct={winPct}
         label={wins}
-        className="bg-emerald-500/85 text-white"
+        className="bg-win-fill text-primary-foreground"
       />
       <Segment
         pct={drawPct}
         label={draws}
-        className="bg-amber-400/80 text-amber-950"
+        className="bg-draw-fill text-on-pop"
       />
       <Segment
         pct={lossPct}
         label={losses}
-        className="bg-rose-500/80 text-white"
+        className="bg-loss-fill text-on-pop"
       />
     </div>
   );
