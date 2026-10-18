@@ -24,10 +24,10 @@ export function ScanProgress({
   const pct = expected ? Math.min((fetched / expected) * 100, 95) : 100;
 
   return (
-    <div className="rounded-xl border border-amber/20 bg-amber/5 p-4 animate-fade-up">
+    <div className="sticker rounded-2xl bg-card p-4 animate-fade-up">
       <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-sm">
         {running && (
-          <Loader2 className="h-4 w-4 animate-spin text-amber shrink-0" />
+          <Loader2 className="h-4 w-4 animate-spin text-primary shrink-0" />
         )}
         <span className="text-ink-light">
           {running ? dict.progress.streaming : dict.progress.complete}
@@ -39,12 +39,12 @@ export function ScanProgress({
           {progress?.currentLabel ? ` · ${progress.currentLabel}` : ""}
         </span>
       </div>
-      <div className="mt-3 h-1.5 rounded-full bg-amber/10 overflow-hidden">
+      <div className="mt-3 h-2.5 rounded-full border-2 border-line bg-muted overflow-hidden">
         {indeterminate ? (
-          <div className="h-full w-1/3 bg-amber/60 rounded-full animate-progress-indeterminate" />
+          <div className="h-full w-1/3 bg-primary rounded-full animate-progress-indeterminate" />
         ) : (
           <div
-            className="h-full bg-amber/60 rounded-full transition-all"
+            className="h-full bg-primary rounded-full transition-all"
             style={{ width: `${running ? pct : 100}%` }}
           />
         )}

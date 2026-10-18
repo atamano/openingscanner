@@ -14,6 +14,10 @@ export interface Dictionary {
     subtitle: string;
     footer: string;
     sisterSitesPrefix: string;
+    stepUsername: string;
+    stepScan: string;
+    stepExplore: string;
+    openSource: string;
   };
   header: {
     newScan: string;
@@ -28,6 +32,7 @@ export interface Dictionary {
     sourcesHint: string;
     addAccount: string;
     removeAccount: string;
+    moreOptions: string;
     popular: string;
     colorWhite: string;
     colorBlack: string;

@@ -21,7 +21,11 @@
     "h1": "Opening Scanner",
     "subtitle": "Che aperture gioca davvero un giocatore?",
     "footer": "Gratuito. Local-first. Nulla lascia il tuo browser.",
-    "sisterSitesPrefix": "Altri nostri progetti"
+    "sisterSitesPrefix": "Altri nostri progetti",
+    "stepUsername": "Un nome utente",
+    "stepScan": "Analizziamo le partite",
+    "stepExplore": "Esplora l'albero",
+    "openSource": "Open source"
   },
   "header": {
     "newScan": "Nuova scansione",
@@ -56,7 +60,8 @@
     "window1y": "1 anno",
     "windowAll": "Tutto",
     "limit": "Max partite",
-    "limitAll": "Tutte"
+    "limitAll": "Tutte",
+    "moreOptions": "Opzioni"
   },
   "progress": {
     "streaming": "Ricezione partite…",

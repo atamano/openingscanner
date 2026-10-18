@@ -21,7 +21,11 @@
     "h1": "Opening Scanner",
     "subtitle": "Jakie otwarcia naprawdę gra dany gracz?",
     "footer": "Darmowy. Wszystko działa lokalnie. Nic nie opuszcza twojej przeglądarki.",
-    "sisterSitesPrefix": "Nasze inne projekty"
+    "sisterSitesPrefix": "Nasze inne projekty",
+    "stepUsername": "Nazwa gracza",
+    "stepScan": "Skanujemy partie",
+    "stepExplore": "Odkryj drzewo",
+    "openSource": "Open source"
   },
   "header": {
     "newScan": "Nowy skan",
@@ -56,7 +60,8 @@
     "window1y": "1 rok",
     "windowAll": "Wszystko",
     "limit": "Maks. partii",
-    "limitAll": "Wszystkie"
+    "limitAll": "Wszystkie",
+    "moreOptions": "Opcje"
   },
   "progress": {
     "streaming": "Pobieranie partii…",

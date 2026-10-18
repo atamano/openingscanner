@@ -23,7 +23,11 @@
     "h1": "Opening Scanner",
     "subtitle": "What openings does any player actually play?",
     "footer": "Free. Local-first. Nothing leaves your browser.",
-    "sisterSitesPrefix": "Also from us"
+    "sisterSitesPrefix": "Also from us",
+    "stepUsername": "A username",
+    "stepScan": "We scan the games",
+    "stepExplore": "Explore the tree",
+    "openSource": "Open source"
   },
   "header": {
     "newScan": "New scan",
@@ -58,7 +62,8 @@
     "window1y": "1 yr",
     "windowAll": "All",
     "limit": "Max games",
-    "limitAll": "All"
+    "limitAll": "All",
+    "moreOptions": "Options"
   },
   "progress": {
     "streaming": "Streaming games…",

@@ -21,7 +21,11 @@
     "h1": "Opening Scanner",
     "subtitle": "Quais aberturas um jogador realmente joga?",
     "footer": "Grátis. Tudo roda no seu navegador. Nada sai dele.",
-    "sisterSitesPrefix": "Nossos outros projetos"
+    "sisterSitesPrefix": "Nossos outros projetos",
+    "stepUsername": "Um usuário",
+    "stepScan": "Escaneamos as partidas",
+    "stepExplore": "Explore a árvore",
+    "openSource": "Código aberto"
   },
   "header": {
     "newScan": "Novo escaneamento",
@@ -56,7 +60,8 @@
     "window1y": "1 ano",
     "windowAll": "Tudo",
     "limit": "Máx. partidas",
-    "limitAll": "Todas"
+    "limitAll": "Todas",
+    "moreOptions": "Opções"
   },
   "progress": {
     "streaming": "Recebendo partidas…",

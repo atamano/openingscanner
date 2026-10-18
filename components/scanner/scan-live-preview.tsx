@@ -17,9 +17,9 @@ export function ScanLivePreview({ progress }: ScanLivePreviewProps) {
   const top = progress?.topOpenings ?? [];
 
   return (
-    <section className="rounded-xl border border-border bg-paper p-5 paper-inset animate-fade-up overflow-hidden">
+    <section className="sticker rounded-2xl bg-card p-5 animate-fade-up overflow-hidden">
       <header className="flex items-start gap-3">
-        <div className="grid size-9 place-items-center rounded-full border border-amber/30 bg-amber/10 text-amber">
+        <div className="sticker-sm grid size-9 place-items-center rounded-xl bg-pop-yellow text-on-pop">
           <Sparkles className="size-4" />
         </div>
         <div className="min-w-0 flex-1">
@@ -66,7 +66,7 @@ function PreviewRow({
       className="group flex min-w-0 items-center gap-3 rounded-lg border border-border/60 bg-background/40 px-3 py-2 animate-fade-up"
       style={{ animationDelay: `${Math.min(rank * 30, 240)}ms` }}
     >
-      <span className="font-mono text-[10px] text-ink-light/70 tabular-nums w-4 text-right shrink-0">
+      <span className="font-mono text-[10px] text-ink-light tabular-nums w-4 text-right shrink-0">
         {rank}
       </span>
       <span
@@ -79,7 +79,7 @@ function PreviewRow({
       <div className="min-w-0 flex-1">
         <div className="flex min-w-0 items-baseline gap-1.5">
           {opening.eco ? (
-            <span className="font-mono text-[10px] text-ink-light/70 tabular-nums shrink-0">
+            <span className="font-mono text-[10px] text-ink-light tabular-nums shrink-0">
               {opening.eco}
             </span>
           ) : null}
@@ -89,15 +89,15 @@ function PreviewRow({
         </div>
         <div className="mt-1 flex h-1 overflow-hidden rounded-full bg-border/40">
           <div
-            className="h-full bg-emerald-500/70 transition-all duration-500"
+            className="h-full bg-win-fill transition-all duration-500"
             style={{ width: `${winPct}%` }}
           />
           <div
-            className="h-full bg-amber/70 transition-all duration-500"
+            className="h-full bg-draw-fill transition-all duration-500"
             style={{ width: `${drawPct}%` }}
           />
           <div
-            className="h-full bg-rose-500/70 transition-all duration-500"
+            className="h-full bg-loss-fill transition-all duration-500"
             style={{ width: `${lossPct}%` }}
           />
         </div>

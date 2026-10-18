@@ -24,9 +24,9 @@ export function StrongSpots(props: StrongSpotsProps) {
       kind="strong"
       {...props}
       icon={TrendingUp}
-      iconClassName="text-emerald-500"
-      statClassName="text-emerald-500"
-      hoverClassName="hover:border-emerald-500/60 hover:bg-emerald-500/5"
+      iconClassName="text-win"
+      statClassName="text-win"
+      hoverClassName="hover:border-line hover:bg-chip-active"
       computeOpenings={computeStrongOpenings}
       computeVariations={computeStrongVariations}
     />

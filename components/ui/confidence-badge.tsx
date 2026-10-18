@@ -14,18 +14,16 @@ function confidenceTier(n: number): ConfidenceTier {
 
 const STYLE: Record<ConfidenceTier, string> = {
   weak: "border-border bg-muted/60 text-muted-foreground",
-  moderate:
-    "border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-300",
-  high: "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
-  stable:
-    "border-emerald-500/40 bg-emerald-500/15 text-emerald-800 dark:text-emerald-200",
+  moderate: "border-line bg-pop-yellow text-on-pop",
+  high: "border-line bg-pop-sky text-on-pop",
+  stable: "border-line bg-primary text-primary-foreground",
 };
 
 const DOT: Record<ConfidenceTier, string> = {
   weak: "bg-muted-foreground/50",
-  moderate: "bg-amber-500",
-  high: "bg-emerald-500",
-  stable: "bg-emerald-600",
+  moderate: "bg-on-pop",
+  high: "bg-on-pop",
+  stable: "bg-primary-foreground",
 };
 
 interface ConfidenceBadgeProps {
@@ -52,10 +50,10 @@ export function ConfidenceBadge({
       aria-label={tooltip}
       title={tooltip}
       className={cn(
-        "inline-flex items-center gap-1 rounded-full border font-medium uppercase tracking-wide",
+        "inline-flex items-center gap-1 rounded-full border font-semibold",
         size === "xs"
-          ? "px-1.5 py-0 text-[9px] leading-4"
-          : "px-2 py-0.5 text-[10px] leading-4",
+          ? "px-1.5 py-0 text-[10px] leading-4"
+          : "px-2 py-0.5 text-[11px] leading-4",
         STYLE[tier],
         className,
       )}

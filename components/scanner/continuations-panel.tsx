@@ -37,7 +37,7 @@ export function ContinuationsPanel({
   const heading = title ?? dict.continuations.move;
 
   return (
-    <div className="flex h-full min-h-0 flex-col overflow-hidden rounded-xl border bg-card">
+    <div className="sticker flex h-full min-h-0 flex-col overflow-hidden rounded-2xl bg-card">
       <div className="flex items-center justify-between px-4 py-3">
         <span className="text-sm font-medium">{heading}</span>
         <span className="text-xs text-muted-foreground">

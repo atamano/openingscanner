@@ -228,9 +228,9 @@ export function Dashboard({ stats }: DashboardProps) {
   }, [setPath]);
 
   return (
-    <section className="space-y-3">
+    <section className="space-y-5">
       {/* Board takes first-screen prominence on mobile; 3-col desktop layout kicks in at xl. */}
-      <div className="grid items-stretch gap-3 xl:h-[calc(min(460px,100dvh-20rem)+7rem)] xl:grid-cols-[minmax(0,1fr)_minmax(0,460px)_minmax(300px,360px)]">
+      <div className="grid items-stretch gap-4 xl:h-[calc(min(460px,100dvh-20rem)+13rem)] xl:grid-cols-[minmax(0,1fr)_minmax(0,460px)_minmax(300px,360px)]">
         <div className="order-2 min-h-[22rem] xl:order-1 xl:min-h-0">
           <RepertoireList
             stats={stats}
@@ -265,7 +265,7 @@ export function Dashboard({ stats }: DashboardProps) {
           />
         </div>
 
-        <div className="order-1 flex min-w-0 min-h-0 flex-col overflow-y-auto rounded-xl border bg-card p-3 xl:order-2 xl:h-full">
+        <div className="sticker order-1 flex min-w-0 min-h-0 flex-col overflow-y-auto rounded-2xl bg-card p-3 xl:order-2 xl:h-full">
           {previewMoves ? (
             <div className="flex flex-col gap-3">
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -374,7 +374,7 @@ export function Dashboard({ stats }: DashboardProps) {
 function EmptyContinuationsPanel({ previewing }: { previewing: boolean }) {
   const dict = useDictionary();
   return (
-    <div className="flex h-full min-h-0 flex-col overflow-hidden rounded-xl border bg-card">
+    <div className="sticker flex h-full min-h-0 flex-col overflow-hidden rounded-2xl bg-card">
       <div className="flex items-center justify-between px-4 py-3">
         <span className="text-sm font-medium">
           {dict.dashboard.continuations}
@@ -480,7 +480,7 @@ function CenterPanel({
               </>
             ) : null}
           </div>
-          <div className="mt-0.5 text-sm font-semibold leading-tight">
+          <div className="mt-0.5 text-lg font-extrabold leading-tight tracking-tight">
             {stats.entry?.name ?? dict.dashboard.uncategorized}
           </div>
         </div>
@@ -500,22 +500,22 @@ function CenterPanel({
         <MiniKpi
           label={dict.dashboard.kpiWin}
           value={formatPct(winPct, 0)}
-          accent="emerald"
+          accent="win"
         />
         <MiniKpi
           label={dict.dashboard.kpiDraw}
           value={formatPct(drawPct, 0)}
-          accent="amber"
+          accent="draw"
         />
         <MiniKpi
           label={dict.dashboard.kpiLoss}
           value={formatPct(lossPct, 0)}
-          accent="rose"
+          accent="loss"
         />
       </div>
 
       {stats.avgOpponentRating ? (
-        <div className="rounded-md border bg-background/40 px-3 py-1.5 text-center text-xs text-muted-foreground">
+        <div className="rounded-xl bg-muted px-3 py-1.5 text-center text-xs text-muted-foreground">
           {dict.dashboard.avgOpponentRating} ·{" "}
           <span className="font-mono tabular-nums text-foreground">
             {Math.round(stats.avgOpponentRating)}
@@ -533,22 +533,22 @@ function MiniKpi({
 }: {
   label: string;
   value: string | number;
-  accent?: "emerald" | "amber" | "rose";
+  accent?: "win" | "draw" | "loss";
 }) {
   const accentClass =
-    accent === "emerald"
-      ? "text-emerald-500"
-      : accent === "amber"
-        ? "text-amber-500"
-        : accent === "rose"
-          ? "text-rose-500"
+    accent === "win"
+      ? "text-win"
+      : accent === "draw"
+        ? "text-draw"
+        : accent === "loss"
+          ? "text-loss"
           : "text-foreground";
   return (
-    <div className="rounded-md border bg-background/40 px-2 py-1.5 text-center">
-      <div className="text-[9px] uppercase tracking-wider text-muted-foreground">
+    <div className="rounded-xl bg-muted px-2 py-1.5 text-center">
+      <div className="text-[11px] font-semibold text-muted-foreground">
         {label}
       </div>
-      <div className={`font-mono text-sm font-semibold ${accentClass}`}>
+      <div className={`text-base font-extrabold tabular-nums ${accentClass}`}>
         {value}
       </div>
     </div>

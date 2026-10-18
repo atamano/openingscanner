@@ -51,6 +51,10 @@ export function ChessBoard({
             allowDragging: false,
             lightSquareStyle: { backgroundColor: "var(--color-board-light)" },
             darkSquareStyle: { backgroundColor: "var(--color-board-dark)" },
+            // Library default labels are beige/brown; black clears AA on
+            // both square colors in both themes.
+            lightSquareNotationStyle: { color: "#000000", fontWeight: 600 },
+            darkSquareNotationStyle: { color: "#000000", fontWeight: 600 },
             boardStyle: {
               borderRadius: "0",
             },

@@ -16,13 +16,13 @@ export default async function OpengraphImage({
   const locale: Locale = isLocale(raw) ? raw : "en";
   const dict = await getDictionary(locale);
 
-  const PAPER = "#f5f0e6";
-  const INK = "#1a1612";
-  const INK_LIGHT = "#6b5d4f";
-  const WOOD = "#8b6b47";
-  const GREEN = "#5aa874";
-  const AMBER = "#e8a664";
-  const RED = "#c87563";
+  const PAPER = "#ede6ff";
+  const INK = "#1d1442";
+  const INK_LIGHT = "#5a507c";
+  const WOOD = "#5b3df5";
+  const GREEN = "#8fd8ff";
+  const AMBER = "#ffd43b";
+  const RED = "#ff9acb";
 
   return new ImageResponse(
     (
@@ -33,8 +33,6 @@ export default async function OpengraphImage({
           display: "flex",
           flexDirection: "column",
           background: PAPER,
-          backgroundImage:
-            "radial-gradient(circle at 20% 0%, rgba(139,107,71,0.08) 0%, transparent 50%), radial-gradient(circle at 80% 100%, rgba(90,168,116,0.06) 0%, transparent 50%)",
           padding: 72,
           position: "relative",
         }}
@@ -52,10 +50,11 @@ export default async function OpengraphImage({
           <div
             style={{
               display: "flex",
-              width: 14,
-              height: 14,
-              borderRadius: 7,
+              width: 22,
+              height: 22,
+              borderRadius: 6,
               background: AMBER,
+              border: `3px solid ${INK}`,
             }}
           />
           Opening Scanner
@@ -72,11 +71,11 @@ export default async function OpengraphImage({
         >
           <div
             style={{
-              fontSize: 72,
-              fontWeight: 700,
-              color: WOOD,
-              lineHeight: 1.1,
-              letterSpacing: -2,
+              fontSize: 84,
+              fontWeight: 800,
+              color: INK,
+              lineHeight: 1,
+              letterSpacing: -3,
               display: "flex",
               maxWidth: 1000,
             }}
@@ -86,7 +85,7 @@ export default async function OpengraphImage({
           <div
             style={{
               fontSize: 40,
-              color: INK,
+              color: WOOD,
               marginTop: 24,
               lineHeight: 1.25,
               display: "flex",
@@ -114,7 +113,7 @@ export default async function OpengraphImage({
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            borderTop: "1px solid rgba(26,22,18,0.12)",
+            borderTop: `3px solid ${INK}`,
             paddingTop: 28,
           }}
         >
@@ -130,9 +129,10 @@ export default async function OpengraphImage({
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
               <div
                 style={{
-                  width: 12,
-                  height: 12,
-                  borderRadius: 6,
+                  width: 16,
+                  height: 16,
+                  borderRadius: 8,
+                  border: `2px solid ${INK}`,
                   background: GREEN,
                 }}
               />
@@ -141,9 +141,10 @@ export default async function OpengraphImage({
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
               <div
                 style={{
-                  width: 12,
-                  height: 12,
-                  borderRadius: 6,
+                  width: 16,
+                  height: 16,
+                  borderRadius: 8,
+                  border: `2px solid ${INK}`,
                   background: RED,
                 }}
               />
@@ -152,9 +153,10 @@ export default async function OpengraphImage({
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
               <div
                 style={{
-                  width: 12,
-                  height: 12,
-                  borderRadius: 6,
+                  width: 16,
+                  height: 16,
+                  borderRadius: 8,
+                  border: `2px solid ${INK}`,
                   background: AMBER,
                 }}
               />

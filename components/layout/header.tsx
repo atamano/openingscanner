@@ -15,24 +15,31 @@ export function Header({ onNewScan, subtitle }: HeaderProps) {
   const dict = useDictionary();
   const locale = useLocale();
   return (
-    <header className="wood-panel border-b-2 border-amber-dark/30 shrink-0">
-      <div className="flex h-11 items-center gap-2 px-3 sm:gap-4 sm:px-5">
+    <header className="shrink-0">
+      <div className="flex h-16 items-center gap-2 px-3 sm:gap-3 sm:px-5">
         {/* Brand always links home — never overload it as a destructive
             new-scan trigger; the explicit "+ New scan" button on the right
             is the single discoverable way to reset state. */}
         <Link
           href={`/${locale}`}
-          className="text-base font-bold tracking-tight text-amber-light select-none rounded-md -mx-1 px-1 hover:text-paper transition-colors"
-          style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
+          className="flex items-center gap-2.5 select-none rounded-xl -mx-1 px-1 text-foreground"
           aria-label={dict.header.backToHome}
         >
-          Opening Scanner
+          <span
+            aria-hidden
+            className="sticker-sm chess-glyph grid h-9 w-9 place-items-center rounded-xl bg-pop-yellow text-xl text-on-pop"
+          >
+            ♟
+          </span>
+          <span className="whitespace-nowrap text-base font-extrabold tracking-tight sm:text-lg">
+            opening scanner
+          </span>
         </Link>
 
         {subtitle ? (
           <>
-            <div className="h-4 w-px bg-wood-lighter" />
-            <div className="min-w-0 text-xs text-paper-dark/80">{subtitle}</div>
+            <div className="h-5 w-px bg-border" />
+            <div className="min-w-0 text-xs text-muted-foreground">{subtitle}</div>
           </>
         ) : null}
 
@@ -42,9 +49,9 @@ export function Header({ onNewScan, subtitle }: HeaderProps) {
           <button
             onClick={onNewScan}
             aria-label={dict.header.newScan}
-            className="flex h-8 items-center gap-1.5 rounded-md px-2 text-xs font-medium text-amber-light/80 transition-all hover:bg-wood-lighter/30 hover:text-amber-light sm:h-7 sm:px-3"
+            className="sticker-sm sticker-press flex h-9 items-center gap-1.5 rounded-xl bg-primary px-2.5 text-sm font-bold text-primary-foreground sm:px-3.5"
           >
-            <Plus className="h-3.5 w-3.5" />
+            <Plus className="h-4 w-4" />
             <span className="hidden sm:inline">{dict.header.newScan}</span>
           </button>
         ) : null}
@@ -54,7 +61,7 @@ export function Header({ onNewScan, subtitle }: HeaderProps) {
           target="_blank"
           rel="noopener"
           aria-label="GitHub"
-          className="flex h-8 w-8 items-center justify-center rounded-md text-amber-light/80 transition-all hover:bg-wood-lighter/30 hover:text-amber-light sm:h-7 sm:w-7"
+          className="sticker-sm sticker-press hidden h-9 w-9 sm:flex items-center justify-center rounded-xl bg-card text-foreground"
         >
           <svg
             viewBox="0 0 24 24"
